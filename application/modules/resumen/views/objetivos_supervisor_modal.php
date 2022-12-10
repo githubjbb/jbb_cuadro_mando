@@ -77,9 +77,35 @@
             );
             $nroActividades = $this->general_model->countActividades($arrParam);
 			$cumplimiento = $this->general_model->sumCumplimiento($arrParam);
+			$calificacion = $this->general_model->get_evaluacion_calificacion($arrParam);
+			$calificacion_0 = isset($calificacion[0]['calificacion']);
+			$calificacion_1 = isset($calificacion[1]['calificacion']);
             $promedioCumplimiento = 0;
             if($nroActividades){
                 $promedioCumplimiento = number_format($cumplimiento["cumplimiento"]/$nroActividades,2);
+            }
+            if ($calificacion_0){
+            	if ($promedioCumplimiento > $calificacion[0]['calificacion']) {
+            		$promedioCumplimiento = number_format($cumplimiento["cumplimiento"]/$nroActividades,2);
+                } else {
+                	if ($calificacion[0]['estado'] == 2) {
+                        $promedioCumplimiento = $calificacion[0]['calificacion'];
+                	}
+                	if ($calificacion[0]['estado'] == 1 || $calificacion[0]['estado'] == 3) {
+                		if ($calificacion_1) {
+                			if ($calificacion[1]['estado'] == 2) {
+                				$promedioCumplimiento = $calificacion[1]['calificacion'];
+                			}
+                		} else {
+                            $promedioCumplimiento = number_format($cumplimiento["cumplimiento"]/$nroActividades,2);
+                		}
+                	}
+                	if ($calificacion[0]['estado'] == 4) {
+                        $promedioCumplimiento = number_format($cumplimiento["cumplimiento"]/$nroActividades,2);
+                	}
+                }
+            } else {
+            	$promedioCumplimiento = number_format($cumplimiento["cumplimiento"]/$nroActividades,2);
             }
 		?>
 		<input type="hidden" id="hddId" name="hddId" value="<?php echo $infoComentario?$infoComentario[0]["id_historial"]:""; ?>"/>

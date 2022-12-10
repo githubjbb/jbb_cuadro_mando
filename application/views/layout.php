@@ -26,6 +26,7 @@
     <link href="<?php echo base_url("assets/bootstrap/vendor/datatables-plugins/dataTables.bootstrap.css"); ?>" rel="stylesheet">
     <!-- DataTables Responsive CSS -->
     <link href="<?php echo base_url("assets/bootstrap/vendor/datatables-responsive/dataTables.responsive.css"); ?>" rel="stylesheet">
+    <link href="<?php echo base_url("assets/sweet/sweetalert2.css"); ?>" rel="stylesheet">
 
     <!-- jQuery -->
     <script src="<?php echo base_url("assets/bootstrap/vendor/jquery/jquery.min.js"); ?>"></script>
@@ -217,6 +218,7 @@
     <script src="<?php echo base_url("assets/bootstrap/vendor/datatables/js/jquery.dataTables.min.js"); ?>"></script>
     <script src="<?php echo base_url("assets/bootstrap/vendor/datatables-plugins/dataTables.bootstrap.min.js"); ?>"></script>
     <script src="<?php echo base_url("assets/bootstrap/vendor/datatables-responsive/dataTables.responsive.js"); ?>"></script>
+    <script src="<?php echo base_url("assets/sweet/sweetalert2.min.js"); ?>"></script>
 	
 	</body>
 </html>

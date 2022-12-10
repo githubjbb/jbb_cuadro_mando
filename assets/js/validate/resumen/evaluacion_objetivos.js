@@ -26,54 +26,68 @@ $( document ).ready( function () {
 	});
 	
 	$("#btnSubmit").click(function(){
-		var calificacion = $("#calificacion").val();
+		var calificacion = parseFloat($("#calificacion").val());
 		var cumplimiento = $("#hddCumplimientoPOA").val();
-		if (calificacion > 0 && calificacion <= cumplimiento) {
-			alert('la calificacion no puede ser menor o igual al promedio de cumplimiento actual.')
+		if (calificacion <= 0 || calificacion > 100) {
+			Swal.fire({
+                title: "Error",
+                text: "la calificacion no puede ser menor o igual a 0 ni mayor a 100.",
+                icon: "error",
+                confirmButtonText: "Confirmar"
+            });
 		} else {
-			if ($("#form").valid() == true){
-				//Activa icono guardando
-				$('#btnSubmit').attr('disabled','-1');
-				$("#div_error").css("display", "none");
-				$("#div_load").css("display", "inline");
-				$.ajax({
-					type: "POST",	
-					url: base_url + "resumen/guardar_evaluacion_objetivos",	
-					data: $("#form").serialize(),
-					dataType: "json",
-					contentType: "application/x-www-form-urlencoded;charset=UTF-8",
-					cache: false,
-					success: function(data){
-						if( data.result == "error" )
-						{
-							$("#div_load").css("display", "none");
-							$("#div_error").css("display", "inline");
-							$("#span_msj").html(data.mensaje);
-							$('#btnSubmit').removeAttr('disabled');
-							return false;
-						} 
-						if( data.result )//true
-						{	                                                        
-							$("#div_load").css("display", "none");
-							$('#btnSubmit').removeAttr('disabled');
-							var url = base_url + "resumen/objetivos_estrategicos";
-							$(location).attr("href", url);
-						}
-						else
-						{
+			if (calificacion <= cumplimiento) {
+				Swal.fire({
+	                title: "Error",
+	                text: "la calificacion no puede ser menor o igual al promedio de cumplimiento actual.",
+	                icon: "error",
+	                confirmButtonText: "Confirmar"
+	            });
+			} else {
+				if ($("#form").valid() == true) {
+					//Activa icono guardando
+					$('#btnSubmit').attr('disabled','-1');
+					$("#div_error").css("display", "none");
+					$("#div_load").css("display", "inline");
+					$.ajax({
+						type: "POST",
+						url: base_url + "resumen/guardar_evaluacion_objetivos",	
+						data: $("#form").serialize(),
+						dataType: "json",
+						contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+						cache: false,
+						success: function(data){
+							if( data.result == "error" )
+							{
+								$("#div_load").css("display", "none");
+								$("#div_error").css("display", "inline");
+								$("#span_msj").html(data.mensaje);
+								$('#btnSubmit').removeAttr('disabled');
+								return false;
+							} 
+							if( data.result )//true
+							{	                                                        
+								$("#div_load").css("display", "none");
+								$('#btnSubmit').removeAttr('disabled');
+								var url = base_url + "resumen/objetivos_estrategicos";
+								$(location).attr("href", url);
+							}
+							else
+							{
+								alert('Error. Reload the web page.');
+								$("#div_load").css("display", "none");
+								$("#div_error").css("display", "inline");
+								$('#btnSubmit').removeAttr('disabled');
+							}	
+						},
+						error: function(result) {
 							alert('Error. Reload the web page.');
 							$("#div_load").css("display", "none");
 							$("#div_error").css("display", "inline");
 							$('#btnSubmit').removeAttr('disabled');
-						}	
-					},
-					error: function(result) {
-						alert('Error. Reload the web page.');
-						$("#div_load").css("display", "none");
-						$("#div_error").css("display", "inline");
-						$('#btnSubmit').removeAttr('disabled');
-					}
-				});	
+						}
+					});
+				}
 			}
 		}
 	});
