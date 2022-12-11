@@ -116,7 +116,7 @@
 			<div class="col-sm-4">
 				<div class="form-group text-left">
 					<label class="control-label" for="calificacion">Calificación: *</label>
-					<input type="number" id="calificacion" name="calificacion" class="form-control" value="<?php echo $infoEvaluacion?$infoEvaluacion[0]["calificacion"]:""; ?>" placeholder="Calificación" required >
+					<input type="number" id="calificacion" name="calificacion" class="form-control" value="<?php if ($infoEvaluacion && $infoEvaluacion[0]["estado"] == 1) { echo $infoEvaluacion[0]["calificacion"]; } else { echo ""; } ?>" placeholder="Calificación" required >
 				</div>
 			</div>
 		</div>
@@ -125,7 +125,7 @@
 			<div class="col-sm-12">
 				<div class="form-group text-left">
 					<label class="control-label" for="observacion">Observación: *</label>
-					<textarea id="observacion" name="observacion" class="form-control" rows="3" placeholder="Observación" required><?php echo $infoEvaluacion?$infoEvaluacion[0]["observacion"]:""; ?></textarea>
+					<textarea id="observacion" name="observacion" class="form-control" rows="3" placeholder="Observación" required><?php if ($infoEvaluacion && $infoEvaluacion[0]["estado"] == 1) { echo $infoEvaluacion[0]["observacion"]; } else { echo ""; } ?></textarea>
 				</div>
 			</div>
 		</div>
@@ -134,7 +134,7 @@
 			<div class="col-sm-12">
 				<div class="form-group text-left">
 					<label class="control-label" for="comentario">Comentario: *</label>
-					<textarea id="comentario" name="comentario" class="form-control" rows="3" placeholder="Comentario" required><?php echo $infoEvaluacion?$infoEvaluacion[0]["comentario"]:""; ?></textarea>
+					<textarea id="comentario" name="comentario" class="form-control" rows="3" placeholder="Comentario" required><?php if ($infoEvaluacion && $infoEvaluacion[0]["estado"] == 1) { echo $infoEvaluacion[0]["comentario"]; } else { echo ""; } ?></textarea>
 				</div>
 			</div>
 		</div>
