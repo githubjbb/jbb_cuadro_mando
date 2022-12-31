@@ -37,13 +37,13 @@ $(function(){
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<i class="fa fa-thumb-tack"></i> LISTA PROYECTOS DE INVERSIÓN POR VIGENCIA
-					<div class="pull-right">
+					<!--<div class="pull-right">
 						<div class="btn-group">																				
 							<button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#modal" id="x">
 									<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Adicionar Proyecto de Inversión
 							</button>
 						</div>
-					</div>
+					</div>-->
 				</div>
 				<div class="panel-body small">
 
@@ -87,12 +87,12 @@ $(function(){
 						<thead>
 							<tr>
 								<th width="5%" class="text-center">No.</th>
-								<th width="24%" class="text-center">Proyecto Inversión</th>
-								<th width="5%" class="text-center">Vigencia</th>
-								<th width="30%" class="text-center">Recurso programado</th>
-								<th width="10%" class="text-center">Recurso ejecutado</th>
-								<th width="8%" class="text-center">Porcentaje cumplimiento</th>
-								<th width="10%" class="text-center">Editar</th>
+								<th width="25%" class="text-center">Proyecto Inversión</th>
+								<th width="10%" class="text-center">Vigencia</th>
+								<th width="20%" class="text-center">Recurso programado</th>
+								<th width="20%" class="text-center">Recurso ejecutado</th>
+								<th width="20%" class="text-center">Porcentaje cumplimiento</th>
+								<!--<th width="10%" class="text-center">Editar</th>-->
 							</tr>
 						</thead>
 						<tbody>							
@@ -103,20 +103,19 @@ $(function(){
 									echo "<td>" . $lista['nombre_proyecto_inversion'] . "</td>";
 									echo "<td class='text-center'>" . $lista['vigencia_proyecto'] . "</td>";
 									echo "<td class='text-right'>$ " . number_format($lista['recurso_programado_proyecto']) . "</td>";
-									echo "<td class='text-right'>$ " . number_format($lista['recurso_ejecutado_proyeccto']) . "</td>";
+									echo "<td class='text-right'>$ " . number_format($lista['recurso_ejecutado_proyecto']) . "</td>";
 									echo "<td class='text-right'>" . round($lista['porcentaje_cumplimiento_proyecto'],2) . " %</td>";
-									echo "<td class='text-center'>";
+									//echo "<td class='text-center'>";
 						?>
-									<button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#modal" id="<?php echo $lista['id_proyecto_vigencia']; ?>" >
+									<!--<button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#modal" id="<?php //echo $lista['id_proyecto_vigencia']; ?>" >
 										Editar <span class="glyphicon glyphicon-edit" aria-hidden="true">
 									</button>
-<!--
-									<button type="button" id="<?php echo $lista['id_proyecto_vigencia']; ?>" class='btn btn-danger btn-xs' title="Eliminar">
+
+									<button type="button" id="<?php //echo $lista['id_proyecto_vigencia']; ?>" class='btn btn-danger btn-xs' title="Eliminar">
 											<i class="fa fa-trash-o"></i>
-									</button>
--->
+									</button>-->
 						<?php
-									echo "</td>";
+									//echo "</td>";
 							endforeach;
 						?>
 						</tbody>

@@ -1986,7 +1986,22 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
 			$data['vigencia']  = $vigencia;
 			$arrParam = array('vigencia'=>$vigencia);
 			$data['info'] = $this->general_model->get_propositos_x_vigencia($arrParam);
-			
+			for ($i=0; $i<count($data['info']); $i++) {
+				$arrParam = array(
+					'numeroProposito' => $data['info'][$i]['numero_proposito'],
+					'vigencia' => $vigencia
+				);
+				$programado = $this->general_model->get_sumPresupuestoProgramado($arrParam);
+				$ejecutado = $this->general_model->get_sumRecursoEjecutado($arrParam);
+				$data['info'][$i]['recurso_programado_proposito'] = $programado['presupuesto_meta'];
+				$data['info'][$i]['recurso_ejecutado_proposito'] = $ejecutado['recurso_ejecutado_meta'];
+				if ($programado['presupuesto_meta'] != 0) {
+					$data['info'][$i]['porcentaje_cumplimiento_proposito'] = ($ejecutado['recurso_ejecutado_meta']*100)/$programado['presupuesto_meta'];
+				} else {
+					$data['info'][$i]['porcentaje_cumplimiento_proposito'] = 0;
+				}
+			}
+
 			$data["view"] = 'propositos_x_vigencia';
 			$this->load->view("layout_calendar", $data);
 	}
@@ -2126,16 +2141,27 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
      * @since 24/07/2022
      * @author BMOTTAG
 	 */
-	public function proyectos_x_vigencia($vigencia='x')
+	public function proyectos_x_vigencia($vigencia=2022)
 	{
 			$data['vigencia']  = $vigencia;
-			if($vigencia == 'x'){
-				$data['vigencia']  = date('Y');
+			$arrParam = array('vigencia'=>$vigencia);
+			$data['info'] = $this->general_model->get_proyectos_x_vigencia($arrParam);
+			for ($i=0; $i<count($data['info']); $i++) {
+				$arrParam = array(
+					'numeroProyecto' => $data['info'][$i]['numero_proyecto_inversion'],
+					'vigencia' => $vigencia
+				);
+				$programado = $this->general_model->get_sumPresupuestoProgramado($arrParam);
+				$ejecutado = $this->general_model->get_sumRecursoEjecutado($arrParam);
+				$data['info'][$i]['recurso_programado_proyecto'] = $programado['presupuesto_meta'];
+				$data['info'][$i]['recurso_ejecutado_proyecto'] = $ejecutado['recurso_ejecutado_meta'];
+				if ($programado['presupuesto_meta'] != 0) {
+					$data['info'][$i]['porcentaje_cumplimiento_proyecto'] = ($ejecutado['recurso_ejecutado_meta']*100)/$programado['presupuesto_meta'];
+				} else {
+					$data['info'][$i]['porcentaje_cumplimiento_proyecto'] = 0;
+				}
 			}
 
-			$arrParam = array('vigencia'=>$data['vigencia']);
-			$data['info'] = $this->general_model->get_proyectos_x_vigencia($arrParam);
-	
 			$data["view"] = 'proyectos_x_vigencia';
 			$this->load->view("layout_calendar", $data);
 	}
@@ -2201,16 +2227,27 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
      * @since 24/07/2022
      * @author BMOTTAG
 	 */
-	public function metas_pdd_x_vigencia($vigencia='x')
+	public function metas_pdd_x_vigencia($vigencia=2022)
 	{
 			$data['vigencia']  = $vigencia;
-			if($vigencia == 'x'){
-				$data['vigencia']  = date('Y');
+			$arrParam = array('vigencia'=>$vigencia);
+			$data['info'] = $this->general_model->get_metas_pdd_x_vigencia($arrParam);
+			for ($i=0; $i<count($data['info']); $i++) {
+				$arrParam = array(
+					'numeroMetaPDD' => $data['info'][$i]['numero_meta_pdd'],
+					'vigencia' => $vigencia
+				);
+				$programado = $this->general_model->get_sumPresupuestoProgramado($arrParam);
+				$ejecutado = $this->general_model->get_sumRecursoEjecutado($arrParam);
+				$data['info'][$i]['recurso_programado_meta_pdd'] = $programado['presupuesto_meta'];
+				$data['info'][$i]['recurso_ejecutado_meta_pdd'] = $ejecutado['recurso_ejecutado_meta'];
+				if ($programado['presupuesto_meta'] != 0) {
+					$data['info'][$i]['porcentaje_cumplimiento_meta_pdd'] = ($ejecutado['recurso_ejecutado_meta']*100)/$programado['presupuesto_meta'];
+				} else {
+					$data['info'][$i]['porcentaje_cumplimiento_meta_pdd'] = 0;
+				}
 			}
 
-			$arrParam = array('vigencia'=>$data['vigencia']);
-			$data['info'] = $this->general_model->get_metas_pdd_x_vigencia($arrParam);
-	
 			$data["view"] = 'metas_pdd_x_vigencia';
 			$this->load->view("layout_calendar", $data);
 	}
@@ -2346,16 +2383,27 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
      * @since 24/07/2022
      * @author BMOTTAG
 	 */
-	public function programa_sp_x_vigencia($vigencia='x')
+	public function programa_sp_x_vigencia($vigencia=2022)
 	{
 			$data['vigencia']  = $vigencia;
-			if($vigencia == 'x'){
-				$data['vigencia']  = date('Y');
+			$arrParam = array('vigencia'=>$vigencia);
+			$data['info'] = $this->general_model->get_programa_sp_x_vigencia($arrParam);
+			for ($i=0; $i<count($data['info']); $i++) {
+				$arrParam = array(
+					'numeroProgramaSG' => $data['info'][$i]['numero_programa'],
+					'vigencia' => $vigencia
+				);
+				$programado = $this->general_model->get_sumPresupuestoProgramado($arrParam);
+				$ejecutado = $this->general_model->get_sumRecursoEjecutado($arrParam);
+				$data['info'][$i]['recurso_programado_programa'] = $programado['presupuesto_meta'];
+				$data['info'][$i]['recurso_ejecutado_programa'] = $ejecutado['recurso_ejecutado_meta'];
+				if ($programado['presupuesto_meta'] != 0) {
+					$data['info'][$i]['porcentaje_cumplimiento_programa'] = ($ejecutado['recurso_ejecutado_meta']*100)/$programado['presupuesto_meta'];
+				} else {
+					$data['info'][$i]['porcentaje_cumplimiento_programa'] = 0;
+				}
 			}
 
-			$arrParam = array('vigencia'=>$data['vigencia']);
-			$data['info'] = $this->general_model->get_programa_sp_x_vigencia($arrParam);
-	
 			$data["view"] = 'programa_sp_x_vigencia';
 			$this->load->view("layout_calendar", $data);
 	}

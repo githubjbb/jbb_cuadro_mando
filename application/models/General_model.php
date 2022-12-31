@@ -825,7 +825,7 @@ class General_model extends CI_Model {
 				if (array_key_exists("vigencia", $arrData)) {
 					$this->db->where('M.vigencia_meta_proyecto', $arrData["vigencia"]);
 				}
-				$this->db->order_by('numero_meta_proyecto', 'asc');
+				$this->db->order_by('M.numero_meta_proyecto asc, M.fk_numero_proyecto asc');
 				$query = $this->db->get('meta_proyecto_inversion M');
 				if ($query->num_rows() > 0) {
 					return $query->result_array();
@@ -1925,6 +1925,68 @@ class General_model extends CI_Model {
 				$query = $this->db->get('objetivos_estrategicos_evaluacion E');
 				if ($query->num_rows() > 0) {
 					return $query->result_array();
+				} else {
+					return false;
+				}
+		}
+
+		/**
+		 * Sumatoria programado proposito
+		 * @since 12/12/2022
+		 * @author AOCUBILLOSA
+		 */
+		public function get_sumPresupuestoProgramado($arrData)
+		{
+				$this->db->select_sum('presupuesto_meta');
+				if (array_key_exists("numeroProposito", $arrData)) {
+					$this->db->where('fk_numero_proposito', $arrData["numeroProposito"]);
+				}
+				if (array_key_exists("numeroProgramaSG", $arrData)) {
+					$this->db->where('fk_numero_programa', $arrData["numeroProgramaSG"]);
+				}
+				if (array_key_exists("numeroMetaPDD", $arrData)) {
+					$this->db->where('fk_numero_meta_pdd', $arrData["numeroMetaPDD"]);
+				}
+				if (array_key_exists("numeroProyecto", $arrData)) {
+					$this->db->where('fk_numero_proyecto', $arrData["numeroProyecto"]);
+				}
+				if (array_key_exists("vigencia", $arrData)) {
+					$this->db->where('vigencia_meta_proyecto', $arrData["vigencia"]);
+				}
+				$query = $this->db->get('meta_proyecto_inversion');
+				if ($query->num_rows() > 0) {
+					return $query->row_array();
+				} else {
+					return false;
+				}
+		}
+
+		/**
+		 * Sumatoria ejecutado proposito
+		 * @since 12/12/2022
+		 * @author AOCUBILLOSA
+		 */
+		public function get_sumRecursoEjecutado($arrData)
+		{
+				$this->db->select_sum('recurso_ejecutado_meta');
+				if (array_key_exists("numeroProposito", $arrData)) {
+					$this->db->where('fk_numero_proposito', $arrData["numeroProposito"]);
+				}
+				if (array_key_exists("numeroProgramaSG", $arrData)) {
+					$this->db->where('fk_numero_programa', $arrData["numeroProgramaSG"]);
+				}
+				if (array_key_exists("numeroMetaPDD", $arrData)) {
+					$this->db->where('fk_numero_meta_pdd', $arrData["numeroMetaPDD"]);
+				}
+				if (array_key_exists("numeroProyecto", $arrData)) {
+					$this->db->where('fk_numero_proyecto', $arrData["numeroProyecto"]);
+				}
+				if (array_key_exists("vigencia", $arrData)) {
+					$this->db->where('vigencia_meta_proyecto', $arrData["vigencia"]);
+				}
+				$query = $this->db->get('meta_proyecto_inversion');
+				if ($query->num_rows() > 0) {
+					return $query->row_array();
 				} else {
 					return false;
 				}
