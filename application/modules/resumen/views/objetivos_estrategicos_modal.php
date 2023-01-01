@@ -97,7 +97,11 @@
                 				$promedioCumplimiento = $calificacion[1]['calificacion'];
                 			}
                 		} else {
-                            $promedioCumplimiento = number_format($cumplimiento["cumplimiento"]/$nroActividades,2);
+                			if ($nroActividades == 0) {
+                				$promedioCumplimiento = 0;
+                			} else {
+                				$promedioCumplimiento = number_format($cumplimiento["cumplimiento"]/$nroActividades,2);
+                			}
                 		}
                 	}
                 	if ($calificacion[0]['estado'] == 4) {
@@ -105,7 +109,11 @@
                 	}
                 }
             } else {
-            	$promedioCumplimiento = number_format($cumplimiento["cumplimiento"]/$nroActividades,2);
+            	if ($nroActividades == 0) {
+    				$promedioCumplimiento = 0;
+    			} else {
+    				$promedioCumplimiento = number_format($cumplimiento["cumplimiento"]/$nroActividades,2);
+    			}
             }
 		?>
 		<input type="hidden" id="hddId" name="hddId" value="<?php echo $infoEvaluacion?$infoEvaluacion[0]["id_evaluacion_objetivo_estrategico"]:""; ?>"/>

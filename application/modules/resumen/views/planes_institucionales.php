@@ -5,7 +5,7 @@
 			<div class="panel panel-primary">
 				<div class="panel-heading">
 					<h4 class="list-group-item-heading">
-					<i class="fa fa-gear fa-fw"></i> RESUMEN - PLANES INSTITUCIONALES
+					<i class="fa fa-gear fa-fw"></i> RESUMEN - PLANES INSTITUCIONALES <?php echo date('Y') ?>
 					</h4>
 				</div>
 			</div>
@@ -17,7 +17,7 @@
 		<div class="col-lg-12">
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					<i class="fa fa-crosshairs"></i> RESUMEN PLANES INSTITUCIONALES
+					<i class="fa fa-crosshairs"></i> RESUMEN PLANES INSTITUCIONALES <?php echo date('Y') ?>
 				</div>
 				<div class="panel-body">
 
@@ -51,7 +51,10 @@
 						</thead>
 						<tbody>							
 						<?php
-	                            $arrParam = array("planArchivos" => true);
+	                            $arrParam = array(
+	                            	"planArchivos" => true,
+	                            	'vigencia' => date('Y')
+	                            );
 	                            $nroActividades = $this->general_model->countActividades($arrParam);
 								$cumplimiento = $this->general_model->sumCumplimiento($arrParam);
 	                            $promedioCumplimiento = 0;
@@ -82,7 +85,10 @@
 	                            echo "</td>";
 	                            echo "</tr>";
 
-	                            $arrParam = array("planAdquisiciones" => true);
+	                            $arrParam = array(
+	                            	"planAdquisiciones" => true,
+	                            	'vigencia' => date('Y')
+	                            );
 	                            $nroActividades = $this->general_model->countActividades($arrParam);
 								$cumplimiento = $this->general_model->sumCumplimiento($arrParam);
 	                            $promedioCumplimiento = 0;
@@ -113,7 +119,10 @@
 	                            echo "</td>";
 	                            echo "</tr>";
 
-	                            $arrParam = array("planVacantes" => true);
+	                            $arrParam = array(
+	                            	"planVacantes" => true,
+	                            	'vigencia' => date('Y')
+	                            );
 	                            $nroActividades = $this->general_model->countActividades($arrParam);
 								$cumplimiento = $this->general_model->sumCumplimiento($arrParam);
 	                            $promedioCumplimiento = 0;
@@ -144,7 +153,10 @@
 	                            echo "</td>";
 	                            echo "</tr>";
 
-	                            $arrParam = array("planRecursos" => true);
+	                            $arrParam = array(
+	                            	"planRecursos" => true,
+	                            	'vigencia' => date('Y')
+	                            );
 	                            $nroActividades = $this->general_model->countActividades($arrParam);
 								$cumplimiento = $this->general_model->sumCumplimiento($arrParam);
 	                            $promedioCumplimiento = 0;
@@ -175,7 +187,10 @@
 	                            echo "</td>";
 	                            echo "</tr>";
 
-	                            $arrParam = array("planTalento" => true);
+	                            $arrParam = array(
+	                            	"planTalento" => true,
+	                            	'vigencia' => date('Y')
+	                            );
 	                            $nroActividades = $this->general_model->countActividades($arrParam);
 								$cumplimiento = $this->general_model->sumCumplimiento($arrParam);
 	                            $promedioCumplimiento = 0;
@@ -206,7 +221,10 @@
 	                            echo "</td>";
 	                            echo "</tr>";
 
-	                            $arrParam = array("planCapacitacion" => true);
+	                            $arrParam = array(
+	                            	"planCapacitacion" => true,
+	                            	'vigencia' => date('Y')
+	                            );
 	                            $nroActividades = $this->general_model->countActividades($arrParam);
 								$cumplimiento = $this->general_model->sumCumplimiento($arrParam);
 	                            $promedioCumplimiento = 0;
@@ -237,7 +255,10 @@
 	                            echo "</td>";
 	                            echo "</tr>";
 
-	                            $arrParam = array("planIncentivos" => true);
+	                            $arrParam = array(
+	                            	"planIncentivos" => true,
+	                            	'vigencia' => date('Y')
+	                            );
 	                            $nroActividades = $this->general_model->countActividades($arrParam);
 								$cumplimiento = $this->general_model->sumCumplimiento($arrParam);
 	                            $promedioCumplimiento = 0;
@@ -268,7 +289,10 @@
 	                            echo "</td>";
 	                            echo "</tr>";
 
-	                            $arrParam = array("planTrabajo" => true);
+	                            $arrParam = array(
+	                            	"planTrabajo" => true,
+	                            	'vigencia' => date('Y')
+	                            );
 	                            $nroActividades = $this->general_model->countActividades($arrParam);
 								$cumplimiento = $this->general_model->sumCumplimiento($arrParam);
 	                            $promedioCumplimiento = 0;
@@ -299,7 +323,10 @@
 	                            echo "</td>";
 	                            echo "</tr>";
 
-	                            $arrParam = array("planAnticorrupcion" => true);
+	                            $arrParam = array(
+	                            	"planAnticorrupcion" => true,
+	                            	'vigencia' => date('Y')
+	                            );
 	                            $nroActividades = $this->general_model->countActividades($arrParam);
 								$cumplimiento = $this->general_model->sumCumplimiento($arrParam);
 	                            $promedioCumplimiento = 0;
@@ -330,7 +357,10 @@
 	                            echo "</td>";
 	                            echo "</tr>";
 
-	                            $arrParam = array("planTecnologia" => true);
+	                            $arrParam = array(
+	                            	"planTecnologia" => true,
+	                            	'vigencia' => date('Y')
+	                            );
 	                            $nroActividades = $this->general_model->countActividades($arrParam);
 								$cumplimiento = $this->general_model->sumCumplimiento($arrParam);
 	                            $promedioCumplimiento = 0;
@@ -361,7 +391,10 @@
 	                            echo "</td>";
 	                            echo "</tr>";
 
-	                            $arrParam = array("planRiesgos" => true);
+	                            $arrParam = array(
+	                            	"planRiesgos" => true,
+	                            	'vigencia' => date('Y')
+	                            );
 	                            $nroActividades = $this->general_model->countActividades($arrParam);
 								$cumplimiento = $this->general_model->sumCumplimiento($arrParam);
 	                            $promedioCumplimiento = 0;
@@ -392,7 +425,10 @@
 	                            echo "</td>";
 	                            echo "</tr>";
 
-	                            $arrParam = array("planInformacion" => true);
+	                            $arrParam = array(
+	                            	"planInformacion" => true,
+	                            	'vigencia' => date('Y')
+	                            );
 	                            $nroActividades = $this->general_model->countActividades($arrParam);
 								$cumplimiento = $this->general_model->sumCumplimiento($arrParam);
 	                            $promedioCumplimiento = 0;

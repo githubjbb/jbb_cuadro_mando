@@ -209,7 +209,7 @@
                                 <p class="text-danger"><span class="glyphicon glyphicon-alert" aria-hidden="true"></span> No le han asignado actividades.</p>
                             </div>';
                         echo '</div>';
-                    }else{
+                    } else {
                             $arrParam2 = array();
                             if($_GET && isset($_GET["id_estrategia"]) && $_GET["id_estrategia"] != ""){
                                 $arrParam2["idEstrategia"] = $_GET["id_estrategia"];
@@ -222,9 +222,12 @@
                             }
                             if($_GET && $_GET["id_dependencia"] != ""){
                                 $arrParam2["idDependencia"] = $_GET["id_dependencia"];
-                            }elseif($userRol == ID_ROL_SUPERVISOR || $userRol == ID_ROL_ENLACE){
+                            } elseif ($userRol == ID_ROL_SUPERVISOR || $userRol == ID_ROL_ENLACE){
                                 $arrParam2["idDependencia"] = $infoDependencia[0]['id_dependencia'];  
                             }
+                            $arrParam2 = array(
+                                'vigencia' => date('Y')
+                            );
                             $listaTodasActividades = $this->general_model->get_numero_actividades_full_by_dependencia($arrParam2);
                     ?>
                         <div class="row">
@@ -352,6 +355,9 @@
                                     $arrParam["idDependencia"] = $_GET["id_dependencia"];
                                 }
                             }
+                            $arrParam = array(
+                                'vigencia' => date('Y')
+                            );
                             $listaActividades = $this->general_model->get_actividades_full_by_dependencia($arrParam);
 
                             echo '<div class="row">';

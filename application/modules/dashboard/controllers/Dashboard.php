@@ -110,7 +110,10 @@ class Dashboard extends CI_Controller {
 			$data['idCuadroBase'] = $idCuadroBase;
 			$data['numeroTrimestre'] = false;
 			$data['infoEjecucion'] = false;
-			$arrParam = array("idCuadroBase" => $idCuadroBase);
+			$arrParam = array(
+				"idCuadroBase" => $idCuadroBase,
+				'vigencia' => date('Y')
+			);
 			$data['infoCuadroBase'] = $this->general_model->get_lista_cuadro_mando($arrParam);
 			$data['listaActividades'] = $this->general_model->get_actividades($arrParam);
 			$data['listaHistorial'] = false;
@@ -123,7 +126,10 @@ class Dashboard extends CI_Controller {
 			$data['listaObjetivosEstrategicos'] = $this->general_model->get_objetivos_estrategicos($arrParam);
 
 			if($numeroActividad != 'x') {
-				$arrParam = array("numeroActividad" => $numeroActividad);
+				$arrParam = array(
+					"numeroActividad" => $numeroActividad,
+					'vigencia' => date('Y')
+				);
 				$data['listaActividades'] = $this->general_model->get_actividades($arrParam);
 				
 				$arrParam['numeroTrimestre'] = 1;

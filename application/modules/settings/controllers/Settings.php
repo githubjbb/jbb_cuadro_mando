@@ -1271,7 +1271,15 @@ class Settings extends CI_Controller {
 				"id" => "x"
 			);
 			$data['listaEstrategias'] = $this->general_model->get_basic_search($arrParam);
-
+			$arrParam = array(
+				'vigencia' => date('Y')
+			);
+			$data['listaActividades'] = $this->general_model->get_actividades($arrParam);
+			$data['cantActividades'] = 0;
+			if ($data['listaActividades']) {
+				$data['cantActividades'] = count($data['listaActividades']);
+			}
+			
 			$data["view"] = "plan_estrategico";
 			$this->load->view("layout_calendar", $data);
 	}
@@ -1933,7 +1941,10 @@ class Settings extends CI_Controller {
 			$data["idCuadroBase"] = $this->input->post("idCuadroBase");
 
 			if ($data["idCuadroBase"] != 'x') {
-				$arrParam = array("idCuadroBase" => $data["idCuadroBase"]);
+				$arrParam = array(
+					"idCuadroBase" => $data["idCuadroBase"],
+					'vigencia' => date('Y')
+				);
 				$data['information'] = $this->general_model->get_lista_cuadro_mando($arrParam);//info bloques
 				
 				$data["numeroObjetivoEstrategico"] = $data['information'][0]['fk_numero_objetivo_estrategico'];
@@ -1943,7 +1954,8 @@ class Settings extends CI_Controller {
 			$data['infoObjetivoEstrategico'] = $this->general_model->get_objetivos_estrategicos($arrParam);
 
 			$arrParam = array(
-				"NOTidCuadroBase" => $data["idCuadroBase"]
+				"NOTidCuadroBase" => $data["idCuadroBase"],
+				'vigencia' => date('Y')
 			);
 			$data['listaActividades'] = $this->general_model->get_actividades($arrParam);
 
@@ -2686,7 +2698,7 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
 	 */
 	public function tablero_pmr()
 	{
-			$arrParam = array();
+			$arrParam = array('vigencia' => date('Y'));
 			$data['info'] = $this->settings_model->get_tablero_pmr($arrParam);
 			$data["view"] = "tablero_pmr";
 			$this->load->view("layout_calendar", $data);

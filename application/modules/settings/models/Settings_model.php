@@ -379,7 +379,8 @@
 					'fk_numero_programa_estrategico' => $this->input->post('id_programa_estrategico'),
 					'fk_numero_meta_pdd' => $this->input->post('id_meta_pdd'),
 					'fk_numero_ods' => $this->input->post('id_ods'),
-					'fk_id_dimension' => $this->input->post('id_dimension')
+					'fk_id_dimension' => $this->input->post('id_dimension'),
+					'vigencia' => date('Y')
 				);
 
 				//revisar si es para adicionar o editar
@@ -1004,6 +1005,9 @@
 				if (array_key_exists("id_pmr", $arrData)) {
 					$this->db->where('T.id_pmr', $arrData['id_pmr']);
 				}
+				if (array_key_exists("vigencia", $arrData)) {
+					$this->db->where('T.vigencia', $arrData['vigencia']);
+				}
 				$this->db->order_by('fk_numero_indicador_pmr', 'asc');
 				$query = $this->db->get('tablero_pmr T');
 				if ($query->num_rows() > 0) {
@@ -1018,9 +1022,10 @@
 		 * @since 31/10/2022
 		 * @author AOCUBILLOSA
 		 */
-		public function get_actividades($indicador_pmr) {		
+		public function get_actividades($arrParams) {
 				$this->db->select('numero_actividad');
-				$this->db->where('fk_numero_indicador_pmr', $indicador_pmr);
+				$this->db->where('fk_numero_indicador_pmr', $arrParams['fk_numero_indicador_pmr']);
+				$this->db->where('vigencia', $arrParams['vigencia']);
 				$this->db->order_by('numero_actividad', 'asc');
 				$query = $this->db->get('actividades');
 				if ($query->num_rows() > 0) {
@@ -1084,7 +1089,8 @@
 					'fk_numero_indicador_pmr' => $this->input->post('id_indicador_pmr'),
 					'fk_id_unidad_medida_pmr' => $this->input->post('id_unidad_medida_pmr'),
 					'fk_id_naturaleza_pmr' => $this->input->post('id_naturaleza_pmr'),
-					'fk_id_periodicidad_pmr' => $this->input->post('id_periodicidad_pmr')
+					'fk_id_periodicidad_pmr' => $this->input->post('id_periodicidad_pmr'),
+					'vigencia' => date('Y')
 				);
 				//revisar si es para adicionar o editar
 				if ($idPMR == 'x') {

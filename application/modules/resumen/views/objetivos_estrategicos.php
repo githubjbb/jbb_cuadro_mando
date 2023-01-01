@@ -112,7 +112,11 @@ $(function(){
 		                            				$promedioCumplimiento = $calificacion[1]['calificacion'];
 		                            			}
 		                            		} else {
-					                            $promedioCumplimiento = number_format($cumplimiento["cumplimiento"]/$nroActividades,2);
+		                            			if ($nroActividades == 0) {
+		                            				$promedioCumplimiento = 0;
+		                            			} else {
+		                            				$promedioCumplimiento = number_format($cumplimiento["cumplimiento"]/$nroActividades,2);
+		                            			}
 		                            		}
 		                            	}
 		                            	if ($calificacion[0]['estado'] == 4) {
@@ -120,8 +124,13 @@ $(function(){
 		                            	}
 		                            }
 	                            } else {
-	                            	$promedioCumplimiento = number_format($cumplimiento["cumplimiento"]/$nroActividades,2);
+	                            	if ($nroActividades == 0) {
+                        				$promedioCumplimiento = 0;
+                        			} else {
+                        				$promedioCumplimiento = number_format($cumplimiento["cumplimiento"]/$nroActividades,2);
+                        			}
 	                            }
+
 
 	                            if (!$promedioCumplimiento) {
 	                                $promedioCumplimiento = 0;

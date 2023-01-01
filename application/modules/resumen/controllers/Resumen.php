@@ -54,18 +54,16 @@ class Resumen extends CI_Controller {
 	        }
 	        $data['listaProyectos'] = $this->general_model->get_numero_proyectos_full_by_dependencia($arrParam);
             if($_GET && $_GET["numero_proyecto"] != ""){
-                $arrParam["numeroProyecto"] = $_GET["numero_proyecto"];
+            	$arrParam = array(
+	                "numeroProyecto" => $_GET["numero_proyecto"]
+	            );
             }
 			$data['listaNumeroDependencia'] = $this->general_model->get_dependencia_full_by_filtro($arrParam);
-            if($_GET && $_GET["id_dependencia"] != ""){
-                $arrParam["idDependencia"] = $_GET["id_dependencia"];
-            }
+            $arrParam = array(
+	                'vigencia' => date('Y')
+	            );
             $data['listaTodasActividades'] = $this->general_model->get_numero_actividades_full_by_dependencia($arrParam);
-            if($_GET && $_GET["numero_actividad"] != ""){
-                $arrParam["numeroActividad"] = $_GET["numero_actividad"];
-            }
 			$data['listaActividades'] = $this->general_model->get_actividades($arrParam);
-			$arrParam["vigencia"] = date("Y");
 			$data['nroActividades'] = $this->general_model->countActividades($arrParam);          
 	        //FIN LISTAS PARA FILTROS
 			//NO INICIADA
@@ -206,6 +204,7 @@ class Resumen extends CI_Controller {
 	        }
 			$arrParam = array(
 				"evaluacionFlag" => true,
+				'vigencia' => date('Y')
 			);
 			$data['listaActividades'] = $this->general_model->get_actividades($arrParam);
 			$data['bandera'] = 1;

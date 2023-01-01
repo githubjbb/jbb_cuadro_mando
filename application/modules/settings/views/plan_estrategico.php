@@ -79,7 +79,7 @@ if ($retornoError) {
         <div class="col-lg-12">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <i class="fa fa-cogs fa-fw"></i> <b>PLAN ESTRATÉGICO</b>
+                    <i class="fa fa-cogs fa-fw"></i> <b>PLAN ESTRATÉGICO <?php echo date('Y'); ?></b>
                 </div>
                 <div class="panel-body">
                     <?php 
@@ -118,7 +118,10 @@ if ($retornoError) {
                             <div class="panel-body small">
                                 <?php 
                                     $numeroObjetivoEstrategico = $lista['numero_objetivo_estrategico'];
-                                    $arrParam = array('numeroObjetivoEstrategico' => $numeroObjetivoEstrategico);
+                                    $arrParam = array(
+                                        'numeroObjetivoEstrategico' => $numeroObjetivoEstrategico,
+                                        'vigencia' => date('Y')
+                                    );
                                     $metas = $this->general_model->get_lista_metas($arrParam);
                                     $indicadores = $this->general_model->get_lista_indicadores($arrParam);
                                     $resultados = $this->general_model->get_lista_resultados($arrParam);
@@ -205,7 +208,19 @@ if ($retornoError) {
                                             //buscar las dependencias relacionadas
                                             $arrParam = array('idCuadroBase' => $lista['id_cuadro_base']);
                                             $dependencias = $this->general_model->get_dependencias($arrParam);
-
+                                            $idCuadroBase = '';
+                                            if ($cuadroBase) {
+                                                $idCuadroBase = $lista['id_cuadro_base'];
+                                            }
+                                            $arrParam = array(
+                                                'id_cuadro_base' => $idCuadroBase,
+                                                'vigencia' => date('Y')
+                                            );
+                                            $actividades_CB = $this->general_model->get_actividades_CB($arrParam);
+                                            $cant_ActividadesCB = 0;
+                                            if ($actividades_CB) {
+                                                $cant_ActividadesCB = count($actividades_CB);
+                                            }
                                             echo "<tr>";
                                             echo "<td><small>" . $lista["meta_proyecto"] . "</small></td>";
                                             echo "<td><small>" . $lista["proyecto_inversion"] . "</small></td>";
@@ -232,7 +247,7 @@ if ($retornoError) {
                                             </button>
                                             </p>
                                             <p>
-                                            <button title="Importar Actividad" type="button" class="btn btn-violeta btn-xs" data-toggle="modal" data-target="#modal" id="<?php echo $lista['id_cuadro_base']; ?>" >
+                                            <button title="Importar Actividad" type="button" class="btn btn-violeta btn-xs" data-toggle="modal" data-target="#modal" id="<?php echo $lista['id_cuadro_base']; ?>" <?php if (!$listaActividades || $cantActividades == $cant_ActividadesCB) { ?>disabled<?php } ?> >
                                                 Importar Actividad <span class="glyphicon glyphicon-plus" aria-hidden="true">
                                             </button>
                                             </p>

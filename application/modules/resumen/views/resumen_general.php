@@ -194,7 +194,7 @@ $(function(){
                                             <select name="valorEstado" id="valorEstado" class="form-control" required >
                                                 <option value="">Seleccione...</option>
                                                 <?php for ($i = 0; $i < count($listaEstados); $i++) { ?>
-                                                    <option value="<?php echo $listaEstados[$i]["valor"]; ?>" ><?php echo $listaEstados[$i]["estado"]; ?></option>        
+                                                    <option value="<?php echo $listaEstados[$i]["valor"]; ?>" ><?php echo $listaEstados[$i]["estado"]; ?></option>
                                                 <?php } ?>
                                                     <option value="99" >Realizar Cálculo</option>
                                             </select>

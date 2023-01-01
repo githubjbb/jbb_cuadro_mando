@@ -342,6 +342,9 @@ class General_model extends CI_Model {
 				if (array_key_exists("numeroObjetivoEstrategico", $arrData)) {
 					$this->db->where('fk_numero_objetivo_estrategico like', $arrData["numeroObjetivoEstrategico"]);
 				}
+				if (array_key_exists("vigencia", $arrData)) {
+					$this->db->where('vigencia', $arrData["vigencia"]);
+				}
 				$this->db->order_by('id_evaluacion_objetivo_estrategico', 'desc');
 				$query = $this->db->get('objetivos_estrategicos_evaluacion');
 				if ($query->num_rows() > 0) {
@@ -410,6 +413,9 @@ class General_model extends CI_Model {
 
 				if (array_key_exists("idCuadroBase", $arrData)) {
 					$this->db->where('C.id_cuadro_base', $arrData["idCuadroBase"]);
+				}
+				if (array_key_exists("vigencia", $arrData)) {
+					$this->db->where('C.vigencia', $arrData["vigencia"]);
 				}
 				if (array_key_exists("filtroCuadroBase", $arrData)) {
 					$where = "C.id_cuadro_base IN (" . $arrData["filtroCuadroBase"] . ")";
@@ -526,7 +532,12 @@ class General_model extends CI_Model {
 				$this->db->join('cuadro_base C', 'C.id_cuadro_base = A.fk_id_cuadro_base', 'INNER');
 				$this->db->join('param_dependencias D', 'D.id_dependencia = A.fk_id_dependencia', 'INNER');
 				$this->db->join('actividad_estado E', 'E.fk_numero_actividad  = A.numero_actividad ', 'LEFT');
-
+				if(array_key_exists("vigencia", $arrData)) {
+					$this->db->where('C.vigencia', $arrData["vigencia"]);
+				}
+				if(array_key_exists("vigencia", $arrData)) {
+					$this->db->where('A.vigencia', $arrData["vigencia"]);
+				}
 				if(array_key_exists("idActividad", $arrData)) {
 					$this->db->where('A.id_actividad', $arrData["idActividad"]);
 				}
@@ -877,6 +888,12 @@ class General_model extends CI_Model {
 				$this->db->join('meta_pdd Z', 'Z.numero_meta_pdd = C.fk_numero_meta_pdd', 'INNER');
 				$this->db->join('ods O', 'O.numero_ods = C.fk_numero_ods', 'INNER');
 
+				if (array_key_exists("vigencia", $arrData)) {
+					$this->db->where('A.vigencia', $arrData["vigencia"]);
+				}
+				if (array_key_exists("vigencia", $arrData)) {
+					$this->db->where('C.vigencia', $arrData["vigencia"]);
+				}
 				if (array_key_exists("idDependencia", $arrData)) {
 					$this->db->where('A.fk_id_dependencia', $arrData["idDependencia"]);
 				}
@@ -955,7 +972,12 @@ class General_model extends CI_Model {
 				$this->db->select("A.numero_actividad, numero_objetivo_estrategico, objetivo_estrategico");
 				$this->db->join('cuadro_base C', 'C.id_cuadro_base = A.fk_id_cuadro_base', 'INNER');
 				$this->db->join('objetivos_estrategicos ES', 'ES.numero_objetivo_estrategico = C.fk_numero_objetivo_estrategico', 'INNER');
-
+				if (array_key_exists("vigencia", $arrData)) {
+					$this->db->where('A.vigencia', $arrData["vigencia"]);
+				}
+				if (array_key_exists("vigencia", $arrData)) {
+					$this->db->where('C.vigencia', $arrData["vigencia"]);
+				}
 				if (array_key_exists("idDependencia", $arrData)) {
 					$this->db->where('A.fk_id_dependencia', $arrData["idDependencia"]);
 				}
@@ -1126,7 +1148,9 @@ class General_model extends CI_Model {
 				if(array_key_exists("numeroActividad", $arrData)) {
 					$sql.= " AND A.numero_actividad = '". $arrData["numeroActividad"]. "'";
 				}
-
+				if(array_key_exists("vigencia", $arrData)) {
+					$sql.= " AND A.vigencia = '". $arrData["vigencia"]. "'";
+				}
 				if (array_key_exists("planArchivos", $arrData)) {
 					$sql.= " AND A.plan_archivos = 1";
 				}
@@ -1185,9 +1209,9 @@ class General_model extends CI_Model {
 				}
 				if (array_key_exists("idEstrategia", $arrData)) {
 					$sql.= " AND E.fk_id_estrategia = '". $arrData["idEstrategia"]. "'";
-					if (array_key_exists("vigencia", $arrData)) {
-						$sql.= " AND M.vigencia_meta_proyecto = '". $arrData["vigencia"]. "'";
-					}
+				}
+				if (array_key_exists("vigencia", $arrData)) {
+					$sql.= " AND E.vigencia = '". $arrData["vigencia"]. "'";
 				}
 				if (array_key_exists("numeroTrimestre", $arrData) && array_key_exists("estadoTrimestre", $arrData) ) {
 					$sql.= " AND A.estado_trimestre_" . $arrData["numeroTrimestre"] . " = '". $arrData["estadoTrimestre"]. "'";
@@ -1423,7 +1447,7 @@ class General_model extends CI_Model {
 				$this->db->where('numero_objetivo_estrategico', $arrData["numeroObjetivoEstrategico"]);
 			}
 			if (array_key_exists("vigencia", $arrData)) {
-				$this->db->where('vigencia_meta_proyecto', $arrData["vigencia"]);
+				$this->db->where('A.vigencia', $arrData["vigencia"]);
 			}
 			
 			$query = $this->db->get('actividad_estado E');
@@ -1731,6 +1755,7 @@ class General_model extends CI_Model {
 			$idUser = $this->session->userdata("id");
 			$idEvaluacion = $this->input->post("hddId");
 			$fecha = date("Y-m-d G:i:s");
+			$vigencia = date("Y");
 			$arrParam = array("numeroObjetivoEstrategico" => $this->input->post("hddNumero"));
 			$infoSupervisores = $this->general_model->get_objetivos_estrategicos_supervisores($arrParam);
 			$infoEvaluacion = $this->general_model->get_evaluacion_objetivos_estrategicos($arrParam);
@@ -1748,6 +1773,7 @@ class General_model extends CI_Model {
 				} else {
 					$data = array(
 						'fk_numero_objetivo_estrategico' => $this->input->post("hddNumero"),
+						'vigencia' => $vigencia,
 						'fk_id_usuario' => $idUser,
 						'fecha_cambio' => $fecha,
 						'observacion' => $this->input->post("observacion"),
@@ -1784,6 +1810,7 @@ class General_model extends CI_Model {
 			} else {
 				$data = array(
 					'fk_numero_objetivo_estrategico' => $this->input->post("hddNumero"),
+					'vigencia' => $vigencia,
 					'fk_id_usuario' => $idUser,
 					'fecha_cambio' => $fecha,
 					'observacion' => $this->input->post("observacion"),
@@ -1821,6 +1848,7 @@ class General_model extends CI_Model {
 		public function get_evaluacion_calificacion($arrData)
 		{
 				$this->db->select('id_evaluacion_objetivo_estrategico, calificacion, estado');
+				$this->db->where('vigencia', $arrData["vigencia"]);
 				$this->db->where('fk_numero_objetivo_estrategico like', $arrData["numeroObjetivoEstrategico"]);
 				$this->db->order_by('id_evaluacion_objetivo_estrategico', 'desc');
 				$query = $this->db->get('objetivos_estrategicos_evaluacion');
@@ -1840,6 +1868,7 @@ class General_model extends CI_Model {
 				$idUser = $this->session->userdata("id");
 				$this->db->select();
 				$this->db->join('objetivos_estrategicos_historial H', 'E.id_evaluacion_objetivo_estrategico = H.fk_id_evaluacion', 'INNER');
+				$this->db->where('E.vigencia', $arrData["vigencia"]);
 				$this->db->where('E.fk_numero_objetivo_estrategico like', $arrData["numeroObjetivoEstrategico"]);
 				$this->db->where('H.fk_id_supervisor', $idUser);
 				$this->db->order_by('E.id_evaluacion_objetivo_estrategico', 'desc');
@@ -1860,6 +1889,7 @@ class General_model extends CI_Model {
 				$this->db->select();
 				$this->db->join('objetivos_estrategicos_historial H', 'E.id_evaluacion_objetivo_estrategico = H.fk_id_evaluacion', 'INNER');
 				$this->db->join('usuarios U', 'H.fk_id_supervisor = U.id_user', 'INNER');
+				$this->db->where('E.vigencia', $arrData["vigencia"]);
 				$this->db->where('fk_numero_objetivo_estrategico like', $arrData["numeroObjetivoEstrategico"]);
 				$this->db->where('E.estado', 1);
 				$this->db->order_by('E.id_evaluacion_objetivo_estrategico', 'desc');
@@ -1920,6 +1950,7 @@ class General_model extends CI_Model {
 				$this->db->select();
 				$this->db->join('objetivos_estrategicos_historial H', 'E.id_evaluacion_objetivo_estrategico = H.fk_id_evaluacion', 'INNER');
 				$this->db->join('usuarios U', 'H.fk_id_supervisor = U.id_user', 'INNER');
+				$this->db->where('vigencia', $arrData["vigencia"]);
 				$this->db->where('fk_numero_objetivo_estrategico like', $arrData["numeroObjetivoEstrategico"]);
 				$this->db->order_by('E.id_evaluacion_objetivo_estrategico', 'desc');
 				$query = $this->db->get('objetivos_estrategicos_evaluacion E');
@@ -1987,6 +2018,28 @@ class General_model extends CI_Model {
 				$query = $this->db->get('meta_proyecto_inversion');
 				if ($query->num_rows() > 0) {
 					return $query->row_array();
+				} else {
+					return false;
+				}
+		}
+
+		/**
+		 * Cantidad de actividades de un cuadro base
+		 * @since 31/12/2022
+		 */
+		public function get_actividades_CB($arrData) 
+		{
+				$this->db->select();
+				$this->db->join('actividades A', 'A.fk_id_cuadro_base = C.id_cuadro_base', 'INNER');
+				if (array_key_exists("id_cuadro_base", $arrData)) {
+					$this->db->where('C.id_cuadro_base', $arrData["id_cuadro_base"]);
+				}
+				if (array_key_exists("vigencia", $arrData)) {
+					$this->db->where('A.vigencia', $arrData["vigencia"]);
+				}
+				$query = $this->db->get('cuadro_base C');
+				if ($query->num_rows() > 0) {
+					return $query->result_array();
 				} else {
 					return false;
 				}
