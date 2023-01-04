@@ -79,7 +79,7 @@ if ($retornoError) {
         <div class="col-lg-12">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <i class="fa fa-cogs fa-fw"></i> <b>PLAN ESTRATÉGICO <?php echo date('Y'); ?></b>
+                    <i class="fa fa-cogs fa-fw"></i> <b>PLAN ESTRATÉGICO <?php echo $vigencia['vigencia']; ?></b>
                 </div>
                 <div class="panel-body">
                     <?php 
@@ -120,7 +120,7 @@ if ($retornoError) {
                                     $numeroObjetivoEstrategico = $lista['numero_objetivo_estrategico'];
                                     $arrParam = array(
                                         'numeroObjetivoEstrategico' => $numeroObjetivoEstrategico,
-                                        'vigencia' => date('Y')
+                                        'vigencia' => $vigencia['vigencia']
                                     );
                                     $metas = $this->general_model->get_lista_metas($arrParam);
                                     $indicadores = $this->general_model->get_lista_indicadores($arrParam);
@@ -214,7 +214,7 @@ if ($retornoError) {
                                             }
                                             $arrParam = array(
                                                 'id_cuadro_base' => $idCuadroBase,
-                                                'vigencia' => date('Y')
+                                                'vigencia' => $vigencia['vigencia']
                                             );
                                             $actividades_CB = $this->general_model->get_actividades_CB($arrParam);
                                             $cant_ActividadesCB = 0;

@@ -91,7 +91,7 @@
 					<select name="id_responsable" id="id_responsable" class="form-control" required >
 						<option value="">Seleccione...</option>
 						<?php for ($i = 0; $i < count($listaAreaResponsable); $i++) { ?>
-							<option value="<?php echo $listaAreaResponsable[$i]["id_area_responsable"]; ?>" <?php if($information && $information[0]["fk_id_area_responsable"] == $listaAreaResponsable[$i]["id_area_responsable"]) { echo "selected"; }  ?>><?php echo $listaAreaResponsable[$i]["area_responsable"]; ?></option>		
+							<option value="<?php echo $listaAreaResponsable[$i]["id_area_responsable"]; ?>" <?php if($information && $information[0]["fk_id_area_responsable"] == $listaAreaResponsable[$i]["id_area_responsable"]) { echo "selected"; }  ?>><?php echo $listaAreaResponsable[$i]["area_responsable"]; ?></option>
 						<?php } ?>
 					</select>
 				</div>

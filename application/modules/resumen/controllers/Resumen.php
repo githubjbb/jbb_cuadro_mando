@@ -59,8 +59,9 @@ class Resumen extends CI_Controller {
 	            );
             }
 			$data['listaNumeroDependencia'] = $this->general_model->get_dependencia_full_by_filtro($arrParam);
+			$vigencia = $this->general_model->get_vigencia();
             $arrParam = array(
-	                'vigencia' => date('Y')
+	                'vigencia' => $vigencia['vigencia']
 	            );
             $data['listaTodasActividades'] = $this->general_model->get_numero_actividades_full_by_dependencia($arrParam);
 			$data['listaActividades'] = $this->general_model->get_actividades($arrParam);
@@ -70,7 +71,7 @@ class Resumen extends CI_Controller {
 			$arrParam2 = array(
 				"numeroTrimestre" => 1,
 				"estadoTrimestre" => 0,
-				"vigencia" => date("Y")
+				"vigencia" => $vigencia['vigencia']
 			);
 			$data['nroActividadesPrimerTrimestreNoIniciada'] = $this->general_model->countActividadesEstado($arrParam2);
 			$arrParam2["numeroTrimestre"] = 2;
@@ -83,7 +84,7 @@ class Resumen extends CI_Controller {
 			$arrParam2 = array(
 				"numeroTrimestre" => 1,
 				"estadoTrimestre" => 1,
-				"vigencia" => date("Y")
+				"vigencia" => $vigencia['vigencia']
 			);
 			$data['nroActividadesPrimerTrimestreEnProceso'] = $this->general_model->countActividadesEstado($arrParam2);
 			$arrParam2["numeroTrimestre"] = 2;
@@ -96,7 +97,7 @@ class Resumen extends CI_Controller {
 			$arrParam2 = array(
 				"numeroTrimestre" => 1,
 				"estadoTrimestre" => 2,
-				"vigencia" => date("Y")
+				"vigencia" => $vigencia['vigencia']
 			);
 			$data['nroActividadesPrimerTrimestreCerrado'] = $this->general_model->countActividadesEstado($arrParam2);
 			$arrParam2["numeroTrimestre"] = 2;
@@ -109,7 +110,7 @@ class Resumen extends CI_Controller {
 			$arrParam2 = array(
 				"numeroTrimestre" => 1,
 				"estadoTrimestre" => 3,
-				"vigencia" => date("Y")
+				"vigencia" => $vigencia['vigencia']
 			);
 			$data['nroActividadesPrimerTrimestreAprobadoSupervisor'] = $this->general_model->countActividadesEstado($arrParam2);
 			$arrParam2["numeroTrimestre"] = 2;
@@ -122,7 +123,7 @@ class Resumen extends CI_Controller {
 			$arrParam2 = array(
 				"numeroTrimestre" => 1,
 				"estadoTrimestre" => 4,
-				"vigencia" => date("Y")
+				"vigencia" => $vigencia['vigencia']
 			);
 			$data['nroActividadesPrimerTrimestreRechazadaSupervisor'] = $this->general_model->countActividadesEstado($arrParam2);
 			$arrParam2["numeroTrimestre"] = 2;
@@ -135,7 +136,7 @@ class Resumen extends CI_Controller {
 			$arrParam2 = array(
 				"numeroTrimestre" => 1,
 				"estadoTrimestre" => 5,
-				"vigencia" => date("Y")
+				"vigencia" => $vigencia['vigencia']
 			);
 			$data['nroActividadesPrimerTrimestreAprobadaPlaneacion'] = $this->general_model->countActividadesEstado($arrParam2);
 			$arrParam2["numeroTrimestre"] = 2;
@@ -148,7 +149,7 @@ class Resumen extends CI_Controller {
 			$arrParam2 = array(
 				"numeroTrimestre" => 1,
 				"estadoTrimestre" => 6,
-				"vigencia" => date("Y")
+				"vigencia" => $vigencia['vigencia']
 			);
 			$data['nroActividadesPrimerTrimestreRechazadaPlaneacion'] = $this->general_model->countActividadesEstado($arrParam2);
 			$arrParam2["numeroTrimestre"] = 2;
@@ -161,7 +162,7 @@ class Resumen extends CI_Controller {
 			$arrParam2 = array(
 				"numeroTrimestre" => 1,
 				"estadoTrimestre" => 7,
-				"vigencia" => date("Y")
+				"vigencia" => $vigencia['vigencia']
 			);
 			$data['nroActividadesPrimerTrimestreIncumplidas'] = $this->general_model->countActividadesEstado($arrParam2);
 			$arrParam2["numeroTrimestre"] = 2;
@@ -202,9 +203,10 @@ class Resumen extends CI_Controller {
 					}			
 				}
 	        }
+	        $vigencia = $this->general_model->get_vigencia();
 			$arrParam = array(
 				"evaluacionFlag" => true,
-				'vigencia' => date('Y')
+				'vigencia' => $vigencia['vigencia']
 			);
 			$data['listaActividades'] = $this->general_model->get_actividades($arrParam);
 			$data['bandera'] = 1;
@@ -230,9 +232,10 @@ class Resumen extends CI_Controller {
 			}
 			//INICIO LISTAS PARA FILTROS
 			$idDependencia = $this->session->userdata("dependencia");
+			$vigencia = $this->general_model->get_vigencia();
 			$arrParam = array(
 				"idDependencia" => $idDependencia,
-				"vigencia" => date("Y")
+				"vigencia" => $vigencia['vigencia']
 			);
 			$filtroObjetivosEstrategicos = $this->general_model->get_objetivos_estrategicos_by_dependencia($arrParam);
 			$valor = '';
@@ -271,14 +274,14 @@ class Resumen extends CI_Controller {
                 $arrParam["numeroActividad"] = $this->input->post('numero_actividad');
             }
 			$data['listaActividades'] = $this->general_model->get_actividades($arrParam);
-			$arrParam["vigencia"] = date("Y");
+			$arrParam["vigencia"] = $vigencia['vigencia'];
 			$data['nroActividades'] = $this->general_model->countActividades($arrParam);          
 	        //FIN LISTAS PARA FILTROS
 			//NO INICIADA
 			$arrParam2 = array(
 				"numeroTrimestre" => 1,
 				"estadoTrimestre" => 0,
-				"vigencia" => date("Y"),
+				"vigencia" => $vigencia['vigencia'],
 				"idDependencia" => $idDependencia
 			);
 			$data['nroActividadesPrimerTrimestreNoIniciada'] = $this->general_model->countActividadesEstado($arrParam2);
@@ -292,7 +295,7 @@ class Resumen extends CI_Controller {
 			$arrParam2 = array(
 				"numeroTrimestre" => 1,
 				"estadoTrimestre" => 1,
-				"vigencia" => date("Y"),
+				"vigencia" => $vigencia['vigencia'],
 				"idDependencia" => $idDependencia
 			);
 			$data['nroActividadesPrimerTrimestreEnProceso'] = $this->general_model->countActividadesEstado($arrParam2);
@@ -306,7 +309,7 @@ class Resumen extends CI_Controller {
 			$arrParam2 = array(
 				"numeroTrimestre" => 1,
 				"estadoTrimestre" => 2,
-				"vigencia" => date("Y"),
+				"vigencia" => $vigencia['vigencia'],
 				"idDependencia" => $idDependencia
 			);
 			$data['nroActividadesPrimerTrimestreCerrado'] = $this->general_model->countActividadesEstado($arrParam2);
@@ -320,7 +323,7 @@ class Resumen extends CI_Controller {
 			$arrParam2 = array(
 				"numeroTrimestre" => 1,
 				"estadoTrimestre" => 3,
-				"vigencia" => date("Y"),
+				"vigencia" => $vigencia['vigencia'],
 				"idDependencia" => $idDependencia
 			);
 			$data['nroActividadesPrimerTrimestreAprobadoSupervisor'] = $this->general_model->countActividadesEstado($arrParam2);
@@ -334,7 +337,7 @@ class Resumen extends CI_Controller {
 			$arrParam2 = array(
 				"numeroTrimestre" => 1,
 				"estadoTrimestre" => 4,
-				"vigencia" => date("Y"),
+				"vigencia" => $vigencia['vigencia'],
 				"idDependencia" => $idDependencia
 			);
 			$data['nroActividadesPrimerTrimestreRechazadaSupervisor'] = $this->general_model->countActividadesEstado($arrParam2);
@@ -348,7 +351,7 @@ class Resumen extends CI_Controller {
 			$arrParam2 = array(
 				"numeroTrimestre" => 1,
 				"estadoTrimestre" => 5,
-				"vigencia" => date("Y"),
+				"vigencia" => $vigencia['vigencia'],
 				"idDependencia" => $idDependencia
 			);
 			$data['nroActividadesPrimerTrimestreAprobadaPlaneacion'] = $this->general_model->countActividadesEstado($arrParam2);
@@ -362,7 +365,7 @@ class Resumen extends CI_Controller {
 			$arrParam2 = array(
 				"numeroTrimestre" => 1,
 				"estadoTrimestre" => 6,
-				"vigencia" => date("Y"),
+				"vigencia" => $vigencia['vigencia'],
 				"idDependencia" => $idDependencia
 			);
 			$data['nroActividadesPrimerTrimestreRechazadaPlaneacion'] = $this->general_model->countActividadesEstado($arrParam2);
@@ -376,7 +379,7 @@ class Resumen extends CI_Controller {
 			$arrParam2 = array(
 				"numeroTrimestre" => 1,
 				"estadoTrimestre" => 7,
-				"vigencia" => date("Y"),
+				"vigencia" => $vigencia['vigencia'],
 				"idDependencia" => $idDependencia
 			);
 			$data['nroActividadesPrimerTrimestreIncumplidas'] = $this->general_model->countActividadesEstado($arrParam2);
@@ -596,7 +599,8 @@ class Resumen extends CI_Controller {
      * @author BMOTTAG
 	 */
 	public function planes_institucionales()
-	{				
+	{
+			$data['vigencia'] = $this->general_model->get_vigencia();
 			$data["view"] = 'planes_institucionales';
 			$this->load->view("layout_calendar", $data);
 	}
@@ -1320,9 +1324,10 @@ class Resumen extends CI_Controller {
 		if($listaDependencia){
 			$j=2;
 	        foreach ($listaDependencia as $lista):
+	        	$vigencia = $this->general_model->get_vigencia();
 	            $arrParam = array(
 	                "idDependencia" => $lista["id_dependencia"],
-	                "vigencia" => date("Y")
+	                "vigencia" => $vigencia['vigencia']
 	            );
 	            $nroActividades = $this->general_model->countActividades($arrParam);
 	            $avance = $this->general_model->sumAvance($arrParam);
@@ -1388,9 +1393,10 @@ class Resumen extends CI_Controller {
 		if($listaEstrategias){
 			$j=2;
 	        foreach ($listaEstrategias as $lista):
+	        	$vigencia = $this->general_model->get_vigencia();
                 $arrParam = array(
                     "idEstrategia" => $lista["id_estrategia"],
-                    "vigencia" => date("Y")
+                    "vigencia" => $vigencia['vigencia']
                 );
                 $nroActividades = $this->general_model->countActividades($arrParam);
                 $cumplimiento = $this->general_model->sumCumplimiento($arrParam);
@@ -1459,9 +1465,10 @@ class Resumen extends CI_Controller {
 		if($info){
 			$j=2;
 	        foreach ($info as $lista):
+	        	$vigencia = $this->general_model->get_vigencia();
                 $arrParam = array(
                     "numeroObjetivoEstrategico" => $lista["numero_objetivo_estrategico"],
-                    "vigencia" => date("Y")
+                    "vigencia" => $vigencia['vigencia']
                 );
                 $nroActividades = $this->general_model->countActividades($arrParam);
 				$cumplimiento = $this->general_model->sumCumplimiento($arrParam);
@@ -1557,9 +1564,10 @@ class Resumen extends CI_Controller {
 	{
 			header("Content-Type: text/plain; charset=utf-8"); //Para evitar problemas de acentos
 			$data["numeroObjetivoEstrategico"] = $this->input->post("numeroObjetivoEstrategico");
+			$vigencia = $this->general_model->get_vigencia();
 			$arrParam = array(
 				"numeroObjetivoEstrategico" => $data["numeroObjetivoEstrategico"],
-				"vigencia" => date("Y")
+				"vigencia" => $vigencia['vigencia']
 			);
 			$data['infoSupervisores'] = $this->general_model->get_objetivos_estrategicos_supervisores($arrParam);
             $data['infoEvaluacion'] = $this->general_model->get_evaluacion_objetivos_estrategicos($arrParam);
@@ -1721,9 +1729,10 @@ class Resumen extends CI_Controller {
 	{
 			header("Content-Type: text/plain; charset=utf-8"); //Para evitar problemas de acentos
 			$data["numeroObjetivoEstrategico"] = $this->input->post("numeroObjetivoEstrategico");
+			$vigencia = $this->general_model->get_vigencia();
 			$arrParam = array(
 				"numeroObjetivoEstrategico" => $data["numeroObjetivoEstrategico"],
-				"vigencia" => date("Y")
+				"vigencia" => $vigencia['vigencia']
 			);
             $data['comentarios'] = $this->general_model->get_historial_comentarios($arrParam);
 			$this->load->view("historial_comentarios_modal", $data);

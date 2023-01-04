@@ -65,7 +65,7 @@ if ($retornoError) {
         <div class="col-lg-12">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <i class="fa fa-cogs fa-fw"></i> <b>TABLERO PMR <?php echo date('Y'); ?></b>
+                    <i class="fa fa-cogs fa-fw"></i> <b>TABLERO PMR <?php echo $vigencia['vigencia']; ?></b>
                 </div>
                 <div class="panel-body">
                     <div class="row">
@@ -103,21 +103,21 @@ if ($retornoError) {
                                                     <th style='width: 7%'><small>Opciones</small></th>
                                                     <th><small>Indicador PMR</small></th>
                                                     <th><small>Actividades Relacionadas</small></th>
-                                                    <th><small>Meta <?php echo date('Y') ?></small></th>
+                                                    <th><small>Meta <?php echo $vigencia['vigencia'] ?></small></th>
                                                     <th><small>Unidad Medida</small></th>
-                                                    <th><small>Avance Enero <?php echo date('Y') ?></small></th>
-                                                    <th><small>Avance Febrero <?php echo date('Y') ?></small></th>
-                                                    <th><small>Avance Marzo <?php echo date('Y') ?></small></th>
-                                                    <th><small>Avance Abril <?php echo date('Y') ?></small></th>
-                                                    <th><small>Avance Mayo <?php echo date('Y') ?></small></th>
-                                                    <th><small>Avance Junio <?php echo date('Y') ?></small></th>
-                                                    <th><small>Avance Julio <?php echo date('Y') ?></small></th>
-                                                    <th><small>Avance Agosto <?php echo date('Y') ?></small></th>
-                                                    <th><small>Avance Septiembre <?php echo date('Y') ?></small></th>
-                                                    <th><small>Avance Octubre <?php echo date('Y') ?></small></th>
-                                                    <th><small>Avance Noviembre <?php echo date('Y') ?></small></th>
-                                                    <th><small>Avance Diciembre <?php echo date('Y') ?></small></th>
-                                                    <th><small>Total Avance <?php echo date('Y') ?></small></th>
+                                                    <th><small>Avance Enero <?php echo $vigencia['vigencia'] ?></small></th>
+                                                    <th><small>Avance Febrero <?php echo $vigencia['vigencia'] ?></small></th>
+                                                    <th><small>Avance Marzo <?php echo $vigencia['vigencia'] ?></small></th>
+                                                    <th><small>Avance Abril <?php echo $vigencia['vigencia'] ?></small></th>
+                                                    <th><small>Avance Mayo <?php echo $vigencia['vigencia'] ?></small></th>
+                                                    <th><small>Avance Junio <?php echo $vigencia['vigencia'] ?></small></th>
+                                                    <th><small>Avance Julio <?php echo $vigencia['vigencia'] ?></small></th>
+                                                    <th><small>Avance Agosto <?php echo $vigencia['vigencia'] ?></small></th>
+                                                    <th><small>Avance Septiembre <?php echo $vigencia['vigencia'] ?></small></th>
+                                                    <th><small>Avance Octubre <?php echo $vigencia['vigencia'] ?></small></th>
+                                                    <th><small>Avance Noviembre <?php echo $vigencia['vigencia'] ?></small></th>
+                                                    <th><small>Avance Diciembre <?php echo $vigencia['vigencia'] ?></small></th>
+                                                    <th><small>Total Avance <?php echo $vigencia['vigencia'] ?></small></th>
                                                     <th><small>Naturaleza</small></th>
                                                     <th><small>Periodicidad</small></th>
                                                     <th><small>Elemento PEP</small></th>
@@ -130,7 +130,7 @@ if ($retornoError) {
                                             foreach ($info as $lista):
                                                 $arrParams = array(
                                                     'fk_numero_indicador_pmr' => $lista['fk_numero_indicador_pmr'],
-                                                    'vigencia' => date('Y')
+                                                    'vigencia' => $vigencia['vigencia']
                                                 );
                                                 $arrayActividades = $this->settings_model->get_actividades($arrParams);
                                                 if ($arrayActividades > 0) {

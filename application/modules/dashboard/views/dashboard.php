@@ -64,7 +64,7 @@ if ($retornoError) {
         <div class="col-lg-6">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <i class="fa fa-bell fa-fw"></i> Avance Dependencias <b><?php echo date("Y"); ?></b>
+                    <i class="fa fa-bell fa-fw"></i> Avance Dependencias <b><?php echo vigencia['vigencia']; ?></b>
                 </div>
                 <div class="panel-body small">
 
@@ -72,7 +72,7 @@ if ($retornoError) {
                         <thead>
                             <tr>
                                 <th>Dependencia</th>
-                                <th>Avance Plan Estratégico <b><?php echo date("Y"); ?></b></th>
+                                <th>Avance Plan Estratégico <b><?php echo $vigencia['vigencia']; ?></b></th>
                                 <th>No. Actividades</th>
                             </tr>
                         </thead>
@@ -80,7 +80,7 @@ if ($retornoError) {
                         foreach ($listaDependencia as $lista):
                             $arrParam = array(
                                 "idDependencia" => $lista["id_dependencia"],
-                                "vigencia" => date("Y")
+                                "vigencia" => $vigencia['vigencia']
                             );
                             $nroActividades = $this->general_model->countActividades($arrParam);
                             $avance = $this->general_model->sumAvance($arrParam);
@@ -165,7 +165,7 @@ if ($retornoError) {
         <div class="col-lg-6">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <i class="fa fa-bell fa-fw"></i> Avance Estrategias <b><?php echo date("Y"); ?></b>
+                    <i class="fa fa-bell fa-fw"></i> Avance Estrategias <b><?php echo $vigencia['vigencia']; ?></b>
                 </div>
                 <div class="panel-body small">
 
@@ -173,7 +173,7 @@ if ($retornoError) {
                         <thead>
                             <tr>
                                 <th>Estrategia</th>
-                                <th>% Avance Vigencia <b><?php echo date("Y"); ?></b></th>
+                                <th>% Avance Vigencia <b><?php echo $vigencia['vigencia']; ?></b></th>
                                 <th>No. Actividades</th>
                             </tr>
                         </thead>
@@ -182,7 +182,7 @@ if ($retornoError) {
                         foreach ($listaObjetivosEstrategicos as $lista):
                             $arrParam = array(
                                 "idObjetivo" => $lista["id_objetivo_estrategico"],
-                                "vigencia" => date("Y")
+                                "vigencia" => $vigencia['vigencia']
                             );
                             $nroActividades = $this->general_model->countActividades($arrParam);
                             $avance = $this->general_model->sumAvance($arrParam);
@@ -249,7 +249,7 @@ if ($retornoError) {
                         <thead>
                             <tr>
                                 <th>Administración</th>
-                                <th>Avance Plan Estratégico <b><?php echo date("Y"); ?></b></th>
+                                <th>Avance Plan Estratégico <b><?php echo $vigencia['vigencia']; ?></b></th>
                             </tr>
                         </thead>
                         <?php

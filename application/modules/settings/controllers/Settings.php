@@ -725,10 +725,15 @@ class Settings extends CI_Controller {
      * @since 16/04/2022
      * @author BMOTTAG
 	 */
-	public function metas_proyectos($vigencia=2022)
+	public function metas_proyectos($vigencia='x')
 	{
-			$data['vigencia']  = $vigencia;
-			$arrParam = array('vigencia'=>$vigencia);
+			$vig = $this->general_model->get_vigencia();
+			if($vigencia == 'x'){
+				$data['vigencia']  = $vig['vigencia'];
+			} else {
+				$data['vigencia']  = $vigencia;
+			}
+			$arrParam = array('vigencia'=>$data['vigencia']);
 			$data['info'] = $this->general_model->get_meta_proyecto($arrParam);
 			
 			$data["view"] = 'meta_proyectos';
@@ -1271,14 +1276,16 @@ class Settings extends CI_Controller {
 				"id" => "x"
 			);
 			$data['listaEstrategias'] = $this->general_model->get_basic_search($arrParam);
+			$vigencia = $this->general_model->get_vigencia();
 			$arrParam = array(
-				'vigencia' => date('Y')
+				'vigencia' => $vigencia['vigencia']
 			);
 			$data['listaActividades'] = $this->general_model->get_actividades($arrParam);
 			$data['cantActividades'] = 0;
 			if ($data['listaActividades']) {
 				$data['cantActividades'] = count($data['listaActividades']);
 			}
+			$data['vigencia'] = $this->general_model->get_vigencia();
 			
 			$data["view"] = "plan_estrategico";
 			$this->load->view("layout_calendar", $data);
@@ -1520,9 +1527,10 @@ class Settings extends CI_Controller {
         header("Content-Type: text/plain; charset=utf-8"); //Para evitar problemas de acentos
 		$numeroProyecto = $this->input->post('numeroProyecto');
 
+		$vigencia = $this->general_model->get_vigencia();
 		$arrParam = array(
 			"numeroProyecto" => $numeroProyecto,
-			"vigencia" => date('Y')
+			"vigencia" => $vigencia['vigencia']
 		);
 		$lista= $this->general_model->get_meta_proyecto($arrParam);
 
@@ -1941,9 +1949,10 @@ class Settings extends CI_Controller {
 			$data["idCuadroBase"] = $this->input->post("idCuadroBase");
 
 			if ($data["idCuadroBase"] != 'x') {
+				$vigencia = $this->general_model->get_vigencia();
 				$arrParam = array(
 					"idCuadroBase" => $data["idCuadroBase"],
-					'vigencia' => date('Y')
+					'vigencia' => $vigencia['vigencia']
 				);
 				$data['information'] = $this->general_model->get_lista_cuadro_mando($arrParam);//info bloques
 				
@@ -1953,9 +1962,10 @@ class Settings extends CI_Controller {
 			$arrParam = array("numeroObjetivoEstrategico" => $data["numeroObjetivoEstrategico"]);
 			$data['infoObjetivoEstrategico'] = $this->general_model->get_objetivos_estrategicos($arrParam);
 
+			$vigencia = $this->general_model->get_vigencia();
 			$arrParam = array(
 				"NOTidCuadroBase" => $data["idCuadroBase"],
-				'vigencia' => date('Y')
+				'vigencia' => $vigencia['vigencia']
 			);
 			$data['listaActividades'] = $this->general_model->get_actividades($arrParam);
 
@@ -1993,15 +2003,20 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
      * @since 16/04/2022
      * @author BMOTTAG
 	 */
-	public function propositos_x_vigencia($vigencia=2022)
+	public function propositos_x_vigencia($vigencia='x')
 	{
-			$data['vigencia']  = $vigencia;
-			$arrParam = array('vigencia'=>$vigencia);
+			$vig = $this->general_model->get_vigencia();
+			if($vigencia == 'x'){
+				$data['vigencia']  = $vig['vigencia'];
+			} else {
+				$data['vigencia']  = $vigencia;
+			}
+			$arrParam = array('vigencia'=>$data['vigencia']);
 			$data['info'] = $this->general_model->get_propositos_x_vigencia($arrParam);
 			for ($i=0; $i<count($data['info']); $i++) {
 				$arrParam = array(
 					'numeroProposito' => $data['info'][$i]['numero_proposito'],
-					'vigencia' => $vigencia
+					'vigencia' => $data['vigencia']
 				);
 				$programado = $this->general_model->get_sumPresupuestoProgramado($arrParam);
 				$ejecutado = $this->general_model->get_sumRecursoEjecutado($arrParam);
@@ -2087,10 +2102,31 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
 				"id" => "x"
 			);
 			$data['info'] = $this->general_model->get_basic_search($arrParam);
+			$data['vigencia'] = $this->general_model->get_vigencia();
+
 			
 			$data["view"] = 'fechas';
 			$this->load->view("layout_calendar", $data);
 	}
+
+	/**
+	 * Cambiar Vigencia
+     * @since 04/01/2023
+     * @author AOCUBILLOSA
+	 */
+	public function cambiarVigencia()
+	{
+			header('Content-Type: application/json');
+			$msj = "Se realizó cambio de vigencia";
+			if($this->general_model->cambiar_vigencia()){
+				$data["result"] = true;				
+				$this->session->set_flashdata('retornoExito2', '<strong>Correcto!</strong> ' . $msj);
+			} else {
+				$data["result"] = "error";			
+				$this->session->set_flashdata('retornoError2', '<strong>Error!</strong> Ask for help');
+			}
+			echo json_encode($data);	
+    }
 
     /**
      * Cargo modal - formulario fechas limite registro ejecución
@@ -2138,14 +2174,14 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
 			);
 
 			if($this->general_model->updateRecord($arrParam)){
-				$data["result"] = true;				
+				$data["result"] = true;
 				$this->session->set_flashdata('retornoExito', '<strong>Correcto!</strong> ' . $msj);
 			} else {
-				$data["result"] = "error";			
+				$data["result"] = "error";
 				$this->session->set_flashdata('retornoError', '<strong>Error!</strong> Ask for help');
 			}
 
-			echo json_encode($data);	
+			echo json_encode($data);
     }
 
 	/**
@@ -2153,15 +2189,20 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
      * @since 24/07/2022
      * @author BMOTTAG
 	 */
-	public function proyectos_x_vigencia($vigencia=2022)
+	public function proyectos_x_vigencia($vigencia='x')
 	{
-			$data['vigencia']  = $vigencia;
-			$arrParam = array('vigencia'=>$vigencia);
+			$vig = $this->general_model->get_vigencia();
+			if($vigencia == 'x'){
+				$data['vigencia']  = $vig['vigencia'];
+			} else {
+				$data['vigencia']  = $vigencia;
+			}
+			$arrParam = array('vigencia'=>$data['vigencia']);
 			$data['info'] = $this->general_model->get_proyectos_x_vigencia($arrParam);
 			for ($i=0; $i<count($data['info']); $i++) {
 				$arrParam = array(
 					'numeroProyecto' => $data['info'][$i]['numero_proyecto_inversion'],
-					'vigencia' => $vigencia
+					'vigencia' => $data['vigencia']
 				);
 				$programado = $this->general_model->get_sumPresupuestoProgramado($arrParam);
 				$ejecutado = $this->general_model->get_sumRecursoEjecutado($arrParam);
@@ -2239,15 +2280,20 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
      * @since 24/07/2022
      * @author BMOTTAG
 	 */
-	public function metas_pdd_x_vigencia($vigencia=2022)
+	public function metas_pdd_x_vigencia($vigencia='x')
 	{
-			$data['vigencia']  = $vigencia;
-			$arrParam = array('vigencia'=>$vigencia);
+			$vig = $this->general_model->get_vigencia();
+			if($vigencia == 'x'){
+				$data['vigencia']  = $vig['vigencia'];
+			} else {
+				$data['vigencia']  = $vigencia;
+			}
+			$arrParam = array('vigencia'=>$data['vigencia']);
 			$data['info'] = $this->general_model->get_metas_pdd_x_vigencia($arrParam);
 			for ($i=0; $i<count($data['info']); $i++) {
 				$arrParam = array(
 					'numeroMetaPDD' => $data['info'][$i]['numero_meta_pdd'],
-					'vigencia' => $vigencia
+					'vigencia' => $data['vigencia']
 				);
 				$programado = $this->general_model->get_sumPresupuestoProgramado($arrParam);
 				$ejecutado = $this->general_model->get_sumRecursoEjecutado($arrParam);
@@ -2395,15 +2441,20 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
      * @since 24/07/2022
      * @author BMOTTAG
 	 */
-	public function programa_sp_x_vigencia($vigencia=2022)
+	public function programa_sp_x_vigencia($vigencia='x')
 	{
-			$data['vigencia']  = $vigencia;
-			$arrParam = array('vigencia'=>$vigencia);
+			$vig = $this->general_model->get_vigencia();
+			if($vigencia == 'x'){
+				$data['vigencia']  = $vig['vigencia'];
+			} else {
+				$data['vigencia']  = $vigencia;
+			}
+			$arrParam = array('vigencia'=>$data['vigencia']);
 			$data['info'] = $this->general_model->get_programa_sp_x_vigencia($arrParam);
 			for ($i=0; $i<count($data['info']); $i++) {
 				$arrParam = array(
 					'numeroProgramaSG' => $data['info'][$i]['numero_programa'],
-					'vigencia' => $vigencia
+					'vigencia' => $data['vigencia']
 				);
 				$programado = $this->general_model->get_sumPresupuestoProgramado($arrParam);
 				$ejecutado = $this->general_model->get_sumRecursoEjecutado($arrParam);
@@ -2553,11 +2604,12 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
 	 */
 	public function indicador_sp_x_vigencia($vigencia='x')
 	{
-			$data['vigencia']  = $vigencia;
+			$vig = $this->general_model->get_vigencia();
 			if($vigencia == 'x'){
-				$data['vigencia']  = date('Y');
+				$data['vigencia']  = $vig['vigencia'];
+			} else {
+				$data['vigencia']  = $vigencia;
 			}
-
 			$arrParam = array('vigencia'=>$data['vigencia']);
 			$data['info'] = $this->general_model->get_indicador_sp_x_vigencia($arrParam);
 	
@@ -2698,8 +2750,12 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
 	 */
 	public function tablero_pmr()
 	{
-			$arrParam = array('vigencia' => date('Y'));
+			$vigencia = $this->general_model->get_vigencia();
+			$arrParam = array(
+				'vigencia' => $vigencia['vigencia']
+			);
 			$data['info'] = $this->settings_model->get_tablero_pmr($arrParam);
+			$data['vigencia'] = $this->general_model->get_vigencia();
 			$data["view"] = "tablero_pmr";
 			$this->load->view("layout_calendar", $data);
 	}

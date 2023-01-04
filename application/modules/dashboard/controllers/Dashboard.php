@@ -79,6 +79,7 @@ class Dashboard extends CI_Controller {
                 $arrParam["numeroProyecto"] = $_GET["numero_proyecto"];
             }
 			$data['listaNumeroDependencia'] = $this->general_model->get_dependencia_full_by_filtro($arrParam);
+			$data['vigencia'] = $this->general_model->get_vigencia();
 
 			$data["view"] = "dashboard_principal";
 			$this->load->view("layout_calendar", $data);
@@ -110,9 +111,10 @@ class Dashboard extends CI_Controller {
 			$data['idCuadroBase'] = $idCuadroBase;
 			$data['numeroTrimestre'] = false;
 			$data['infoEjecucion'] = false;
+			$vigencia = $this->general_model->get_vigencia();
 			$arrParam = array(
 				"idCuadroBase" => $idCuadroBase,
-				'vigencia' => date('Y')
+				'vigencia' => $vigencia['vigencia']
 			);
 			$data['infoCuadroBase'] = $this->general_model->get_lista_cuadro_mando($arrParam);
 			$data['listaActividades'] = $this->general_model->get_actividades($arrParam);
@@ -126,9 +128,10 @@ class Dashboard extends CI_Controller {
 			$data['listaObjetivosEstrategicos'] = $this->general_model->get_objetivos_estrategicos($arrParam);
 
 			if($numeroActividad != 'x') {
+				$vigencia = $this->general_model->get_vigencia();
 				$arrParam = array(
 					"numeroActividad" => $numeroActividad,
-					'vigencia' => date('Y')
+					'vigencia' => $vigencia['vigencia']
 				);
 				$data['listaActividades'] = $this->general_model->get_actividades($arrParam);
 				
@@ -549,9 +552,10 @@ class Dashboard extends CI_Controller {
 			);
 			$data['listaDependencia'] = $this->general_model->get_app_dependencias($arrParam);
 
+			$vigencia = $this->general_model->get_vigencia();
 			$arrParam = array(
 				"idDependencia" => $idDependencia,
-				"vigencia" => date("Y")
+				"vigencia" => $vigencia['vigencia']
 			);
 			$filtroObjetivosEstrategicos = $this->general_model->get_objetivos_estrategicos_by_dependencia($arrParam);
 
@@ -606,6 +610,7 @@ class Dashboard extends CI_Controller {
 				"id" => $idDependencia
 			);
 			$data['infoDependencia'] = $this->general_model->get_basic_search($arrParam);
+			$data['vigencia'] = $this->general_model->get_vigencia();
 
 			$data["view"] = "dashboard_principal";
 			$this->load->view("layout_calendar", $data);
@@ -818,10 +823,11 @@ class Dashboard extends CI_Controller {
 	 * @since 09/06/2022
 	 */
 	public function dependencias($idDependencia)
-	{				
+	{
+			$vigencia = $this->general_model->get_vigencia();
 			$arrParam = array(
 				"idDependencia" => $idDependencia,
-				"vigencia" => date("Y")
+				"vigencia" => $vigencia['vigencia']
 			);
 			$filtroObjetivosEstrategicos = $this->general_model->get_objetivos_estrategicos_by_dependencia($arrParam);
 			$data['nroActividadesDependencia'] = $this->general_model->countActividades($arrParam);
@@ -856,7 +862,7 @@ class Dashboard extends CI_Controller {
 			$arrParam2 = array(
 				"numeroTrimestre" => 1,
 				"estadoTrimestre" => 0,
-				"vigencia" => date("Y"),
+				"vigencia" => $vigencia['vigencia'],
 				"idDependencia" => $idDependencia
 			);
 			$data['nroActividadesPrimerTrimestreNoIniciada'] = $this->general_model->countActividadesEstado($arrParam2);
@@ -872,7 +878,7 @@ class Dashboard extends CI_Controller {
 			$arrParam2 = array(
 				"numeroTrimestre" => 1,
 				"estadoTrimestre" => 1,
-				"vigencia" => date("Y"),
+				"vigencia" => $vigencia['vigencia'],
 				"idDependencia" => $idDependencia
 			);
 			$data['nroActividadesPrimerTrimestreEnProceso'] = $this->general_model->countActividadesEstado($arrParam2);
@@ -888,7 +894,7 @@ class Dashboard extends CI_Controller {
 			$arrParam2 = array(
 				"numeroTrimestre" => 1,
 				"estadoTrimestre" => 2,
-				"vigencia" => date("Y"),
+				"vigencia" => $vigencia['vigencia'],
 				"idDependencia" => $idDependencia
 			);
 			$data['nroActividadesPrimerTrimestreCerrado'] = $this->general_model->countActividadesEstado($arrParam2);
@@ -904,7 +910,7 @@ class Dashboard extends CI_Controller {
 			$arrParam2 = array(
 				"numeroTrimestre" => 1,
 				"estadoTrimestre" => 3,
-				"vigencia" => date("Y"),
+				"vigencia" => $vigencia['vigencia'],
 				"idDependencia" => $idDependencia
 			);
 			$data['nroActividadesPrimerTrimestreAprobadoSupervisor'] = $this->general_model->countActividadesEstado($arrParam2);
@@ -920,7 +926,7 @@ class Dashboard extends CI_Controller {
 			$arrParam2 = array(
 				"numeroTrimestre" => 1,
 				"estadoTrimestre" => 4,
-				"vigencia" => date("Y"),
+				"vigencia" => $vigencia['vigencia'],
 				"idDependencia" => $idDependencia
 			);
 			$data['nroActividadesPrimerTrimestreRechazadaSupervisor'] = $this->general_model->countActividadesEstado($arrParam2);
@@ -936,7 +942,7 @@ class Dashboard extends CI_Controller {
 			$arrParam2 = array(
 				"numeroTrimestre" => 1,
 				"estadoTrimestre" => 5,
-				"vigencia" => date("Y"),
+				"vigencia" => $vigencia['vigencia'],
 				"idDependencia" => $idDependencia
 			);
 			$data['nroActividadesPrimerTrimestreAprobadaPlaneacion'] = $this->general_model->countActividadesEstado($arrParam2);
@@ -952,7 +958,7 @@ class Dashboard extends CI_Controller {
 			$arrParam2 = array(
 				"numeroTrimestre" => 1,
 				"estadoTrimestre" => 6,
-				"vigencia" => date("Y"),
+				"vigencia" => $vigencia['vigencia'],
 				"idDependencia" => $idDependencia
 			);
 			$data['nroActividadesPrimerTrimestreRechazadaPlaneacion'] = $this->general_model->countActividadesEstado($arrParam2);
@@ -968,7 +974,7 @@ class Dashboard extends CI_Controller {
 			$arrParam2 = array(
 				"numeroTrimestre" => 1,
 				"estadoTrimestre" => 7,
-				"vigencia" => date("Y"),
+				"vigencia" => $vigencia['vigencia'],
 				"idDependencia" => $idDependencia
 			);
 			$data['nroActividadesPrimerTrimestreIncumplidas'] = $this->general_model->countActividadesEstado($arrParam2);
@@ -1013,9 +1019,10 @@ class Dashboard extends CI_Controller {
 			);
 			$data['listaDependencia'] = $this->general_model->get_app_dependencias($arrParam);
 
+			$vigencia = $this->general_model->get_vigencia();
 			$arrParam = array(
 				"idDependencia" => $idDependencia,
-				"vigencia" => date("Y")
+				"vigencia" => $vigencia['vigencia']
 			);
 			$filtroObjetivosEstrategicos = $this->general_model->get_objetivos_estrategicos_by_dependencia($arrParam);
 
@@ -1075,6 +1082,7 @@ class Dashboard extends CI_Controller {
 				"id" => $idDependencia
 			);
 			$data['infoDependencia'] = $this->general_model->get_basic_search($arrParam);
+			$data['vigencia'] = $this->general_model->get_vigencia();
 
 			$data["view"] = "dashboard_principal";
 			$this->load->view("layout_calendar", $data);
@@ -1095,8 +1103,9 @@ class Dashboard extends CI_Controller {
 			);
 			$data['listaDependencia'] = $this->general_model->get_app_dependencias($arrParam);
 
+			$vigencia = $this->general_model->get_vigencia();
 			$arrParam = array(
-				"vigencia" => date("Y")
+				"vigencia" => $vigencia['vigencia']
 			);
 			$filtroObjetivosEstrategicos = $this->general_model->get_objetivos_estrategicos_by_dependencia($arrParam);
 
@@ -1137,6 +1146,7 @@ class Dashboard extends CI_Controller {
             }
 			$data['listaNumeroDependencia'] = $this->general_model->get_dependencia_full_by_filtro($arrParam);
 	        //FIN LISTAS PARA FILTROS
+	        $data['vigencia'] = $this->general_model->get_vigencia();
 
 			$data["view"] = "dashboard_principal";
 			$this->load->view("layout_calendar", $data);
@@ -1385,8 +1395,9 @@ class Dashboard extends CI_Controller {
 			);
 			$data['listaDependencia'] = $this->general_model->get_app_dependencias($arrParam);
 
+			$vigencia = $this->general_model->get_vigencia();
 			$arrParam = array(
-				"vigencia" => date("Y")
+				"vigencia" => $vigencia['vigencia']
 			);
 			$filtroObjetivosEstrategicos = $this->general_model->get_objetivos_estrategicos_by_dependencia($arrParam);
 
@@ -1427,6 +1438,7 @@ class Dashboard extends CI_Controller {
             }
 			$data['listaNumeroDependencia'] = $this->general_model->get_dependencia_full_by_filtro($arrParam);
 	        //FIN LISTAS PARA FILTROS
+	        $data['vigencia'] = $this->general_model->get_vigencia();
 
 			$data["view"] = "dashboard_principal";
 			$this->load->view("layout_calendar", $data);
@@ -1447,10 +1459,4 @@ class Dashboard extends CI_Controller {
 
 			$this->load->view("auditoria_actividad_modal", $data);
     }
-
-
-
-
-	
-	
 }

@@ -121,10 +121,11 @@
                         <tbody>                         
                         <?php
                             foreach ($listaObjetivosEstrategicos as $lista):
+                                $vigencia = $this->general_model->get_vigencia();
                                 $arrParam = array(
                                     "idDependencia" => $infoDependencia[0]['id_dependencia'],
                                     "numeroObjetivoEstrategico" => $lista["numero_objetivo_estrategico"],
-                                    "vigencia" => date("Y")
+                                    "vigencia" => $vigencia['vigencia']
                                 );
                                 $nroActividades = $this->general_model->countActividades($arrParam);
                                 $cumplimiento = $this->general_model->sumCumplimiento($arrParam);

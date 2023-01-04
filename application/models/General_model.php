@@ -59,6 +59,42 @@ class General_model extends CI_Model {
 	}
 
 	/**
+	 * Consultar Vigencia
+	 * @author AOCUBILLOSA
+	 * @since 03/01/2022
+	 */
+	public function get_vigencia() 
+	{	
+		$this->db->select('vigencia');
+		$query = $this->db->get('param_vigencia');
+		if ($query->num_rows() > 0) {
+			return $query->row_array();
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Cambiar Vigencia
+	 * @author AOCUBILLOSA
+	 * @since 04/01/2023
+	 */
+	public function cambiar_vigencia()
+	{
+		$vigencia = $this->input->post('vigencia');
+		$data = array(
+			'vigencia' => $vigencia
+		);
+		$query = $this->db->update('param_vigencia', $data);
+
+		if ($query) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
 	 * Lista de menu
 	 * Modules: MENU
 	 * @since 30/3/2020
@@ -1755,7 +1791,7 @@ class General_model extends CI_Model {
 			$idUser = $this->session->userdata("id");
 			$idEvaluacion = $this->input->post("hddId");
 			$fecha = date("Y-m-d G:i:s");
-			$vigencia = date("Y");
+			$vigencia = $this->general_model->get_vigencia();
 			$arrParam = array("numeroObjetivoEstrategico" => $this->input->post("hddNumero"));
 			$infoSupervisores = $this->general_model->get_objetivos_estrategicos_supervisores($arrParam);
 			$infoEvaluacion = $this->general_model->get_evaluacion_objetivos_estrategicos($arrParam);
@@ -1773,7 +1809,7 @@ class General_model extends CI_Model {
 				} else {
 					$data = array(
 						'fk_numero_objetivo_estrategico' => $this->input->post("hddNumero"),
-						'vigencia' => $vigencia,
+						'vigencia' => $vigencia['vigencia'],
 						'fk_id_usuario' => $idUser,
 						'fecha_cambio' => $fecha,
 						'observacion' => $this->input->post("observacion"),
@@ -1810,7 +1846,7 @@ class General_model extends CI_Model {
 			} else {
 				$data = array(
 					'fk_numero_objetivo_estrategico' => $this->input->post("hddNumero"),
-					'vigencia' => $vigencia,
+					'vigencia' => $vigencia['vigencia'],
 					'fk_id_usuario' => $idUser,
 					'fecha_cambio' => $fecha,
 					'observacion' => $this->input->post("observacion"),

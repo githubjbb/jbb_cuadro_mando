@@ -22,7 +22,7 @@
         <div class="col-lg-6">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <i class="fa fa-bell fa-fw"></i> Avance Dependencias <b><?php echo date("Y"); ?></b>
+                    <i class="fa fa-bell fa-fw"></i> Avance Dependencias <b><?php echo $vigencia['vigencia']; ?></b>
                 </div>
                 <div class="panel-body small">
 
@@ -38,7 +38,7 @@
                         foreach ($listaDependencia as $lista):
                             $arrParam = array(
                                 "idDependencia" => $lista["id_dependencia"],
-                                "vigencia" => date("Y")
+                                "vigencia" => $vigencia['vigencia']
                             );
                             $nroActividades = $this->general_model->countActividades($arrParam);
                             $avance = $this->general_model->sumAvance($arrParam);
@@ -82,7 +82,7 @@
         <div class="col-lg-6">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <i class="fa fa-bell fa-fw"></i> Avance Estrategias <b><?php echo date("Y"); ?></b>
+                    <i class="fa fa-bell fa-fw"></i> Avance Estrategias <b><?php echo $vigencia['vigencia']; ?></b>
                 </div>
                 <div class="panel-body small">
 
@@ -99,13 +99,13 @@
                         foreach ($listaEstrategias as $lista):
                             $arrParam = array(
                                 "idEstrategia" => $lista["id_estrategia"],
-                                "vigencia" => date("Y")
+                                "vigencia" => $vigencia['vigencia']
                             );
                             $objetivosEstrategicos = $this->general_model->get_objetivos_estrategicos_by_estrategia($arrParam);
                             for ($i=0; $i<count($objetivosEstrategicos); $i++) {
                                 $arrParam = array(
                                     "numeroObjetivoEstrategico" => $objetivosEstrategicos[$i]["numero_objetivo_estrategico"],
-                                    "vigencia" => date("Y")
+                                    "vigencia" => $vigencia['vigencia']
                                 );
                                 $actividades = $this->general_model->countActividades($arrParam);
                                 $cumplimientos = $this->general_model->sumCumplimiento($arrParam);
@@ -140,7 +140,7 @@
 
                             /*$arrParam = array(
                                 "idEstrategia" => $lista["id_estrategia"],
-                                "vigencia" => date("Y")
+                                "vigencia" => $vigencia['vigencia']
                             );
                             $nroActividades = $this->general_model->countActividades($arrParam);
                             $cumplimiento = $this->general_model->sumCumplimiento($arrParam);
@@ -188,7 +188,7 @@
                     <?php 
                         if($userRol == ID_ROL_PLANEACION || $userRol == ID_ROL_ADMINISTRADOR || $userRol == ID_ROL_SUPER_ADMIN || $userRol == ID_ROL_CONTROL_INTERNO  || $userRol == ID_ROL_JEFEOCI){
                     ?>
-                            <i class="fa fa-thumb-tack fa-fw"></i> <b>PLAN ESTRATÉGICO - <?php echo date("Y"); ?></b>
+                            <i class="fa fa-thumb-tack fa-fw"></i> <b>PLAN ESTRATÉGICO - <?php echo $vigencia['vigencia']; ?></b>
                     <?php
                         }else{
                     ?>
@@ -225,8 +225,9 @@
                             } elseif ($userRol == ID_ROL_SUPERVISOR || $userRol == ID_ROL_ENLACE){
                                 $arrParam2["idDependencia"] = $infoDependencia[0]['id_dependencia'];  
                             }
+                            $vigencia = $this->general_model->get_vigencia();
                             $arrParam2 = array(
-                                'vigencia' => date('Y')
+                                'vigencia' => $vigencia['vigencia']
                             );
                             $listaTodasActividades = $this->general_model->get_numero_actividades_full_by_dependencia($arrParam2);
                     ?>
@@ -355,8 +356,9 @@
                                     $arrParam["idDependencia"] = $_GET["id_dependencia"];
                                 }
                             }
+                            $vigencia = $this->general_model->get_vigencia();
                             $arrParam = array(
-                                'vigencia' => date('Y')
+                                'vigencia' => $vigencia['vigencia']
                             );
                             $listaActividades = $this->general_model->get_actividades_full_by_dependencia($arrParam);
 

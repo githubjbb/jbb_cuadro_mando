@@ -370,6 +370,7 @@
 				$numeroObjetivoEstrategico = $this->input->post('hddObjetivoEstrategico');
 				$idCuadroBase = $this->input->post('hddIdCuadroBase');
 		
+				$vigencia = $this->general_model->get_vigencia();
 				$data = array(
 					'fk_numero_proyecto_inversion' => $this->input->post('id_proyecto_inversion'),
 					'fk_nu_meta_proyecto_inversion' => $this->input->post('id_meta_proyecto_inversion'),
@@ -380,7 +381,7 @@
 					'fk_numero_meta_pdd' => $this->input->post('id_meta_pdd'),
 					'fk_numero_ods' => $this->input->post('id_ods'),
 					'fk_id_dimension' => $this->input->post('id_dimension'),
-					'vigencia' => date('Y')
+					'vigencia' => $vigencia['vigencia']
 				);
 
 				//revisar si es para adicionar o editar
@@ -1081,6 +1082,7 @@
 		public function saveTableroPMR() 
 		{
 				$idPMR = $this->input->post('hddIdPMR');
+				$vigencia = $this->general_model->get_vigencia();
 				$data = array(
 					'fk_numero_objetivo_pmr' => $this->input->post('id_objetivo_pmr'),
 					'fk_id_elemento_pep_pmr' => $this->input->post('id_elemento_pep_pmr'),
@@ -1090,7 +1092,7 @@
 					'fk_id_unidad_medida_pmr' => $this->input->post('id_unidad_medida_pmr'),
 					'fk_id_naturaleza_pmr' => $this->input->post('id_naturaleza_pmr'),
 					'fk_id_periodicidad_pmr' => $this->input->post('id_periodicidad_pmr'),
-					'vigencia' => date('Y')
+					'vigencia' => $vigencia['vigencia']
 				);
 				//revisar si es para adicionar o editar
 				if ($idPMR == 'x') {

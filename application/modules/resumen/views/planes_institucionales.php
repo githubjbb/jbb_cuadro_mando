@@ -5,7 +5,7 @@
 			<div class="panel panel-primary">
 				<div class="panel-heading">
 					<h4 class="list-group-item-heading">
-					<i class="fa fa-gear fa-fw"></i> RESUMEN - PLANES INSTITUCIONALES <?php echo date('Y') ?>
+					<i class="fa fa-gear fa-fw"></i> RESUMEN - PLANES INSTITUCIONALES <?php echo $vigencia['vigencia'] ?>
 					</h4>
 				</div>
 			</div>
@@ -17,7 +17,7 @@
 		<div class="col-lg-12">
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					<i class="fa fa-crosshairs"></i> RESUMEN PLANES INSTITUCIONALES <?php echo date('Y') ?>
+					<i class="fa fa-crosshairs"></i> RESUMEN PLANES INSTITUCIONALES <?php echo $vigencia['vigencia'] ?>
 				</div>
 				<div class="panel-body">
 
@@ -53,7 +53,7 @@
 						<?php
 	                            $arrParam = array(
 	                            	"planArchivos" => true,
-	                            	'vigencia' => date('Y')
+	                            	'vigencia' => $vigencia['vigencia']
 	                            );
 	                            $nroActividades = $this->general_model->countActividades($arrParam);
 								$cumplimiento = $this->general_model->sumCumplimiento($arrParam);
@@ -87,7 +87,7 @@
 
 	                            $arrParam = array(
 	                            	"planAdquisiciones" => true,
-	                            	'vigencia' => date('Y')
+	                            	'vigencia' => $vigencia['vigencia']
 	                            );
 	                            $nroActividades = $this->general_model->countActividades($arrParam);
 								$cumplimiento = $this->general_model->sumCumplimiento($arrParam);
@@ -121,7 +121,7 @@
 
 	                            $arrParam = array(
 	                            	"planVacantes" => true,
-	                            	'vigencia' => date('Y')
+	                            	'vigencia' => $vigencia['vigencia']
 	                            );
 	                            $nroActividades = $this->general_model->countActividades($arrParam);
 								$cumplimiento = $this->general_model->sumCumplimiento($arrParam);
@@ -155,7 +155,7 @@
 
 	                            $arrParam = array(
 	                            	"planRecursos" => true,
-	                            	'vigencia' => date('Y')
+	                            	'vigencia' => $vigencia['vigencia']
 	                            );
 	                            $nroActividades = $this->general_model->countActividades($arrParam);
 								$cumplimiento = $this->general_model->sumCumplimiento($arrParam);
@@ -189,7 +189,7 @@
 
 	                            $arrParam = array(
 	                            	"planTalento" => true,
-	                            	'vigencia' => date('Y')
+	                            	'vigencia' => $vigencia['vigencia']
 	                            );
 	                            $nroActividades = $this->general_model->countActividades($arrParam);
 								$cumplimiento = $this->general_model->sumCumplimiento($arrParam);
@@ -223,7 +223,7 @@
 
 	                            $arrParam = array(
 	                            	"planCapacitacion" => true,
-	                            	'vigencia' => date('Y')
+	                            	'vigencia' => $vigencia['vigencia']
 	                            );
 	                            $nroActividades = $this->general_model->countActividades($arrParam);
 								$cumplimiento = $this->general_model->sumCumplimiento($arrParam);
@@ -257,7 +257,7 @@
 
 	                            $arrParam = array(
 	                            	"planIncentivos" => true,
-	                            	'vigencia' => date('Y')
+	                            	'vigencia' => $vigencia['vigencia']
 	                            );
 	                            $nroActividades = $this->general_model->countActividades($arrParam);
 								$cumplimiento = $this->general_model->sumCumplimiento($arrParam);
@@ -291,7 +291,7 @@
 
 	                            $arrParam = array(
 	                            	"planTrabajo" => true,
-	                            	'vigencia' => date('Y')
+	                            	'vigencia' => $vigencia['vigencia']
 	                            );
 	                            $nroActividades = $this->general_model->countActividades($arrParam);
 								$cumplimiento = $this->general_model->sumCumplimiento($arrParam);
@@ -325,7 +325,7 @@
 
 	                            $arrParam = array(
 	                            	"planAnticorrupcion" => true,
-	                            	'vigencia' => date('Y')
+	                            	'vigencia' => $vigencia['vigencia']
 	                            );
 	                            $nroActividades = $this->general_model->countActividades($arrParam);
 								$cumplimiento = $this->general_model->sumCumplimiento($arrParam);
@@ -359,7 +359,7 @@
 
 	                            $arrParam = array(
 	                            	"planTecnologia" => true,
-	                            	'vigencia' => date('Y')
+	                            	'vigencia' => $vigencia['vigencia']
 	                            );
 	                            $nroActividades = $this->general_model->countActividades($arrParam);
 								$cumplimiento = $this->general_model->sumCumplimiento($arrParam);
@@ -393,7 +393,7 @@
 
 	                            $arrParam = array(
 	                            	"planRiesgos" => true,
-	                            	'vigencia' => date('Y')
+	                            	'vigencia' => $vigencia['vigencia']
 	                            );
 	                            $nroActividades = $this->general_model->countActividades($arrParam);
 								$cumplimiento = $this->general_model->sumCumplimiento($arrParam);
@@ -427,7 +427,7 @@
 
 	                            $arrParam = array(
 	                            	"planInformacion" => true,
-	                            	'vigencia' => date('Y')
+	                            	'vigencia' => $vigencia['vigencia']
 	                            );
 	                            $nroActividades = $this->general_model->countActividades($arrParam);
 								$cumplimiento = $this->general_model->sumCumplimiento($arrParam);

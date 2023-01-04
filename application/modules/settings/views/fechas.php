@@ -4,17 +4,54 @@
 <script>
 $(function(){ 
 	$(".btn-success").click(function () {	
-			var oID = $(this).attr("id");
-            $.ajax ({
-                type: 'POST',
-				url: base_url + 'settings/cargarModalFechas',
-                data: {'idFecha': oID},
-                cache: false,
-                success: function (data) {
-                    $('#tablaDatos').html(data);
-                }
-            });
-	});	
+		var oID = $(this).attr("id");
+        $.ajax ({
+            type: 'POST',
+			url: base_url + 'settings/cargarModalFechas',
+            data: {'idFecha': oID},
+            cache: false,
+            success: function (data) {
+                $('#tablaDatos').html(data);
+            }
+        });
+	});
+
+	$(".btn-primary").click(function () {
+
+		var vigencia = $('#vigencia').val();
+		$("#div_error").css("display", "none");
+		$("#div_load").css("display", "inline");
+		
+        $.ajax ({
+            type: 'POST',
+			url: base_url + 'settings/cambiarVigencia',
+            data: {'vigencia': vigencia},
+            cache: false,
+            success: function(data){
+				if(data.result == "error") {
+					alert('Error. Reload the web page.');
+					$("#div_load").css("display", "none");
+					$("#div_error").css("display", "inline");
+					return false;
+				} 
+				if(data.result) {
+					$("#div_load").css("display", "none");
+					var url = base_url + "settings/fechas_limite";
+					$(location).attr("href", url);
+				}
+				else {
+					alert('Error. Reload the web page.');
+					$("#div_load").css("display", "none");
+					$("#div_error").css("display", "inline");
+				}	
+			},
+			error: function(result) {
+				alert('Error. Reload the web page.');
+				$("#div_load").css("display", "none");
+				$("#div_error").css("display", "inline");
+			}
+        });
+	});
 });
 </script>
 
@@ -25,12 +62,51 @@ $(function(){
 			<div class="panel panel-primary">
 				<div class="panel-heading">
 					<h4 class="list-group-item-heading">
-					<i class="fa fa-gear fa-fw"></i> CONFIGURACIÓN - FECHAS 
+					<i class="fa fa-gear fa-fw"></i> CONFIGURACIÓN - VIGENCIA Y FECHAS LIMITE 
 					</h4>
 				</div>
 			</div>
 		</div>
-		<!-- /.col-lg-12 -->				
+	</div>
+
+	<div class="row">
+		<div class="col-md-12">
+			<div class="panel panel-info">
+<?php
+	$retornoExito2 = $this->session->flashdata('retornoExito2');
+	if ($retornoExito2) {
+?>
+		<div class="alert alert-success ">
+			<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+			<?php echo $retornoExito2 ?>		
+		</div>
+<?php
+	}
+	$retornoError2 = $this->session->flashdata('retornoError2');
+	if ($retornoError2) {
+?>
+		<div class="alert alert-danger ">
+			<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+			<?php echo $retornoError2 ?>
+		</div>
+<?php
+	}
+?> 
+				<div class="panel-heading text-center">
+					<div class="row">
+						<div class="col-md-5"></div>
+						<div class="col-md-2">
+							<label class="control-label" for="vigencia">Vigencia</label>
+							<select class="form-control" name="vigencia" id="vigencia">
+								<option value="2022" <?php if($vigencia['vigencia'] == 2022) { echo "selected"; } ?>>2022</option>
+								<option value="2023" <?php if($vigencia['vigencia'] == 2023) { echo "selected"; } ?>>2023</option>
+							</select><br>
+							<button class="btn btn-primary btn-sm">Guardar <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 	
 	<!-- /.row -->

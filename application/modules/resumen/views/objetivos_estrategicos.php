@@ -85,9 +85,10 @@ $(function(){
 						<tbody>
 						<?php
 							foreach ($info as $lista):
+								$vigencia = $this->general_model->get_vigencia();
 	                            $arrParam = array(
 	                                "numeroObjetivoEstrategico" => $lista["numero_objetivo_estrategico"],
-	                                "vigencia" => date("Y")
+	                                "vigencia" => $vigencia['vigencia']
 	                            );
 	                            $nroActividades = $this->general_model->countActividades($arrParam);
 								$cumplimiento = $this->general_model->sumCumplimiento($arrParam);
@@ -152,9 +153,10 @@ $(function(){
 								if ($userRol == ID_ROL_SUPERVISOR) {
 									$habilitar = ' disabled';
 									$idUser = $this->session->userdata("id");
+									$vigencia = $this->general_model->get_vigencia();
 									$arrParam = array(
 		                                "numeroObjetivoEstrategico" => $lista["numero_objetivo_estrategico"],
-		                                "vigencia" => date("Y")
+		                                "vigencia" => $vigencia['vigencia']
 		                            );
 									$supervisores = $this->general_model->get_objetivos_estrategicos_supervisores($arrParam);
 									$comentario = $this->general_model->get_comentario_supervisor($arrParam);

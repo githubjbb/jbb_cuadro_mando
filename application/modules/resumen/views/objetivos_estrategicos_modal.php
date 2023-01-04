@@ -71,9 +71,10 @@
 
 	<form name="form" id="form" role="form" method="post" >
 		<?php
+			$vigencia = $this->general_model->get_vigencia();
 			$arrParam = array(
                 "numeroObjetivoEstrategico" => $infoSupervisores[0]["numero_objetivo_estrategico"],
-                "vigencia" => date("Y")
+                "vigencia" => $vigencia['vigencia']
             );
             $nroActividades = $this->general_model->countActividades($arrParam);
 			$cumplimiento = $this->general_model->sumCumplimiento($arrParam);
@@ -203,9 +204,10 @@
 			<div class="row" align="center">
 				<div style="width:50%;" align="center">
 					<?php
+					$vigencia = $this->general_model->get_vigencia();
 					$arrParam = array(
                         "numeroObjetivoEstrategico" => $infoSupervisores[0]["numero_objetivo_estrategico"],
-                        "vigencia" => date("Y")
+                        "vigencia" => $vigencia['vigencia']
                     );
                     $calificacion = $this->general_model->get_evaluacion_calificacion($arrParam);
                     $comentarios = $this->general_model->get_comentarios_supervisores($arrParam);
