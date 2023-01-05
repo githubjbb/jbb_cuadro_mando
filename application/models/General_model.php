@@ -560,7 +560,8 @@ class General_model extends CI_Model {
 		 * @since 15/04/2022
 		 */
 		public function get_actividades($arrData) 
-		{									
+		{
+				$vigencia = $this->general_model->get_vigencia();
 				$this->db->select('A.*, D.dependencia, P.mes mes_inicial, X.mes mes_final, R.area_responsable responsable, E.trimestre_1, E.trimestre_2, E.trimestre_3, E.trimestre_4, E.avance_poa, E.estado_trimestre_1, E.estado_trimestre_2, E.estado_trimestre_3, E.estado_trimestre_4, E.observacion_semestre_1, E.observacion_semestre_2, E.calificacion_semestre_1, E.calificacion_semestre_2, E.publicar_calificacion_1, E.publicar_calificacion_2');
 				$this->db->join('param_meses P', 'P.id_mes = A.fecha_inicial', 'INNER');
 				$this->db->join('param_meses X', 'X.id_mes = A.fecha_final', 'INNER');
@@ -568,12 +569,7 @@ class General_model extends CI_Model {
 				$this->db->join('cuadro_base C', 'C.id_cuadro_base = A.fk_id_cuadro_base', 'INNER');
 				$this->db->join('param_dependencias D', 'D.id_dependencia = A.fk_id_dependencia', 'INNER');
 				$this->db->join('actividad_estado E', 'E.fk_numero_actividad  = A.numero_actividad ', 'LEFT');
-				if(array_key_exists("vigencia", $arrData)) {
-					$this->db->where('C.vigencia', $arrData["vigencia"]);
-				}
-				if(array_key_exists("vigencia", $arrData)) {
-					$this->db->where('A.vigencia', $arrData["vigencia"]);
-				}
+				$this->db->where('A.vigencia', $vigencia["vigencia"]);
 				if(array_key_exists("idActividad", $arrData)) {
 					$this->db->where('A.id_actividad', $arrData["idActividad"]);
 				}
@@ -909,6 +905,7 @@ class General_model extends CI_Model {
 		 */
 		public function get_actividades_full_by_dependencia($arrData) 
 		{		
+				$vigencia = $this->general_model->get_vigencia();
 				$this->db->select("A.*, D.dependencia, E.avance_poa, E.estado_trimestre_1, E.estado_trimestre_2, E.estado_trimestre_3, E.estado_trimestre_4, W.mes mes_inicial, K.mes mes_final, C.id_cuadro_base, numero_objetivo_estrategico, objetivo_estrategico, CONCAT(numero_proyecto_inversion, ' ', nombre_proyecto_inversion) proyecto_inversion, meta_proyecto, vigencia_meta_proyecto, CONCAT(numero_proposito, ' ', proposito) proposito, CONCAT(numero_logro, ' ', logro) logro, CONCAT(numero_programa_estrategico, ' ', programa_estrategico) programa, CONCAT(numero_meta_pdd, ' ', meta_pdd) meta_pdd, CONCAT(numero_ods, ' ', ods) ods");
 				$this->db->join('actividad_estado E', 'E.fk_numero_actividad  = A.numero_actividad ', 'LEFT');
 				$this->db->join('param_dependencias D', 'D.id_dependencia = A.fk_id_dependencia', 'INNER');
@@ -923,13 +920,7 @@ class General_model extends CI_Model {
 				$this->db->join('programa_estrategico Y', 'Y.numero_programa_estrategico = C.fk_numero_programa_estrategico', 'INNER');
 				$this->db->join('meta_pdd Z', 'Z.numero_meta_pdd = C.fk_numero_meta_pdd', 'INNER');
 				$this->db->join('ods O', 'O.numero_ods = C.fk_numero_ods', 'INNER');
-
-				if (array_key_exists("vigencia", $arrData)) {
-					$this->db->where('A.vigencia', $arrData["vigencia"]);
-				}
-				if (array_key_exists("vigencia", $arrData)) {
-					$this->db->where('C.vigencia', $arrData["vigencia"]);
-				}
+				$this->db->where('A.vigencia', $vigencia["vigencia"]);
 				if (array_key_exists("idDependencia", $arrData)) {
 					$this->db->where('A.fk_id_dependencia', $arrData["idDependencia"]);
 				}
@@ -1005,15 +996,11 @@ class General_model extends CI_Model {
 		 */
 		public function get_numero_actividades_full_by_dependencia($arrData) 
 		{		
+				$vigencia = $this->general_model->get_vigencia();
 				$this->db->select("A.numero_actividad, numero_objetivo_estrategico, objetivo_estrategico");
 				$this->db->join('cuadro_base C', 'C.id_cuadro_base = A.fk_id_cuadro_base', 'INNER');
 				$this->db->join('objetivos_estrategicos ES', 'ES.numero_objetivo_estrategico = C.fk_numero_objetivo_estrategico', 'INNER');
-				if (array_key_exists("vigencia", $arrData)) {
-					$this->db->where('A.vigencia', $arrData["vigencia"]);
-				}
-				if (array_key_exists("vigencia", $arrData)) {
-					$this->db->where('C.vigencia', $arrData["vigencia"]);
-				}
+				$this->db->where('A.vigencia', $vigencia["vigencia"]);
 				if (array_key_exists("idDependencia", $arrData)) {
 					$this->db->where('A.fk_id_dependencia', $arrData["idDependencia"]);
 				}
@@ -1096,11 +1083,13 @@ class General_model extends CI_Model {
 		 * @since 18/06/2022
 		 */
 		public function get_dependencia_full_by_filtro($arrData) 
-		{		
+		{
+				//$vigencia = $this->general_model->get_vigencia();
 				$this->db->select("distinct(id_dependencia), dependencia");
 				$this->db->join('cuadro_base C', 'C.id_cuadro_base = A.fk_id_cuadro_base', 'INNER');
 				$this->db->join('objetivos_estrategicos ES', 'ES.numero_objetivo_estrategico = C.fk_numero_objetivo_estrategico', 'INNER');
 				$this->db->join('param_dependencias D', 'D.id_dependencia = A.fk_id_dependencia', 'INNER');
+				//$this->db->where('A.vigencia', $vigencia["vigencia"]);
 
 				if (array_key_exists("idDependencia", $arrData)) {
 					$this->db->where('A.fk_id_dependencia', $arrData["idDependencia"]);

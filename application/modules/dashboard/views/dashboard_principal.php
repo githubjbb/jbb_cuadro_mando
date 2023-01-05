@@ -98,8 +98,7 @@
                         $i=0;
                         foreach ($listaEstrategias as $lista):
                             $arrParam = array(
-                                "idEstrategia" => $lista["id_estrategia"],
-                                "vigencia" => $vigencia['vigencia']
+                                "idEstrategia" => $lista["id_estrategia"]
                             );
                             $objetivosEstrategicos = $this->general_model->get_objetivos_estrategicos_by_estrategia($arrParam);
                             for ($i=0; $i<count($objetivosEstrategicos); $i++) {
@@ -225,10 +224,6 @@
                             } elseif ($userRol == ID_ROL_SUPERVISOR || $userRol == ID_ROL_ENLACE){
                                 $arrParam2["idDependencia"] = $infoDependencia[0]['id_dependencia'];  
                             }
-                            $vigencia = $this->general_model->get_vigencia();
-                            $arrParam2 = array(
-                                'vigencia' => $vigencia['vigencia']
-                            );
                             $listaTodasActividades = $this->general_model->get_numero_actividades_full_by_dependencia($arrParam2);
                     ?>
                         <div class="row">
@@ -356,10 +351,6 @@
                                     $arrParam["idDependencia"] = $_GET["id_dependencia"];
                                 }
                             }
-                            $vigencia = $this->general_model->get_vigencia();
-                            $arrParam = array(
-                                'vigencia' => $vigencia['vigencia']
-                            );
                             $listaActividades = $this->general_model->get_actividades_full_by_dependencia($arrParam);
 
                             echo '<div class="row">';

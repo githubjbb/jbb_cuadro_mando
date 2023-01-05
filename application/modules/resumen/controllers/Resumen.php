@@ -27,6 +27,7 @@ class Resumen extends CI_Controller {
 	 */
 	public function index()
 	{
+			$userRol = $this->session->userdata("role");
 			if($_GET)
 			{								
 				$arrParam = array(
@@ -46,25 +47,36 @@ class Resumen extends CI_Controller {
 			//INICIO LISTAS PARA FILTROS
 			$arrParam = array();
 			$data['listaNumeroObjetivoEstrategicos'] = $this->general_model->get_objetivos_estrategicos($arrParam);
+			$data['listaProyectos'] = $this->general_model->get_numero_proyectos_full_by_dependencia($arrParam);
+			$data['listaNumeroDependencia'] = $this->general_model->get_dependencia_full_by_filtro($arrParam);
 	        $arrParam = array();
 	        if($_GET && $_GET["numero_objetivo"] != ""){
 	            $arrParam = array(
 	                "numeroObjetivoEstrategico" => $_GET["numero_objetivo"]
 	            );  
 	        }
-	        $data['listaProyectos'] = $this->general_model->get_numero_proyectos_full_by_dependencia($arrParam);
             if($_GET && $_GET["numero_proyecto"] != ""){
             	$arrParam = array(
 	                "numeroProyecto" => $_GET["numero_proyecto"]
 	            );
             }
-			$data['listaNumeroDependencia'] = $this->general_model->get_dependencia_full_by_filtro($arrParam);
-			$vigencia = $this->general_model->get_vigencia();
-            $arrParam = array(
-	                'vigencia' => $vigencia['vigencia']
-	            );
+            if($_GET && $_GET["id_dependencia"] != ""){
+                $arrParam = array(
+                	"idDependencia" => $_GET["id_dependencia"]
+                );
+            }
+            if($_GET && $_GET["numero_actividad"] != ""){
+                $arrParam = array(
+                	"numeroActividad" => $_GET["numero_actividad"]
+                );
+            }
+			
             $data['listaTodasActividades'] = $this->general_model->get_numero_actividades_full_by_dependencia($arrParam);
 			$data['listaActividades'] = $this->general_model->get_actividades($arrParam);
+			$vigencia = $this->general_model->get_vigencia();
+            $arrParam = array(
+	        	'vigencia' => $vigencia['vigencia']
+	        );
 			$data['nroActividades'] = $this->general_model->countActividades($arrParam);          
 	        //FIN LISTAS PARA FILTROS
 			//NO INICIADA
@@ -172,6 +184,7 @@ class Resumen extends CI_Controller {
 			$arrParam2["numeroTrimestre"] = 4;
 			$data['nroActividadesCuartoTrimestreIncumplidas'] = $this->general_model->countActividadesEstado($arrParam2);
 			$data['bandera'] = 0;
+
 			$data["view"] = "resumen_general";
 			$this->load->view("layout_calendar", $data);
 	}
