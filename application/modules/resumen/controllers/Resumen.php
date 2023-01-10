@@ -625,6 +625,7 @@ class Resumen extends CI_Controller {
 	public function reporte()
 	{	
 		$fechaActual = date('Y-m-d');
+		$vigencia = $this->general_model->get_vigencia();
 		header('Content-Type: application/vnd.ms-excel');
 		header('Content-Disposition:attachment;filename=consolidado_POA_'.$fechaActual.'.xlsx');
 
@@ -708,7 +709,7 @@ class Resumen extends CI_Controller {
 
 		$spreadsheet->getActiveSheet(0)->setCellValue('A9', 'Avance POA Anual');
 
-		$spreadsheet->getActiveSheet(0)->setCellValue('E8', 'VIGENCIA: 2022');
+		$spreadsheet->getActiveSheet(0)->setCellValue('E8', 'VIGENCIA: ' . $vigencia['vigencia']);
 		$spreadsheet->getActiveSheet()->mergeCells('E8:F8');
 
 		$spreadsheet->getActiveSheet()->mergeCells('A11:A13');

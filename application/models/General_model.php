@@ -806,6 +806,7 @@ class General_model extends CI_Model {
 		 */
 		public function get_actividades_full($arrData) 
 		{		
+				$vigencia = $this->general_model->get_vigencia();
 				$this->db->select("A.*, D.dependencia, E.avance_poa, E.trimestre_1, E.trimestre_2, E.trimestre_3, E.trimestre_4, E.descripcion_actividad_trimestre_1, E.descripcion_actividad_trimestre_2, E.descripcion_actividad_trimestre_3, E.descripcion_actividad_trimestre_4, E.evidencias_trimestre_1, E.evidencias_trimestre_2, E.evidencias_trimestre_3, E.evidencias_trimestre_4, E.mensaje_poa_trimestre_1, E.mensaje_poa_trimestre_2, E.mensaje_poa_trimestre_3, E.mensaje_poa_trimestre_4, E.observacion_semestre_1, E.observacion_semestre_2, E.calificacion_semestre_1, E.calificacion_semestre_2, E.unidad_medida_semestre_1, E.unidad_medida_semestre_2, E.publicar_calificacion_1, E.publicar_calificacion_2, W.mes mes_inicial, K.mes mes_final, C.id_cuadro_base, fk_numero_objetivo_estrategico, CONCAT(numero_proyecto_inversion, ' ', nombre_proyecto_inversion) proyecto_inversion, CONCAT(ES.numero_objetivo_estrategico, ' ', ES.objetivo_estrategico) objetivo_estrategico, EG.estrategia, PR.proceso_calidad, meta_proyecto, presupuesto_meta, vigencia_meta_proyecto, CONCAT(numero_proposito, ' ', proposito) proposito, CONCAT(numero_logro, ' ', logro) logro, CONCAT(numero_programa, ' ', programa) programa, CONCAT(numero_programa_estrategico, ' ', programa_estrategico) programa_estrategico, CONCAT(numero_meta_pdd, ' ', meta_pdd) meta_pdd, CONCAT(numero_ods, ' ', ods) ods, CONCAT(id_dimension, ' ', nombre_dimension) dimension, R.area_responsable");
 				$this->db->join('actividad_estado E', 'E.fk_numero_actividad  = A.numero_actividad', 'LEFT');
 				$this->db->join('param_proceso_calidad PR', 'PR.id_proceso_calidad = A.fk_id_proceso_calidad', 'INNER');
@@ -825,6 +826,7 @@ class General_model extends CI_Model {
 				$this->db->join('meta_pdd Z', 'Z.numero_meta_pdd = C.fk_numero_meta_pdd', 'INNER');
 				$this->db->join('ods O', 'O.numero_ods = C.fk_numero_ods', 'INNER');
 				$this->db->join('param_dimensiones_mipg DM', 'DM.id_dimension = C.fk_id_dimension', 'LEFT');
+				$this->db->where('A.vigencia', $vigencia["vigencia"]);
 
 				if (array_key_exists("idActividad", $arrData)) {
 					$this->db->where('A.id_actividad', $arrData["idActividad"]);
