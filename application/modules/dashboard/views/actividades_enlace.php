@@ -188,7 +188,7 @@
 								if($sumaProgramado['programado'] > 0){
 									$avancePOA = round(($sumaEjecutado['ejecutado']/$sumaProgramado['programado']) * $ponderacion,3);
 								}
-								if ($estadoActividad[0]['estado_trimestre_1'] == 5){
+								if ($estadoActividad[0]['estado_trimestre_1'] != 0){
 									if($sumaProgramadoTrimestre1['programado'] > 0) {
 										$cumplimiento1 = round($sumaEjecutadoTrimestre1['ejecutado'] / $sumaProgramadoTrimestre1['programado'] * 100,3);
 									} else {
@@ -201,7 +201,7 @@
 								} else {
 									$cumplimiento1 = 0;
 								}
-								if ($estadoActividad[0]['estado_trimestre_2'] == 5){
+								if ($estadoActividad[0]['estado_trimestre_2'] != 0){
 									if($sumaProgramadoTrimestre2['programado'] > 0) {
 										$cumplimiento2 = round($sumaEjecutadoTrimestre2['ejecutado'] / $sumaProgramadoTrimestre2['programado'] * 100,3);
 									} else {
@@ -214,7 +214,7 @@
 								} else {
 									$cumplimiento2 = 0;
 								}
-								if ($estadoActividad[0]['estado_trimestre_3'] == 5){
+								if ($estadoActividad[0]['estado_trimestre_3'] != 0){
 									if($sumaProgramadoTrimestre3['programado'] > 0) {
 										$cumplimiento3 = round($sumaEjecutadoTrimestre3['ejecutado'] / $sumaProgramadoTrimestre3['programado'] * 100,3);
 									} else {
@@ -227,7 +227,7 @@
 								} else {
 									$cumplimiento3 = 0;
 								}
-								if ($estadoActividad[0]['estado_trimestre_4'] == 5){
+								if ($estadoActividad[0]['estado_trimestre_4'] != 0){
 									if($sumaProgramadoTrimestre4['programado'] > 0) {
 										$cumplimiento4 = round($sumaEjecutadoTrimestre4['ejecutado'] / $sumaProgramadoTrimestre4['programado'] * 100,3);
 									} else {
