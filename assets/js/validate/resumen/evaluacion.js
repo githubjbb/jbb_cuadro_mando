@@ -4,7 +4,8 @@ $( document ).ready( function () {
 		
 	$( "#form" ).validate( {
 		rules: {
-			calificacion: 				{ required: true, minlength: 1, maxlength:10 },
+			calificacion: 			{ required: true, minlength: 1, maxlength:10 },
+			unidadMedida: 			{ required: true, minlength: 1, maxlength:50 },
 			observacion: 			{ required: true }
 		},
 		errorElement: "em",
