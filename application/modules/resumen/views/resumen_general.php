@@ -403,20 +403,20 @@ $(function(){
                                             </button>
 
                                     <?php
-                                        if(($lista["estado_trimestre_1"] == 5 || $lista["estado_trimestre_1"] == 6 || $lista["estado_trimestre_1"] == 7) && ($lista["estado_trimestre_2"] == 5 || $lista["estado_trimestre_2"] == 6 || $lista["estado_trimestre_2"] == 7) && ($userRol == ID_ROL_SUPER_ADMIN || $userRol == ID_ROL_CONTROL_INTERNO || $userRol == ID_ROL_JEFEOCI)){
+                                        //if(($lista["estado_trimestre_1"] == 5 || $lista["estado_trimestre_1"] == 6 || $lista["estado_trimestre_1"] == 7) && ($lista["estado_trimestre_2"] == 5 || $lista["estado_trimestre_2"] == 6 || $lista["estado_trimestre_2"] == 7) && ($userRol == ID_ROL_SUPER_ADMIN || $userRol == ID_ROL_CONTROL_INTERNO || $userRol == ID_ROL_JEFEOCI)){
                                     ?><br><br>
                                     <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#modalEvaluacion" id="<?php echo $lista['numero_actividad']; ?>" title="Evaluación OCI" <?php if($lista["publicar_calificacion_1"] == 1) { ?> disabled <?php } ?>>
                                         Evaluación OCI I <span class="fa fa-pencil" aria-hidden="true"></span>
                                     </button><br><br>
-                                    <?php } ?>
+                                    <?php //} ?>
 
                                     <?php
-                                        if(($lista["estado_trimestre_3"] == 5 || $lista["estado_trimestre_3"] == 6 || $lista["estado_trimestre_3"] == 7) && ($lista["estado_trimestre_4"] == 5 || $lista["estado_trimestre_4"] == 6 || $lista["estado_trimestre_4"] == 7) && ($userRol == ID_ROL_SUPER_ADMIN || $userRol == ID_ROL_CONTROL_INTERNO || $userRol == ID_ROL_JEFEOCI)){
+                                        //if(($lista["estado_trimestre_3"] == 5 || $lista["estado_trimestre_3"] == 6 || $lista["estado_trimestre_3"] == 7) && ($lista["estado_trimestre_4"] == 5 || $lista["estado_trimestre_4"] == 6 || $lista["estado_trimestre_4"] == 7) && ($userRol == ID_ROL_SUPER_ADMIN || $userRol == ID_ROL_CONTROL_INTERNO || $userRol == ID_ROL_JEFEOCI)){
                                     ?>
                                     <button type="button" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modalEvaluacion" id="<?php echo $lista['numero_actividad']; ?>" title="Evaluación OCI" <?php if($lista["publicar_calificacion_2"] == 1) { ?> disabled <?php } ?>>
                                         Evaluación OCI II <span class="fa fa-pencil" aria-hidden="true"></span>
                                     </button>
-                                    <?php } ?>
+                                    <?php //} ?>
                                     </td>
                                     <td><small><?php echo $lista["descripcion_actividad"] ?></small></td>
                                     <td class="text-right"><small><?php echo $trim1 ?></small></td>
