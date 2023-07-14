@@ -3,7 +3,7 @@ $( document ).ready( function () {
 	$(".btn-danger").click(function () {				
 			//Activa icono guardando
 			Swal.fire({
-				title: "Eliminar",
+				title: "Cerrar Trimestre",
                 text: "¿ Por favor confirmar que desea cerrar el Trimestre ? \n Se notificará al Supervisor para que realice la revisión del Trimestre.",
                 icon: "warning",
                 confirmButtonText: "Confirmar",
@@ -13,8 +13,8 @@ $( document ).ready( function () {
 				if (result.isConfirmed) {
 					$(".btn-danger").attr('disabled','-1');
 					var numeroTrimestre = $(this).attr("id");
-					var idCuadroBase = $('#idCuadroBase').val();
-				    var numeroActividad = $('#numeroActividad').val();
+					var idPlanIntegrado = $('#idPlanIntegrado').val();
+				    var numeroActividadPI = $('#numeroActividadPI').val();
 				    var avancePOA = $('#avancePOA').val();
 					if(numeroTrimestre == 1){
 						var cumplimientoTrimestre = $('#cumplimiento1').val();
@@ -28,8 +28,8 @@ $( document ).ready( function () {
 
 					$.ajax ({
 						type: 'POST',
-						url: base_url + 'dashboard/update_trimestre',
-						data: {'numeroTrimestre': numeroTrimestre,'idCuadroBase': idCuadroBase,'numeroActividad': numeroActividad,'cumplimientoTrimestre': cumplimientoTrimestre,'avancePOA': avancePOA },
+						url: base_url + 'settings/update_trimestrePI',
+						data: {'numeroTrimestre': numeroTrimestre,'idPlanIntegrado': idPlanIntegrado,'numeroActividadPI': numeroActividadPI,'cumplimientoTrimestre': cumplimientoTrimestre,'avancePOA': avancePOA },
 						cache: false,
 						success: function(data){
 												
@@ -43,7 +43,7 @@ $( document ).ready( function () {
 							if( data.result )//true
 							{	                                                        
 								$(".btn-danger").removeAttr('disabled');
-								var url = base_url + "dashboard/actividades/" + data.idCuadroBase + "/" + data.numeroActividad;
+								var url = base_url + "settings/actividadesPI/" + data.idPlanIntegrado + "/" + data.numeroActividadPI;
 								$(location).attr("href", url);
 							}
 							else

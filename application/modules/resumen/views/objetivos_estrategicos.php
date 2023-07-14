@@ -150,7 +150,8 @@ $(function(){
 	                            $habilitar = '';
 	                            $warning = '';
 								$userRol = $this->session->userdata("role");
-								if ($userRol == ID_ROL_SUPERVISOR) {
+								$depenSupervisor = $this->session->userdata("dependencia");
+								if ($userRol == ID_ROL_SUPERVISOR && $depenSupervisor != 3) {
 									$habilitar = ' disabled';
 									$idUser = $this->session->userdata("id");
 									$vigencia = $this->general_model->get_vigencia();

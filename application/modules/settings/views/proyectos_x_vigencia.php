@@ -23,7 +23,7 @@ $(function(){
 			<div class="panel panel-primary">
 				<div class="panel-heading">
 					<h4 class="list-group-item-heading">
-					<i class="fa fa-gear fa-fw"></i> CONFIGURACIÓN - PROYECTOS DE INVERSIÓN POR VIGENCIA
+					<i class="fa fa-gear fa-fw"></i> SEGPLAN - PROYECTOS DE INVERSIÓN POR VIGENCIA
 					</h4>
 				</div>
 			</div>

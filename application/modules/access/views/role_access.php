@@ -100,7 +100,7 @@ $(function(){
 									</button>
 									
 									<button type="button" id="<?php echo $lista['id_access']; ?>" class='btn btn-danger btn-xs' title="Delete">
-											<i class="fa fa-trash-o"></i>
+										Eliminar <i class="fa fa-trash-o"></i>
 									</button>
 						<?php
 									echo "</td>";

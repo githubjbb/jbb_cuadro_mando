@@ -96,7 +96,7 @@ $(function(){
 								<th class="text-center">Ejecutado Meta</th>
 								<th class="text-center">Unidad</th>
 								<th class="text-center">Tipología de Anualidad</th>
-								<th class="text-center" style="width: 8%">Editar</th>
+								<th class="text-center" style="width: 8%">Editar/Eliminar</th>
 							</tr>
 						</thead>
 						<tbody>							
@@ -115,11 +115,11 @@ $(function(){
 									echo "<td>" . $lista['tipologia'] . "</td>";
 									echo "<td class='text-center'>";
 						?>
-									<button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#modal" id="<?php echo $lista['id_meta_proyecto_inversion']; ?>" >
-										Editar <span class="glyphicon glyphicon-edit" aria-hidden="true">
+									<button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#modal" id="<?php echo $lista['id_meta_proyecto_inversion']; ?>" title="Editar" >
+										<span class="glyphicon glyphicon-edit" aria-hidden="true">
 									</button>
 									<button type="button" id="<?php echo $lista['id_meta_proyecto_inversion']; ?>" class='btn btn-danger btn-xs' title="Eliminar">
-											<i class="fa fa-trash-o"></i>
+										<i class="fa fa-trash-o"></i>
 									</button>
 						<?php
 									echo "</td>";

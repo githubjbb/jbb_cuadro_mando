@@ -1,11 +1,9 @@
 $( document ).ready( function () {
-
-	$("#numero_ods").bloquearTexto().maxlength(4);
-	
+		
 	$( "#form" ).validate( {
 		rules: {
-			numero_ods:		{ required: true, minlength: 1, maxlength:4 },
-			ods:			{ required: true }
+			mes: 					{ required: true },
+			programado: 			{ required: true, maxlength:6 }
 		},
 		errorElement: "em",
 		errorPlacement: function ( error, element ) {
@@ -26,56 +24,6 @@ $( document ).ready( function () {
 			return true;
 		}
 	});
-
-	$(".btn-danger").click(function () {	
-			var oID = $(this).attr("id");
-			//Activa icono guardando
-			Swal.fire({
-				title: "Eliminar",
-                text: "¿ Por favor confirmar si desea eliminar la ODS ?",
-                icon: "warning",
-                confirmButtonText: "Confirmar",
-                showCancelButton: true,
-                cancelButtonColor: "#DD6B55"
-			}).then((result) => {
-				if (result.isConfirmed) {
-					$(".btn-danger").attr('disabled','-1');
-					$.ajax ({
-						type: 'POST',
-						url: base_url + 'settings/delete_ods',
-						data: {'identificador': oID},
-						cache: false,
-						success: function(data){
-												
-							if( data.result == "error" )
-							{
-								alert(data.mensaje);
-								$(".btn-danger").removeAttr('disabled');							
-								return false;
-							} 
-											
-							if( data.result )//true
-							{	                                                        
-								$(".btn-danger").removeAttr('disabled');
-
-								var url = base_url + "settings/ods";
-								$(location).attr("href", url);
-							}
-							else
-							{
-								alert('Error. Reload the web page.');
-								$(".btn-danger").removeAttr('disabled');
-							}	
-						},
-						error: function(result) {
-							alert('Error. Reload the web page.');
-							$(".btn-danger").removeAttr('disabled');
-						}
-
-					});
-				}
-			});
-	});
 	
 	$("#btnSubmit").click(function(){		
 	
@@ -88,7 +36,7 @@ $( document ).ready( function () {
 			
 				$.ajax({
 					type: "POST",	
-					url: base_url + "settings/save_ods",	
+					url: base_url + "settings/guardar_programadoPI",
 					data: $("#form").serialize(),
 					dataType: "json",
 					contentType: "application/x-www-form-urlencoded;charset=UTF-8",
@@ -99,7 +47,9 @@ $( document ).ready( function () {
 						if( data.result == "error" )
 						{
 							$("#div_load").css("display", "none");
-							$('#btnSubmit').removeAttr('disabled');							
+							$("#div_error").css("display", "inline");
+							$("#span_msj").html(data.mensaje);
+							$('#btnSubmit').removeAttr('disabled');
 							return false;
 						} 
 
@@ -108,7 +58,7 @@ $( document ).ready( function () {
 							$("#div_load").css("display", "none");
 							$('#btnSubmit').removeAttr('disabled');
 
-							var url = base_url + "settings/ods";
+							var url = base_url + "settings/actividadesPI/" + data.idRecord;
 							$(location).attr("href", url);
 						}
 						else

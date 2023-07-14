@@ -265,7 +265,12 @@ class Resumen extends CI_Controller {
 					$valor = false;
 				}
 			}
-			$arrParam = array("filtroEstrategias" => $valor);
+			$arrParam = array();
+			$sesion = $this->session->userdata();
+			if ($sesion['role'] != 4 && $sesion['dependencia'] != 3)
+			{
+				$arrParam = array("filtroEstrategias" => $valor);
+		    }
 			$data['listaNumeroObjetivoEstrategicos'] = $this->general_model->get_objetivos_estrategicos($arrParam);
 	        $arrParam = array();
 	        if($_GET && $_GET["numero_objetivo"] != ""){
@@ -613,7 +618,13 @@ class Resumen extends CI_Controller {
 	 */
 	public function planes_institucionales()
 	{
-			$data['vigencia'] = $this->general_model->get_vigencia();
+
+			$vigencia = $this->general_model->get_vigencia();
+			$data['vigencia'] = $vigencia['vigencia'];
+			$arrParam = array(
+				'vigencia' => $vigencia['vigencia']
+			);
+			$data['planInstitucional'] = $this->general_model->get_plan_institucional($arrParam);
 			$data["view"] = 'planes_institucionales';
 			$this->load->view("layout_calendar", $data);
 	}
@@ -1311,6 +1322,14 @@ class Resumen extends CI_Controller {
 		);
 
 		$spreadsheet->getActiveSheet()->getStyle('A11:CG12')->applyFromArray(
+		    [
+			    'alignment' => [
+			        'wrapText' => TRUE
+			    ]
+		    ]
+		);
+
+		$spreadsheet->getActiveSheet()->getStyle('A2:A6')->applyFromArray(
 		    [
 			    'alignment' => [
 			        'wrapText' => TRUE

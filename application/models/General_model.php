@@ -88,10 +88,114 @@ class General_model extends CI_Model {
 		$query = $this->db->update('param_vigencia', $data);
 
 		if ($query) {
+			$limite1 = $this->get_fecha_limite1();
+			$limite2 = $this->get_fecha_limite2();
+			$limite3 = $this->get_fecha_limite3();
+			$limite4 = $this->get_fecha_limite4();
+			$fecha1 = explode('-', $limite1['fecha']);
+			$fecha2 = explode('-', $limite2['fecha']);
+			$fecha3 = explode('-', $limite3['fecha']);
+			$fecha4 = explode('-', $limite4['fecha']);
+			$year1 = $fecha1[0];
+			$mes1 = $fecha1[1];
+			$dia1 = $fecha1[2];
+			$year2 = $fecha2[0];
+			$mes2 = $fecha2[1];
+			$dia2 = $fecha2[2];
+			$year3 = $fecha3[0];
+			$mes3 = $fecha3[1];
+			$dia3 = $fecha3[2];
+			$year4 = $fecha4[0];
+			$mes4 = $fecha4[1];
+			$dia4 = $fecha4[2];
+			$newFecha1 = $vigencia . '-' . $mes1 . '-' . $dia1;
+			$newFecha2 = $vigencia . '-' . $mes2 . '-' . $dia2;
+			$newFecha3 = $vigencia . '-' . $mes3 . '-' . $dia3;
+			$newFecha4 = $vigencia + 1 . '-' . $mes4 . '-' . $dia4;
+			$this->update_fecha_limite1($newFecha1);
+			$this->update_fecha_limite2($newFecha2);
+			$this->update_fecha_limite3($newFecha3);
+			$this->update_fecha_limite4($newFecha4);
 			return true;
 		} else {
 			return false;
 		}
+	}
+
+	public function get_fecha_limite1()
+	{
+		$this->db->select('fecha');
+		$this->db->where('numero_trimestre', 1);
+		$query = $this->db->get('param_fechas_limites');
+		if ($query->num_rows() > 0) {
+			return $query->row_array();
+		} else {
+			return false;
+		}
+	}
+
+	public function get_fecha_limite2()
+	{
+		$this->db->select('fecha');
+		$this->db->where('numero_trimestre', 2);
+		$query = $this->db->get('param_fechas_limites');
+		if ($query->num_rows() > 0) {
+			return $query->row_array();
+		} else {
+			return false;
+		}
+	}
+
+	public function get_fecha_limite3()
+	{
+		$this->db->select('fecha');
+		$this->db->where('numero_trimestre', 3);
+		$query = $this->db->get('param_fechas_limites');
+		if ($query->num_rows() > 0) {
+			return $query->row_array();
+		} else {
+			return false;
+		}
+	}
+
+	public function get_fecha_limite4()
+	{
+		$this->db->select('fecha');
+		$this->db->where('numero_trimestre', 4);
+		$query = $this->db->get('param_fechas_limites');
+		if ($query->num_rows() > 0) {
+			return $query->row_array();
+		} else {
+			return false;
+		}
+	}
+
+	public function update_fecha_limite1($fecha)
+	{
+		$data = array('fecha' => $fecha);
+		$this->db->where('numero_trimestre', 1);
+		$query = $this->db->update('param_fechas_limites', $data);
+	}
+
+	public function update_fecha_limite2($fecha)
+	{
+		$data = array('fecha' => $fecha);
+		$this->db->where('numero_trimestre', 2);
+		$query = $this->db->update('param_fechas_limites', $data);
+	}
+
+	public function update_fecha_limite3($fecha)
+	{
+		$data = array('fecha' => $fecha);
+		$this->db->where('numero_trimestre', 3);
+		$query = $this->db->update('param_fechas_limites', $data);
+	}
+
+	public function update_fecha_limite4($fecha)
+	{
+		$data = array('fecha' => $fecha);
+		$this->db->where('numero_trimestre', 4);
+		$query = $this->db->update('param_fechas_limites', $data);
 	}
 
 	/**
@@ -605,6 +709,40 @@ class General_model extends CI_Model {
 		}
 
 		/**
+		 * Consulta lista de actividades PI
+		 * @since 08/05/2023
+		 */
+		public function get_actividadesPI($arrData)
+		{
+				$vigencia = $this->general_model->get_vigencia();
+				$this->db->select('A.*, D.dependencia, P.mes mes_inicial, X.mes mes_final, R.area_responsable responsable, E.trimestre_1, E.trimestre_2, E.trimestre_3, E.trimestre_4, E.avance_poa, E.estado_trimestre_1, E.estado_trimestre_2, E.estado_trimestre_3, E.estado_trimestre_4, E.observacion_semestre_1, E.observacion_semestre_2, E.calificacion_semestre_1, E.calificacion_semestre_2, E.publicar_calificacion_1, E.publicar_calificacion_2');
+				$this->db->join('param_meses P', 'P.id_mes = A.fecha_inicial_pi', 'INNER');
+				$this->db->join('param_meses X', 'X.id_mes = A.fecha_final_pi', 'INNER');
+				$this->db->join('param_area_responsable R', 'R.id_area_responsable = A.fk_id_area_responsable', 'INNER');
+				$this->db->join('planes_integrados C', 'C.id_plan_integrado = A.fk_id_plan_integrado', 'INNER');
+				$this->db->join('param_dependencias D', 'D.id_dependencia = A.fk_id_dependencia', 'INNER');
+				$this->db->join('actividad_estado_pi E', 'E.fk_numero_actividad_pi  = A.numero_actividad_pi ', 'LEFT');
+				$this->db->where('A.vigencia', $vigencia["vigencia"]);
+				if(array_key_exists("idActividadPI", $arrData)) {
+					$this->db->where('A.id_actividad_pi', $arrData["idActividadPI"]);
+				}
+				if(array_key_exists("numeroActividadPI", $arrData)) {
+					$this->db->where('A.numero_actividad_pi', $arrData["numeroActividadPI"]);
+				}
+				if(array_key_exists("idPlanIntegrado", $arrData)) {
+					$this->db->where('A.fk_id_plan_integrado', $arrData["idPlanIntegrado"]);
+				}
+
+				$this->db->order_by('A.numero_actividad_pi', 'asc');
+				$query = $this->db->get('actividades_pi A');
+				if ($query->num_rows() > 0) {
+					return $query->result_array();
+				} else {
+					return false;
+				}
+		}
+
+		/**
 		 * Consulta informacion de la ejecucion de las actividades
 		 * @since 17/04/2022
 		 */
@@ -623,6 +761,32 @@ class General_model extends CI_Model {
 				}
 				$this->db->order_by('E.fk_id_mes', 'asc');
 				$query = $this->db->get('actividad_ejecucion E');
+				if ($query->num_rows() > 0) {
+					return $query->result_array();
+				} else {
+					return false;
+				}
+		}
+
+		/**
+		 * Consulta informacion de la ejecucion de las actividades PI
+		 * @since 08/05/2023
+		 */
+		public function get_ejecucion_actividadesPI($arrData) 
+		{		
+				$this->db->select();
+				$this->db->join('param_meses P', 'P.id_mes = E.fk_id_mes', 'INNER');
+				if (array_key_exists("numeroActividadPI", $arrData)) {
+					$this->db->where('E.fk_numero_actividad_pi', $arrData["numeroActividadPI"]);
+				}
+				if (array_key_exists("idMes", $arrData)) {
+					$this->db->where('E.fk_id_mes', $arrData["idMes"]);
+				}
+				if (array_key_exists("numeroTrimestrePI", $arrData)) {
+					$this->db->where('P.numero_trimestre', $arrData["numeroTrimestrePI"]);
+				}
+				$this->db->order_by('E.fk_id_mes', 'asc');
+				$query = $this->db->get('actividad_ejecucion_pi E');
 				if ($query->num_rows() > 0) {
 					return $query->result_array();
 				} else {
@@ -651,6 +815,34 @@ class General_model extends CI_Model {
 				}
 				$this->db->order_by('H.numero_trimestre, H.id_historial ', 'desc');
 				$query = $this->db->get('actividad_historial H');
+				if ($query->num_rows() > 0) {
+					return $query->result_array();
+				} else {
+					return false;
+				}
+		}
+
+		/**
+		 * Consulta historial de la actividad PI
+		 * @since 08/05/2023
+		 */
+		public function get_historial_actividadPI($arrData) 
+		{		
+				$this->db->select("H.*, U.first_name, CONCAT(first_name, ' ', last_name) usuario, P.estado, P.clase, P.icono");
+				$this->db->join('param_estados P', 'P.valor = H.fk_id_estado', 'INNER');
+				$this->db->join('usuarios U', 'U.id_user = H.fk_id_usuario', 'INNER');
+				if (array_key_exists("numeroActividadPI", $arrData)) {
+					$this->db->where('H.fk_numero_actividad_pi', $arrData["numeroActividadPI"]);
+				}
+				if (array_key_exists("numeroTrimestrePI", $arrData)) {
+					$this->db->where('H.numero_trimestre', $arrData["numeroTrimestrePI"]);
+				}
+				if (array_key_exists("filtroEstado", $arrData)) {
+					$where = "H.fk_id_estado IN (" . $arrData["filtroEstado"] . ")";
+					$this->db->where($where);
+				}
+				$this->db->order_by('H.numero_trimestre, H.id_historial_pi ', 'desc');
+				$query = $this->db->get('actividad_historial_pi H');
 				if ($query->num_rows() > 0) {
 					return $query->result_array();
 				} else {
@@ -704,6 +896,27 @@ class General_model extends CI_Model {
 		}
 
 		/**
+		 * Sumar programacion para una actividad PI
+		 * @author AOCUBILLOSA
+		 * @since  08/05/2023
+		 */
+		public function sumarProgramadoPI($arrData)
+		{
+				$this->db->select_sum('programado');
+				$this->db->join('param_meses P', 'P.id_mes = E.fk_id_mes', 'INNER');
+				$this->db->where('E.fk_numero_actividad_pi', $arrData["numeroActividadPI"]);
+				if (array_key_exists("numeroTrimestre", $arrData)) {
+					$this->db->where('P.numero_trimestre', $arrData["numeroTrimestre"]);
+				}
+				$query = $this->db->get('actividad_ejecucion_pi E');
+				if ($query->num_rows() > 0) {
+					return $query->row_array();
+				} else {
+					return false;
+				}
+		}
+
+		/**
 		 * Sumar ejecucion para una actividad
 		 * @author BMOTTAG
 		 * @since  17/04/2022
@@ -722,6 +935,32 @@ class General_model extends CI_Model {
 					$this->db->where($where);
 				}
 				$query = $this->db->get('actividad_ejecucion E');
+				if ($query->num_rows() > 0) {
+					return $query->row_array();
+				} else {
+					return false;
+				}
+		}
+
+		/**
+		 * Sumar ejecucion para una actividad PI
+		 * @author AOCUBILLOSA
+		 * @since  08/05/2023
+		 */
+		public function sumarEjecutadoPI($arrData)
+		{
+				$this->db->select_sum('ejecutado');
+				$this->db->join('actividad_estado_pi A', 'A.fk_numero_actividad_pi = E.fk_numero_actividad_pi', 'INNER');
+				$this->db->join('param_meses P', 'P.id_mes = E.fk_id_mes', 'INNER');
+				$this->db->where('E.fk_numero_actividad_pi', $arrData["numeroActividadPI"]);
+				if (array_key_exists("numeroTrimestre", $arrData)) {
+					$this->db->where('P.numero_trimestre', $arrData["numeroTrimestre"]);
+				}
+				if (array_key_exists("filtroTrimestre", $arrData)) {
+					$where = "P.numero_trimestre IN (" . $arrData["filtroTrimestre"] . ")";
+					$this->db->where($where);
+				}
+				$query = $this->db->get('actividad_ejecucion_pi E');
 				if ($query->num_rows() > 0) {
 					return $query->row_array();
 				} else {
@@ -801,6 +1040,29 @@ class General_model extends CI_Model {
 		}
 
 		/**
+		 * Consulta informacion de los estados de las actividades
+		 * @since 24/04/2022
+		 */
+		public function get_estados_actividadesPI($arrData)
+		{		
+				$this->db->select('E.*, P.estado primer_estado, P.clase primer_clase, X.estado segundo_estado, X.clase segundo_clase, Y.estado tercer_estado, Y.clase tercer_clase, Z.estado cuarta_estado, Z.clase cuarta_clase');
+				$this->db->join('param_estados P', 'P.valor = E.estado_trimestre_1', 'INNER');
+				$this->db->join('param_estados X', 'X.valor = E.estado_trimestre_2', 'INNER');
+				$this->db->join('param_estados Y', 'Y.valor = E.estado_trimestre_3', 'INNER');
+				$this->db->join('param_estados Z', 'Z.valor = E.estado_trimestre_4', 'INNER');
+				if (array_key_exists("numeroActividadPI", $arrData)) {
+					$this->db->where('E.fk_numero_actividad_pi', $arrData["numeroActividadPI"]);
+				}
+				$this->db->order_by('E.fk_numero_actividad_pi', 'asc');
+				$query = $this->db->get('actividad_estado_pi E');
+				if ($query->num_rows() > 0) {
+					return $query->result_array();
+				} else {
+					return false;
+				}
+		}
+
+		/**
 		 * Consulta lista de actividades
 		 * @since 30/04/2022
 		 */
@@ -845,6 +1107,36 @@ class General_model extends CI_Model {
 					$this->db->where($where);
 				}
 				$query = $this->db->get('actividades A');
+				if ($query->num_rows() > 0) {
+					return $query->result_array();
+				} else {
+					return false;
+				}
+		}
+
+		/**
+		 * Consulta lista de actividades PI
+		 * @since 30/05/2023
+		 */
+		public function get_actividades_pi_full($arrData)
+		{
+				$vigencia = $this->general_model->get_vigencia();
+				$this->db->select("A.*, PI.plan_institucional, D.dependencia, E.descripcion_actividad_trimestre_1, E.descripcion_actividad_trimestre_2, E.descripcion_actividad_trimestre_3, E.descripcion_actividad_trimestre_4, E.mensaje_poa_trimestre_1, E.mensaje_poa_trimestre_2, E.mensaje_poa_trimestre_3, E.mensaje_poa_trimestre_4");
+				$this->db->join('planes_integrados I', 'I.id_plan_integrado = A.fk_id_plan_integrado', 'INNER');
+				$this->db->join('planes_institucionales PI', 'PI.id_plan_institucional = I.fk_id_plan_institucional', 'INNER');
+				$this->db->join('param_dependencias D', 'D.id_dependencia = A.fk_id_dependencia', 'INNER');
+				$this->db->join('actividad_estado_pi E', 'E.fk_numero_actividad_pi = A.numero_actividad_pi', 'INNER');
+				$this->db->where('A.vigencia', $vigencia["vigencia"]);
+				if (array_key_exists("idActividad", $arrData)) {
+					$this->db->where('A.id_actividad', $arrData["idActividad"]);
+				}
+				if (array_key_exists("numeroActividad", $arrData)) {
+					$this->db->where('A.numero_actividad', $arrData["numeroActividad"]);
+				}
+				if (array_key_exists("idPlanIntegrado", $arrData)) {
+					$this->db->where('A.fk_id_plan_integrado', $arrData["idPlanIntegrado"]);
+				}
+				$query = $this->db->get('actividades_pi A');
 				if ($query->num_rows() > 0) {
 					return $query->result_array();
 				} else {
@@ -969,6 +1261,28 @@ class General_model extends CI_Model {
 				}
 		}
 
+		/**
+		 * Consulta lista de SUPERVISORES para una actividad
+		 * @since 08/05/2023
+		 */
+		public function get_user_encargado_by_actividadPI($arrData) 
+		{					
+				$this->db->select('id_user');
+				$this->db->join('usuarios U', 'U.fk_id_dependencia_u = A.fk_id_dependencia', 'INNER');
+				if (array_key_exists("idRol", $arrData)) {
+					$this->db->where('U.fk_id_user_role', $arrData["idRol"]);
+				}
+				if (array_key_exists("numeroActividadPI", $arrData)) {
+					$this->db->where('A.numero_actividad_pi', $arrData["numeroActividadPI"]);
+				}
+				$query = $this->db->get('actividades_pi A');
+				if ($query->num_rows() > 0) {
+					return $query->result_array();
+				} else {
+					return false;
+				}
+		}
+
 	/**
 	 * Lista de las dependencias del sistema
 	 * @since 15/06/2022
@@ -979,7 +1293,7 @@ class General_model extends CI_Model {
 			$this->db->where('id_dependencia', $arrData["idDependencia"]);
 		}
 		if (array_key_exists("filtro", $arrData)) {
-			$values = array('1', '3');
+			$values = array('1');
 			$this->db->where_not_in('id_dependencia', $values);
 		}
 		$this->db->order_by('dependencia', 'asc');
@@ -1106,7 +1420,7 @@ class General_model extends CI_Model {
 					$this->db->where('C.fk_numero_proyecto_inversion', $arrData["numeroProyecto"]);
 				}
 				if (array_key_exists("filtro", $arrData)) {
-					$values = array('1', '3');
+					$values = array('1');
 					$this->db->where_not_in('D.id_dependencia', $values);
 				}
 				$this->db->order_by("dependencia", "ASC");
@@ -1276,6 +1590,32 @@ class General_model extends CI_Model {
 		}
 
 		/**
+		 * Add estado actividad PI
+		 * @since 08/05/2023
+		 */
+		public function addHistorialActividadPI($arrData) 
+		{
+			$idUser = $this->session->userdata("id");
+			
+			$data = array(
+				'fk_numero_actividad_pi' => $arrData["numeroActividadPI"],
+				'fk_id_usuario' => $idUser,
+				'numero_trimestre' => $arrData["numeroTrimestre"],
+				'fecha_cambio' => date("Y-m-d G:i:s"),
+				'observacion' => $arrData["observacion"],
+				'fk_id_estado' => $arrData["estado"]
+			);
+			
+			$query = $this->db->insert('actividad_historial_pi', $data);
+
+			if ($query) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+		/**
 		 * Update estado de la actividad
 		 * @since 24/04/2022
 		 */
@@ -1297,6 +1637,36 @@ class General_model extends CI_Model {
 			}
 			$this->db->where('fk_numero_actividad', $arrData["numeroActividad"]);
 			$query = $this->db->update('actividad_estado', $data);
+
+			if ($query) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+		/**
+		 * Update estado de la actividad
+		 * @since 24/04/2022
+		 */
+		public function updateEstadoActividadPI($arrData)
+		{			
+			$data = array(
+				'estado_trimestre_' . $arrData["numeroTrimestre"] => $arrData["estado"],
+				'descripcion_actividad_trimestre_' . $arrData["numeroTrimestre"] => $arrData["descripcion_actividad"],
+				'evidencias_trimestre_' . $arrData["numeroTrimestre"] => $arrData["evidencia"]
+			);	
+			//si esta aprobado por planeacion, debo guardar los calculos
+			if($arrData["estado"] == 5){
+				$valorCumplimiento = "cumplimiento" . $arrData["numeroTrimestre"];
+				$data = array(
+					'trimestre_' . $arrData["numeroTrimestre"] => $arrData[$valorCumplimiento],
+					'estado_trimestre_' . $arrData["numeroTrimestre"] => $arrData["estado"],
+					'avance_poa' => $arrData["avancePOA"]
+				);	
+			}
+			$this->db->where('fk_numero_actividad_pi', $arrData["numeroActividadPI"]);
+			$query = $this->db->update('actividad_estado_pi', $data);
 
 			if ($query) {
 				return true;
@@ -1389,6 +1759,29 @@ class General_model extends CI_Model {
 			);	
 			$this->db->where('fk_numero_actividad', $arrData["numeroActividad"]);
 			$query = $this->db->update('actividad_estado', $data);
+
+			if ($query) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+		/**
+		 * Update estado de la actividad PI
+		 * @since 08/05/2023
+		 */
+		public function updateEstadoActividadTotalesPI($arrData)
+		{			
+			$data = array(
+				'trimestre_' . $arrData["numeroTrimestre"] => $arrData["cumplimientoX"],
+				'estado_trimestre_' . $arrData["numeroTrimestre"] => $arrData["estado"],
+				'avance_poa' => $arrData["avancePOA"],
+				'cumplimiento' => $arrData["cumplimientoActual"],
+				'mensaje_poa_trimestre_' . $arrData["numeroTrimestre"] => $arrData["observacion"]
+			);	
+			$this->db->where('fk_numero_actividad_pi', $arrData["numeroActividadPI"]);
+			$query = $this->db->update('actividad_estado_pi', $data);
 
 			if ($query) {
 				return true;
@@ -1595,6 +1988,30 @@ class General_model extends CI_Model {
 				'valores' => $arrData["jsondataForm"]
 			);
 			$query = $this->db->insert('auditoria_actividad_ejecucion', $data);
+
+			if ($query) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+		/**
+		 * Add estado actividad PI
+		 * @since 08/05/2023
+		 */
+		public function addAuditoriaActividadEjecucionPI($arrData) 
+		{
+			$idUser = $this->session->userdata("id");
+			
+			$data = array(
+				'fk_numero_actividad_pi' => $arrData["numeroActividadPI"],
+				'fk_id_usuario' => $idUser,
+				'numero_trimestre' => $arrData["numeroTrimestre"],
+				'fecha_registro' => date("Y-m-d G:i:s"),
+				'valores' => $arrData["jsondataForm"]
+			);
+			$query = $this->db->insert('auditoria_actividad_ejecucion_pi', $data);
 
 			if ($query) {
 				return true;
@@ -2065,6 +2482,54 @@ class General_model extends CI_Model {
 					$this->db->where('A.vigencia', $arrData["vigencia"]);
 				}
 				$query = $this->db->get('cuadro_base C');
+				if ($query->num_rows() > 0) {
+					return $query->result_array();
+				} else {
+					return false;
+				}
+		}
+
+		/**
+		 * Cantidad de actividades de un cuadro base
+		 * @since 31/12/2022
+		 */
+		public function get_plan_institucional($arrData) 
+		{
+				$this->db->select();
+				$this->db->join('planes_institucionales I', 'P.fk_id_plan_institucional = I.id_plan_institucional', 'LEFT');
+				$this->db->join('actividades_pi A', 'P.id_plan_integrado = A.fk_id_plan_integrado', 'LEFT');
+				$this->db->join('param_dependencias D', 'A.fk_id_dependencia = D.id_dependencia', 'LEFT');
+				if (array_key_exists("idPlanIntegrado", $arrData)) {
+					$this->db->where('P.id_plan_integrado', $arrData["idPlanIntegrado"]);
+				}
+				if (array_key_exists("vigencia", $arrData)) {
+					$this->db->where('P.vigencia', $arrData["vigencia"]);
+				}
+				$query = $this->db->get('planes_integrados P');
+				if ($query->num_rows() > 0) {
+					return $query->result_array();
+				} else {
+					return false;
+				}
+		}
+
+		/**
+		 * Cantidad de actividades de un cuadro base
+		 * @since 31/12/2022
+		 */
+		public function get_sumCumplimiento($arrData)
+		{
+				$this->db->select_sum('cumplimiento');
+				$this->db->join('planes_institucionales I', 'P.fk_id_plan_institucional = I.id_plan_institucional', 'LEFT');
+				$this->db->join('actividades_pi A', 'P.id_plan_integrado = A.fk_id_plan_integrado', 'LEFT');
+				$this->db->join('actividad_estado_pi E', 'E.fk_numero_actividad_pi = A.numero_actividad_pi', 'LEFT');
+				if (array_key_exists("idPlanIntegrado", $arrData)) {
+					$this->db->where('P.id_plan_integrado', $arrData["idPlanIntegrado"]);
+				}
+				if (array_key_exists("vigencia", $arrData)) {
+					$this->db->where('P.vigencia', $arrData["vigencia"]);
+				}
+				$query = $this->db->get('planes_integrados P');
 				if ($query->num_rows() > 0) {
 					return $query->result_array();
 				} else {

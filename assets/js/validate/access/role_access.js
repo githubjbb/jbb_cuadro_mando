@@ -27,8 +27,15 @@ $( document ).ready( function () {
 			var oID = $(this).attr("id");
 			
 			//Activa icono guardando
-			if(window.confirm('Are you sure to delete the link access?'))
-			{
+			Swal.fire({
+				title: "Eliminar",
+                text: "Are you sure to delete the link access ?",
+                icon: "warning",
+                confirmButtonText: "Confirmar",
+                showCancelButton: true,
+                cancelButtonColor: "#DD6B55"
+			}).then((result) => {
+				if (result.isConfirmed) {
 					$(".btn-danger").attr('disabled','-1');
 					$.ajax ({
 						type: 'POST',
@@ -63,7 +70,8 @@ $( document ).ready( function () {
 						}
 
 					});
-			}
+				}
+			});
 	});
 	
 	$("#btnSubmit").click(function(){		

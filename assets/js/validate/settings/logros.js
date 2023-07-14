@@ -30,10 +30,16 @@ $( document ).ready( function () {
 
 	$(".btn-danger").click(function () {	
 			var oID = $(this).attr("id");
-			
 			//Activa icono guardando
-			if(window.confirm('Por favor confirmar si desea eliminar el Logro.'))
-			{
+			Swal.fire({
+				title: "Eliminar",
+                text: "¿ Por favor confirmar si desea eliminar el Logro ?",
+                icon: "warning",
+                confirmButtonText: "Confirmar",
+                showCancelButton: true,
+                cancelButtonColor: "#DD6B55"
+			}).then((result) => {
+				if (result.isConfirmed) {
 					$(".btn-danger").attr('disabled','-1');
 					$.ajax ({
 						type: 'POST',
@@ -68,7 +74,8 @@ $( document ).ready( function () {
 						}
 
 					});
-			}
+				}
+			});
 	});
 	
 	$("#btnSubmit").click(function(){		

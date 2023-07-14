@@ -22,7 +22,7 @@ $(function(){
 			<div class="panel panel-primary">
 				<div class="panel-heading">
 					<h4 class="list-group-item-heading">
-					<i class="fa fa-gear fa-fw"></i> CONFIGURACIÓN - INDICADORES PMR
+					<i class="fa fa-gear fa-fw"></i> SEGPLAN - INDICADORES PMR
 					</h4>
 				</div>
 			</div>

@@ -22,65 +22,83 @@ class Login extends CI_Controller {
 	
 	public function validateUser()
 	{
-			$login = $this->security->xss_clean($this->input->post("inputLogin"));
-			$passwd = $this->security->xss_clean($this->input->post("inputPassword"));
-	
-			//busco datos del usuario
-			$arrParam = array(
-				"table" => "usuarios",
-				"order" => "id_user",
-				"column" => "log_user",
-				"id" => $login
-			);
-			$userExist = $this->general_model->get_basic_search($arrParam);
+			$login = $this->input->post("inputLogin");
+	        $passwd = $this->input->post("inputPassword");
 
-			if ($userExist)
-			{
-					$arrParam = array(
-						"login" => $login,
-						"passwd" => $passwd
+	        $ldapuser = $login;
+	        $ldappass = $passwd;
+	        
+	        $ds = ldap_connect("192.168.0.44", "389") or die("No es posible conectar con el directorio activo.");  // Servidor LDAP!
+	        if (!$ds) {
+	            echo "<br /><h4>Servidor LDAP no disponible</h4>";
+	            @ldap_close($ds);
+	        } else {
+	            $ldapdominio = "jardin";
+	            $ldapusercn = $ldapdominio . "\\" . $ldapuser;
+	            $binddn = "ou=jardin, dc=jardin, dc=local";
+	            $r = @ldap_bind($ds, $ldapusercn, $ldappass);
+	            if (!$r) {
+	                @ldap_close($ds);
+	                $data["msj"] = "Error de autenticación. Por favor revisar usuario y contraseña de red.";
+	                $this->session->sess_destroy();
+					$this->load->view('login', $data);
+	                /*$data["view"] = "error";
+	                $data["mensaje"] = "Error de autenticación. Revisar usuario y contraseña de red.";
+	                $this->load->view("layout", $data);*/
+	            } else {
+					//busco datos del usuario
+					/*$arrParam = array(
+						"table" => "usuarios",
+						"order" => "id_user",
+						"column" => "log_user",
+						"id" => $login
 					);
-					$user = $this->login_model->validateLogin($arrParam); //brings user information from user table
-
-					if(($user["valid"] == true)) 
-					{
-						$userRole = intval($user["role"]);
-						//busco url del dashboard de acuerdo al rol del usuario
+					$userExist = $this->general_model->get_basic_search($arrParam);
+					if ($userExist)
+					{*/
 						$arrParam = array(
-							"idRole" => $userRole
+							"login" => $login
+							//"passwd" => $passwd
 						);
-						$rolInfo = $this->general_model->get_roles($arrParam);
-
-						$sessionData = array(
-							"auth" => "OK",
-							"id" => $user["id"],
-							"dashboardURL" => $rolInfo[0]['dashboard_url'],
-							"firstname" => $user["firstname"],
-							"lastname" => $user["lastname"],
-							"name" => $user["firstname"] . ' ' . $user["lastname"],
-							"dependencia" => $user["dependencia"],
-							"logUser" => $user["logUser"],
-							"state" => $user["state"],
-							"role" => $user["role"],
-							"photo" => $user["photo"]
-						);
-												
-						$this->session->set_userdata($sessionData);
-						//cookies
-						set_cookie('user',$login, '350000'); 
-						set_cookie('password',$passwd,'350000'); 
-						
-						$this->login_model->redireccionarUsuario();
-					}else{					
-						$data["msj"] = "<strong>" . $userExist[0]["first_name"] . "</strong> esa no es su contraseña.";
+						$user = $this->login_model->validateLogin($arrParam); //brings user information from user table
+						if(($user["valid"] == true)) 
+						{
+							$userRole = intval($user["role"]);
+							//busco url del dashboard de acuerdo al rol del usuario
+							$arrParam = array(
+								"idRole" => $userRole
+							);
+							$rolInfo = $this->general_model->get_roles($arrParam);
+							$sessionData = array(
+								"auth" => "OK",
+								"id" => $user["id"],
+								"dashboardURL" => $rolInfo[0]['dashboard_url'],
+								"firstname" => $user["firstname"],
+								"lastname" => $user["lastname"],
+								"name" => $user["firstname"] . ' ' . $user["lastname"],
+								"dependencia" => $user["dependencia"],
+								"logUser" => $user["logUser"],
+								"state" => $user["state"],
+								"role" => $user["role"],
+								"photo" => $user["photo"]
+							);
+							$this->session->set_userdata($sessionData);
+							//cookies
+							set_cookie('user',$login, '350000'); 
+							//set_cookie('password',$passwd,'350000'); 
+							$this->login_model->redireccionarUsuario();
+						} else {					
+							$data["msj"] = "<strong>" . $login . "</strong> no esta registrado.";
+							$this->session->sess_destroy();
+							$this->load->view('login', $data);
+						}
+					/*} else {
+						$data["msj"] = "<strong>" . $login . "</strong> no esta registrado.";
 						$this->session->sess_destroy();
 						$this->load->view('login', $data);
-					}
-			}else{
-				$data["msj"] = "<strong>" . $login . "</strong> no esta registrado.";
-				$this->session->sess_destroy();
-				$this->load->view('login', $data);
-			}
+					}*/
+	            }
+	        }
 	}
 	
 	/**

@@ -1,11 +1,13 @@
+<script type="text/javascript" src="<?php echo base_url("assets/js/validate/settings/planes_institucionales.js"); ?>"></script>
+
 <script>
-$(function(){ 
-	$(".btn-success").click(function () {	
+$(function(){
+	$(".btn-success").click(function () {
 			var oID = $(this).attr("id");
             $.ajax ({
                 type: 'POST',
-				url: base_url + 'settings/cargarModalIndicadoresSP',
-                data: {'idIndicador': oID},
+				url: base_url + 'settings/cargarModalPlanesInstitucionales',
+                data: {'idPlanInstitucional': oID},
                 cache: false,
                 success: function (data) {
                     $('#tablaDatos').html(data);
@@ -22,7 +24,7 @@ $(function(){
 			<div class="panel panel-primary">
 				<div class="panel-heading">
 					<h4 class="list-group-item-heading">
-					<i class="fa fa-gear fa-fw"></i> SEGPLAN - INDICADORES SEGPLAN
+					<i class="fa fa-gear fa-fw"></i> PLAN INTEGRADO - PLANES INSTITUCIONALES
 					</h4>
 				</div>
 			</div>
@@ -35,11 +37,11 @@ $(function(){
 		<div class="col-lg-12">
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					<i class="fa fa-thumb-tack"></i> LISTA INDICADORES SEGPLAN
+					<i class="fa fa-crosshairs"></i> LISTA PLANES INSTITUCIONALES
 					<div class="pull-right">
 						<div class="btn-group">																				
 							<button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#modal" id="x">
-									<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Adicionar Indicador SEGPLAN
+									<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Adicionar Planes Institucionales
 							</button>
 						</div>
 					</div>
@@ -73,8 +75,8 @@ $(function(){
 					<table width="100%" class="table table-striped table-bordered table-hover" id="dataTables">
 						<thead>
 							<tr>
-								<th class="text-center">No.</th>
-								<th class="text-center">Indicador</th>
+								<th>ID</th>
+								<th>Plan Institucional</th>
 								<th class="text-center">Editar</th>
 							</tr>
 						</thead>
@@ -82,15 +84,19 @@ $(function(){
 						<?php
 							foreach ($info as $lista):
 									echo "<tr>";
-									echo "<td class='text-center'>" . $lista['numero_indicador'] . "</td>";
-									echo "<td>" . $lista['indicador_sp'] . "</td>";
+									echo "<td>" . $lista['id_plan_institucional'] . "</td>";
+									echo "<td>" . $lista['plan_institucional'] . "</td>";
 									echo "<td class='text-center'>";
 						?>
-									<button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#modal" id="<?php echo $lista['id_indicador_sp']; ?>" >
+									<button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#modal" id="<?php echo $lista['id_plan_institucional']; ?>" >
 										Editar <span class="glyphicon glyphicon-edit" aria-hidden="true">
+									</button>
+									<button type="button" class='btn btn-danger btn-xs' id="<?php echo $lista['id_plan_institucional']; ?>">
+										Eliminar <i class="fa fa-trash-o"></i>
 									</button>
 						<?php
 									echo "</td>";
+									echo "</tr>";
 							endforeach;
 						?>
 						</tbody>

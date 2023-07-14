@@ -15,7 +15,7 @@ $( document ).ready( function () {
 					var idActividad = $(this).attr("id");
 					$.ajax ({
 						type: 'POST',
-						url: base_url + 'dashboard/delete_actividad',
+						url: base_url + 'settings/delete_actividadPI',
 						data: {'idActividad': idActividad},
 						cache: false,
 						success: function(data){
@@ -30,7 +30,7 @@ $( document ).ready( function () {
 							if( data.result )//true
 							{	                                                        
 								$(".btn-danger").removeAttr('disabled');
-								var url = base_url + "dashboard/actividades/" + data.idCuadrobase;
+								var url = base_url + "settings/actividadesPI/" + data.idPlanIntegrado;
 								$(location).attr("href", url);
 							}
 							else
@@ -48,10 +48,9 @@ $( document ).ready( function () {
 				}
 			});
 	});
-			
+		
 	$( "#formEstado" ).validate( {
 		rules: {
-			estado:					{ required: true },
 			observacion:			{ required: true }
 		},
 		errorElement: "em",
@@ -81,7 +80,7 @@ $( document ).ready( function () {
 			
 				$.ajax({
 					type: "POST",	
-					url: base_url + "dashboard/save_estado_actividad",	
+					url: base_url + "settings/save_estado_actividadPI",	
 					data: $("#formEstado").serialize(),
 					dataType: "json",
 					contentType: "application/x-www-form-urlencoded;charset=UTF-8",
@@ -107,7 +106,7 @@ $( document ).ready( function () {
 							$("#div_guardado").css("display", "inline");
 							$('#btnEstado').removeAttr('disabled');
 
-							var url = base_url + "dashboard/actividades/" + data.record;
+							var url = base_url + "settings/actividadesPI/" + data.record;
 							$(location).attr("href", url);
 						}
 						else

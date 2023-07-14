@@ -1108,4 +1108,337 @@
 				}
 		}
 	    
+	    /**
+		 * Add/Edit ACTIVIDAD PI
+		 * @since 08/05/2023
+		 * @author AOCUBILLOSA
+		 */
+		public function guardarActividadPI() 
+		{
+				$idActividad = $this->input->post('hddId');
+				$idPlanIntegrado = $this->input->post('hddIdPlanIntegrado');
+				$idUser = $this->session->userdata("id");
+				$vigencia = $this->general_model->get_vigencia();
+		
+				$data = array(
+					'numero_actividad_pi' => $this->input->post('numero_actividad'),
+					'descripcion_actividad_pi' => $this->input->post('descripcion'),
+					'meta_plan_operativo_anual_pi' => $this->input->post('meta_plan'),
+					'unidad_medida_pi' => $this->input->post('unidad_medida'),
+					'ponderacion_pi' => $this->input->post('ponderacion'),
+					'fecha_inicial_pi' => $this->input->post('fecha_inicial'),
+					'fecha_final_pi' => $this->input->post('fecha_final'),
+					'fk_id_area_responsable' => $this->input->post('id_responsable'),
+					'fk_id_dependencia' => $this->input->post('id_dependencia'),
+					'vigencia' => $vigencia['vigencia']
+				);	
+
+				//revisar si es para adicionar o editar
+				if ($idActividad == '') 
+				{
+					$data['fk_id_plan_integrado'] = $idPlanIntegrado;
+					$query = $this->db->insert('actividades_pi', $data);
+					$idActividad = $this->db->insert_id();	
+				} else {
+					$this->db->where('id_actividad_pi', $idActividad);
+					$query = $this->db->update('actividades_pi', $data);
+				}
+				if ($query) {
+					return $idActividad;
+				} else {
+					return false;
+				}
+		}
+
+		/**
+		 * Adicionar registros de programacion por mes
+	     * @since 08/05/2023
+	     * @author AOCUBILLOSA
+		 */
+		public function save_programa_actividadPI($numeroActividad) 
+		{
+			//add the new record
+			$query = 1;
+			$mesInicial = $this->input->post('fecha_inicial');
+			$mesFinal = $this->input->post('fecha_final');
+			$idUser = $this->session->userdata("id");
+
+			for ($i = $mesInicial; $i <= $mesFinal; $i++) {
+					$data = array(
+						'fk_id_mes' => $i,
+						'fk_numero_actividad_pi' => $numeroActividad,
+						'fk_id_user' => $idUser,
+						'fecha_creacion' => date("Y-m-d G:i:s")
+					);	
+					$query = $this->db->insert('actividad_ejecucion_pi', $data);
+			}
+
+			if($query) {
+				return true;
+			} else{
+				return false;
+			}
+		}
+
+		/**
+		 * Add/Edit PLAN INSTITUCIONAL
+		 * @since 29/03/2023
+		 * @author AOCUBILLOSA
+		 */
+		public function savePlanInstitucional() 
+		{
+				$idPlanInstitucional = $this->input->post('hddId');
+				$data = array(
+					'plan_institucional' => $this->input->post('plan_institucional')
+				);
+				//revisar si es para adicionar o editar
+				if ($idPlanInstitucional == '') {
+					$query = $this->db->insert('planes_institucionales', $data);		
+				} else {
+					$this->db->where('id_plan_institucional', $idPlanInstitucional);
+					$query = $this->db->update('planes_institucionales', $data);
+				}
+				if ($query) {
+					return true;
+				} else {
+					return false;
+				}
+		}
+
+		/**
+		 * Consulta lista de actividades por indicador PMR
+		 * @since 31/10/2022
+		 * @author AOCUBILLOSA
+		 */
+		public function get_plan_integrado($arrParams) {
+				$this->db->select();
+				$this->db->join('planes_institucionales I', 'I.id_plan_institucional = P.fk_id_plan_institucional', 'LEFT');
+				$this->db->join('actividades_pi A', 'P.id_plan_integrado = A.fk_id_plan_integrado', 'LEFT');
+				$this->db->join('actividad_estado_pi E', 'A.numero_actividad_pi = E.fk_numero_actividad_pi', 'LEFT');
+				$this->db->join('param_dependencias D', 'A.fk_id_dependencia = D.id_dependencia', 'LEFT');
+				$this->db->where('P.vigencia', $arrParams['vigencia']);
+				if (array_key_exists("idPlanIntegrado", $arrParams)) {
+					$this->db->where('P.id_plan_integrado', $arrParams['idPlanIntegrado']);
+				}
+				if (array_key_exists("vigencia", $arrParams)) {
+					$this->db->where('P.vigencia', $arrParams['vigencia']);
+				}
+				if (array_key_exists("dependencia", $arrParams)) {
+					$this->db->where('A.fk_id_dependencia', $arrParams['dependencia']);
+				}
+				$this->db->order_by('P.fk_id_plan_institucional', 'asc');
+				$query = $this->db->get('planes_integrados P');
+				if ($query->num_rows() > 0) {
+					return $query->result_array();
+				} else {
+					return false;
+				}
+		}
+
+		/**
+		 * Add/Edit PLAN INTEGRADO
+		 * @since 30/03/2023
+		 * @author AOCUBILLOSA
+		 */
+		public function savePlanIntegrado() 
+		{
+				$idPlanIntegrado = $this->input->post('hddId');
+				$data = array(
+					'fk_id_plan_institucional' => $this->input->post('plan_institucional'),
+					'vigencia' => $this->input->post('hddVigencia')
+				);
+				//revisar si es para adicionar o editar
+				if ($idPlanIntegrado == '') {
+					$query = $this->db->insert('planes_integrados', $data);		
+				} else {
+					$this->db->where('id_plan_integrado', $idPlanIntegrado);
+					$query = $this->db->update('planes_integrados', $data);
+				}
+				if ($query) {
+					return true;
+				} else {
+					return false;
+				}
+		}
+
+		/**
+		 * Guardar Ejecucion Actividades PI
+		 * @since 08/05/2023
+		 */
+		public function guardarProgramadoPI()
+		{
+				$numeroActividad = $this->input->post('hddNumeroActividad');
+				$idEjecucion = $this->input->post('hddId');
+				$idUser = $this->session->userdata("id");
+		
+				$data = array(
+					'programado' => $this->input->post('programado'),
+					'fecha_creacion' => date("Y-m-d G:i:s")
+				);	
+
+				//revisar si es para adicionar o editar
+				if ($idEjecucion == '') 
+				{
+					$data['fk_numero_actividad_pi'] = $numeroActividad;
+					$data['fk_id_user'] = $idUser;
+					$data['fk_id_mes'] = $this->input->post('mes');
+					$query = $this->db->insert('actividad_ejecucion_pi', $data);
+				} else {
+					$this->db->where('id_ejecucion_actividad_pi', $idEjecucion);
+					$query = $this->db->update(' actividad_ejecucion_pi', $data);
+				}
+				if ($query) {
+					return true;
+				} else {
+					return false;
+				}
+		}
+
+		/**
+		 * Guardar Programacion Actividades
+		 * @since 23/04/2022
+		 */
+		public function guardarProgramacionPI() 
+		{
+				//update states
+				$query = 1;
+				
+				$datos = $this->input->post('form');
+				if($datos) {
+					$tot = count($datos['id']);
+					for ($i = 0; $i < $tot; $i++) 
+					{					
+						$data = array(
+							'programado' => $datos['programado'][$i],
+							'ejecutado' => $datos['ejecutado'][$i],
+							'descripcion_actividades' => $datos['descripcion'][$i],
+							'evidencias' => $datos['evidencia'][$i],
+							'fecha_actualizacion' => date("Y-m-d G:i:s")
+						);
+						$this->db->where('id_ejecucion_actividad_pi', $datos['id'][$i]);
+						$query = $this->db->update('actividad_ejecucion_pi', $data);
+					}
+				}
+				
+				if ($query){
+					return true;
+				} else{
+					return false;
+				}
+		}
+
+		/**
+		 * Guardar estado del Trimestre
+		 * @since 17/04/2022
+		 */
+		public function guardarTrimestrePI($banderaActividad, $estadoActividad, $numeroActividad, $cumplimientoTrimestre, $avancePOA, $numeroTrimestre) 
+		{	
+				$data = array(
+					'estado_trimestre_' . $numeroTrimestre => $estadoActividad,
+				);	
+
+				//revisar si es para adicionar o editar
+				if ($banderaActividad) 
+				{
+					$this->db->where('fk_numero_actividad_pi', $numeroActividad);
+					$query = $this->db->update('actividad_estado_pi', $data);
+				} else {
+					$data['fk_numero_actividad_pi'] = $numeroActividad;
+					$query = $this->db->insert('actividad_estado_pi', $data);
+				}
+				if ($query) {
+					return true;
+				} else {
+					return false;
+				}
+		}
+
+		/**
+		 * Guardar Ejecucion Actividades
+		 * @since 18/06/2022
+		 */
+		public function guardarEjecucionPI() 
+		{
+				//update states
+				$query = 1;
+				$idUser = $this->session->userdata("id");
+				
+				$datos = $this->input->post('form');
+				if($datos) {
+					$tot = count($datos['id']);
+					for ($i = 0; $i < $tot; $i++) 
+					{					
+						$data = array(
+							'fk_id_responsable' => $idUser,
+							'ejecutado' => $datos['ejecutado'][$i],
+							'descripcion_actividades' => $datos['descripcion'][$i],
+							'evidencias' => $datos['evidencia'][$i],
+							'fecha_actualizacion' => date("Y-m-d G:i:s")
+						);
+						$this->db->where('id_ejecucion_actividad_pi', $datos['id'][$i]);
+						$query = $this->db->update('actividad_ejecucion_pi', $data);
+					}
+				}
+				
+				if ($query){
+					return true;
+				} else{
+					return false;
+				}
+		}
+
+		public function eliminar_ejecucionPI($numeroActividad) 
+		{
+			$this->db->where('fk_numero_actividad_pi', $numeroActividad);
+	        $query = $this->db->delete('actividad_ejecucion_pi');
+	        if ($query){
+				return true;
+			} else{
+				return false;
+			}
+	    }
+
+	    public function eliminar_estadoPI($numeroActividad) 
+		{
+			$this->db->where('fk_numero_actividad_pi', $numeroActividad);
+	        $query = $this->db->delete('actividad_estado_pi');
+	        if ($query){
+				return true;
+			} else{
+				return false;
+			}
+	    }
+
+	    public function eliminar_historialPI($numeroActividad) 
+		{
+			$this->db->where('fk_numero_actividad_pi', $numeroActividad);
+	        $query = $this->db->delete('actividad_historial_pi');
+	        if ($query){
+				return true;
+			} else{
+				return false;
+			}
+	    }
+
+	    public function eliminar_auditoriaPI($numeroActividad) 
+		{
+			$this->db->where('fk_numero_actividad_pi', $numeroActividad);
+	        $query = $this->db->delete('auditoria_actividad_ejecucion_pi');
+	        if ($query){
+				return true;
+			} else{
+				return false;
+			}
+	    }
+
+	    public function eliminar_actividadPI($numeroActividad) 
+		{
+			$this->db->where('numero_actividad_pi', $numeroActividad);
+	        $query = $this->db->delete('actividades_pi');
+	        if ($query){
+				return true;
+			} else{
+				return false;
+			}
+	    }
 	}

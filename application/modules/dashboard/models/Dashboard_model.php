@@ -38,7 +38,7 @@
 					'plan_tecnologia' => $this->input->post('plan_tecnologia'),
 					'plan_riesgos' => $this->input->post('plan_riesgos'),
 					'plan_informacion' => $this->input->post('plan_informacion'),
-					'fk_id_indicador_pmr' => $this->input->post('id_indicador_pmr')
+					'fk_numero_indicador_pmr' => $this->input->post('id_indicador_pmr')
 				);	
 
 				//revisar si es para adicionar o editar

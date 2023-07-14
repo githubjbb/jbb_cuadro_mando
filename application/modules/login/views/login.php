@@ -47,9 +47,7 @@
             <div class="col-md-4 col-md-offset-4">
                 <div class="login-panel panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">
-                            Autenticación 
-                        </h3>
+                        <h3 class="panel-title">Autenticación<br>Usuario y Contraseña de Red</h3>
                     </div>
                     <div class="panel-body">
 						<?php if(isset($msj)){?>
@@ -71,7 +69,7 @@
                         </form>
 						
                         <br>
-						<a href="<?php echo base_url("login/recover"); ?>">¿Olvidó su contraseña?</a>					
+						<!--<a href="<?php echo base_url("login/recover"); ?>">¿Olvidó su contraseña?</a>-->
                     </div>
                 </div>
             </div>

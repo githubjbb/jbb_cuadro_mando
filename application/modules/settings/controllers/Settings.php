@@ -1,5 +1,15 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+require_once(FCPATH.'vendor/autoload.php');
+
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Color;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Style\Font;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
 class Settings extends CI_Controller {
 	
@@ -2104,7 +2114,6 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
 			$data['info'] = $this->general_model->get_basic_search($arrParam);
 			$data['vigencia'] = $this->general_model->get_vigencia();
 
-			
 			$data["view"] = 'fechas';
 			$this->load->view("layout_calendar", $data);
 	}
@@ -2119,7 +2128,7 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
 			header('Content-Type: application/json');
 			$msj = "Se realizó cambio de vigencia";
 			if($this->general_model->cambiar_vigencia()){
-				$data["result"] = true;				
+				$data["result"] = true;
 				$this->session->set_flashdata('retornoExito2', '<strong>Correcto!</strong> ' . $msj);
 			} else {
 				$data["result"] = "error";			
@@ -2885,4 +2894,1307 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
 			echo json_encode($data);
     }
 	
+	/**
+	 * Lista de actividades PI
+     * @since 08/05/2023
+     * @author AOCUBILLOSA
+	 */
+	public function actividadesPI($idPlanIntegrado, $numeroActividadPI = 'x', $numeroTrimestrePI = 'x')
+	{
+			/*$goBackInfo = $this->general_model->get_go_back();
+			if($goBackInfo){
+				$get_numero_objetivo = $goBackInfo['get_numero_objetivo'] != 0 ? $goBackInfo['get_numero_objetivo'] : "";
+				$get_numero_proyecto = $goBackInfo['get_numero_proyecto'] != 0 ? $goBackInfo['get_numero_proyecto'] : "";
+				$get_id_dependencia = $goBackInfo['get_id_dependencia'] != 0 ? $goBackInfo['get_id_dependencia'] : "";
+				$get_numero_actividad = $goBackInfo['get_numero_actividad'] != 0 ? $goBackInfo['get_numero_actividad'] : "";
+				$urlBotonRegresar .= "?numero_objetivo=" . $get_numero_objetivo . "&numero_proyecto=".$get_numero_proyecto."&id_dependencia=".$get_id_dependencia."&numero_actividad=" . $get_numero_actividad;
+			}*/
+			$dashboarURL = $this->session->userdata("dashboardURL");
+			$urlBotonRegresar = $dashboarURL;
+			$data['urlBotonRegresar'] = $urlBotonRegresar;
+			$data['numeroActividadPI'] = $numeroActividadPI;
+			$data['idPlanIntegrado'] = $idPlanIntegrado;
+			$data['numeroTrimestrePI'] = false;
+			$data['infoEjecucion'] = false;
+			$vigencia = $this->general_model->get_vigencia();
+			$arrParam = array(
+				"idPlanIntegrado" => $idPlanIntegrado,
+				'vigencia' => $vigencia['vigencia']
+			);
+			$data['listaActividadesPI'] = $this->general_model->get_actividadesPI($arrParam);
+			$data['listaHistorial'] = false;
+			$data['listaHistorial1'] = false;
+			$data['listaHistorial2'] = false;
+			$data['listaHistorial3'] = false;
+			$data['listaHistorial4'] = false;
+			$arrParam = array(
+				"idPlanIntegrado" => $idPlanIntegrado,
+				'vigencia' => $vigencia['vigencia']
+			);
+			$data['planInstitucional'] = $this->general_model->get_plan_institucional($arrParam);
+			if($numeroActividadPI != 'x') {
+				$vigencia = $this->general_model->get_vigencia();
+				$arrParam = array(
+					"numeroActividadPI" => $numeroActividadPI,
+					'vigencia' => $vigencia['vigencia']
+				);
+				$data['listaActividadesPI'] = $this->general_model->get_actividadesPI($arrParam);
+				$arrParam['numeroTrimestrePI'] = 1;
+				$data['listaHistorial1'] = $this->general_model->get_historial_actividadPI($arrParam);
+				$arrParam['numeroTrimestrePI'] = 2;
+				$data['listaHistorial2'] = $this->general_model->get_historial_actividadPI($arrParam);
+				$arrParam['numeroTrimestrePI'] = 3;
+				$data['listaHistorial3'] = $this->general_model->get_historial_actividadPI($arrParam);
+				$arrParam['numeroTrimestrePI'] = 4;
+				$data['listaHistorial4'] = $this->general_model->get_historial_actividadPI($arrParam);
+				if($numeroTrimestrePI != 'x') {
+					$data['numeroTrimestrePI'] = $numeroTrimestrePI;
+					$arrParam['numeroTrimestrePI'] = $numeroTrimestrePI;
+					$data['listaHistorial'] = $this->general_model->get_historial_actividadPI($arrParam);
+					$data['listaHistorial1'] = false;
+					$data['listaHistorial2'] = false;
+					$data['listaHistorial3'] = false;
+					$data['listaHistorial4'] = false;
+					//fechas limite de registro
+					$arrParamFechas = array(
+						"table" => "param_fechas_limites",
+						"order" => "id_fecha",
+						"column" => "numero_trimestre",
+						"id" => $numeroTrimestrePI
+					);
+					$data['infoFechaLimite'] = $this->general_model->get_basic_search($arrParamFechas);
+				}else{
+					$arrParam = array("numeroActividadPI" => $numeroActividadPI);
+				}
+				$data['infoEjecucion'] = $this->general_model->get_ejecucion_actividadesPI($arrParam);
+			}
+			$data["activarBTN1"] = true; //para activar el boton
+			$userRol = $this->session->userdata("role");
+			$data["view"] = "actividades_pi";
+			if($userRol == ID_ROL_ENLACE){
+				$data["view"] = "actividades_pi_enlace";
+			} elseif ($userRol == ID_ROL_SUPERVISOR){
+				$data["view"] = "actividades_pi_supervisor";
+			} elseif ($userRol == ID_ROL_CONTROL_INTERNO  || $userRol == ID_ROL_JEFEOCI){
+				$data["view"] = "actividades_pi_control";
+			}
+			$this->load->view("layout_calendar", $data);
+	}
+	
+    /**
+     * Cargo modal - formulario actividades PI
+     * @since 08/05/2023
+     */
+    public function cargarModalActividadPI() 
+	{
+			header("Content-Type: text/plain; charset=utf-8"); //Para evitar problemas de acentos
+			
+			$data['information'] = FALSE;
+			$data["idPlanIntegrado"] = $this->input->post("idPlanIntegrado");
+			$data["idActividadPI"] = $this->input->post("idActividadPI");
+			$arrParam = array(
+				"table" => "param_area_responsable",
+				"order" => "area_responsable",
+				"id" => "x"
+			);
+			$data['listaAreaResponsable'] = $this->general_model->get_basic_search($arrParam);
+			$arrParam = array(
+				"table" => "param_proceso_calidad",
+				"order" => "proceso_calidad",
+				"id" => "x"
+			);
+			$data['proceso_calidad'] = $this->general_model->get_basic_search($arrParam);
+			$arrParam = array(
+				"filtro" => true
+			);
+			$data['listaDependencia'] = $this->general_model->get_app_dependencias($arrParam);
+			$arrParam = array(
+				"table" => "param_meses",
+				"order" => "id_mes",
+				"id" => "x"
+			);
+			$data['listaMeses'] = $this->general_model->get_basic_search($arrParam);
+			if ($data["idActividadPI"] != 'x') 
+			{
+				$arrParam = array("idActividadPI" => $data["idActividadPI"]);
+				$data['information'] = $this->general_model->get_actividadesPI($arrParam);
+				$data["idPlanIntegrado"] = $data['information'][0]['fk_id_plan_integrado'];
+			}
+			$vigencia = $this->general_model->get_vigencia();
+			$arrParam = array(
+				"idPlanIntegrado" => $data["idPlanIntegrado"],
+				'vigencia' => $vigencia['vigencia']
+			);
+			$data['planInstitucional'] = $this->general_model->get_plan_institucional($arrParam);
+			$this->load->view("actividades_pi_modal", $data);
+    }
+	
+	/**
+	 * Ingresar/Actualizar actividades PI
+     * @since 29/03/2023
+     * @author AOCUBILLOSA
+	 */
+	public function save_actividadesPI()
+	{			
+			header('Content-Type: application/json');
+			$data = array();
+			$idActividadPI = $this->input->post('hddId');
+			$numeroActividadPI = $this->input->post('numero_actividad');
+			$data["idRecord"] = $this->input->post('hddIdPlanIntegrado');
+			$msj = "Se guardo la información!";
+
+			if ($this->settings_model->guardarActividadPI())
+			{	
+				if ($idActividadPI == ''){
+					$this->settings_model->save_programa_actividadPI($numeroActividadPI);//generar los programas
+					//generar REGISTRO DE ESTADO ACTIVIDAD
+					$banderaActividad = false;
+					$estadoActividad = 0;
+					$this->settings_model->guardarTrimestrePI($banderaActividad, $estadoActividad, $numeroActividadPI, '', 0, 1);
+					//guardar el historial de los 4 trimestres
+					for($i=1;$i<5;$i++) {
+						$arrParam = array(
+							"numeroActividadPI" => $numeroActividadPI,
+							"numeroTrimestre" => $i,
+							"observacion" => 'Registro de la actividad',
+							"estado" => 0
+						);
+
+						//actualizo el estado del trimestre de la actividad
+						$this->general_model->addHistorialActividadPI($arrParam);
+					}
+				}
+				$data["result"] = true;		
+				$this->session->set_flashdata('retornoExito', '<strong>Correcto!</strong> ' . $msj);
+			} else {
+				$data["result"] = "error";
+				$this->session->set_flashdata('retornoError', '<strong>Error!</strong> Ask for help');
+			}
+		
+			echo json_encode($data);
+    }
+
+    /**
+	 * Lista de Planes Institucionales
+     * @since 29/03/2023
+     * @author AOCUBILLOSA
+	 */
+	public function planesInstitucionales()
+	{
+			$arrParam = array(
+				"table" => "planes_institucionales",
+				"order" => "id_plan_institucional",
+				"id" => "x"
+			);
+			$data['info'] = $this->general_model->get_basic_search($arrParam);
+			$data["view"] = 'planes_institucionales';
+			$this->load->view("layout_calendar", $data);
+	}
+	
+    /**
+     * Cargo modal - formulario actividades PI
+     * @since 29/03/2023
+     * @author AOCUBILLOSA
+     */
+    public function cargarModalPlanesInstitucionales() 
+	{
+			header("Content-Type: text/plain; charset=utf-8"); //Para evitar problemas de acentos
+			$data['information'] = FALSE;
+			$data["idPlanInstitucional"] = $this->input->post("idPlanInstitucional");
+			if ($data["idPlanInstitucional"] != 'x') {
+				$arrParam = array(
+					"table" => "planes_institucionales",
+					"order" => "plan_institucional",
+					"column" => "id_plan_institucional",
+					"id" => $data["idPlanInstitucional"]
+				);
+				$data['information'] = $this->general_model->get_basic_search($arrParam);
+			}
+			$this->load->view("planes_institucionales_modal", $data);
+    }
+	
+	/**
+	 * Ingresar/Actualizar actividades PI
+     * @since 29/03/2023
+     * @author AOCUBILLOSA
+	 */
+	public function save_planesInstitucionales()
+	{			
+			header('Content-Type: application/json');
+			$data = array();
+			$idPlanInstitucional = $this->input->post('hddId');
+			$msj = "Se adicionó el Plan Institucional!";
+			if ($idPlanInstitucional != '') {
+				$msj = "Se actualizó el Plan Institucional!";
+			}
+			if ($idPlanInstitucional = $this->settings_model->savePlanInstitucional()) {
+				$data["result"] = true;				
+				$this->session->set_flashdata('retornoExito', '<strong>Correcto!</strong> ' . $msj);
+			} else {
+				$data["result"] = "error";			
+				$this->session->set_flashdata('retornoError', '<strong>Error!</strong> Ask for help');
+			}
+			echo json_encode($data);
+    }
+
+    public function eliminar_planInstitucional()
+	{			
+			header('Content-Type: application/json');
+			$data = array();
+			$idPlanInstitucional = $this->input->post('identificador');
+			$arrParam = array(
+				"table" => "planes_institucionales",
+				"primaryKey" => "id_plan_institucional",
+				"id" => $idPlanInstitucional
+			);
+			if ($this->general_model->deleteRecord($arrParam))
+			{
+				$data["result"] = true;
+				$this->session->set_flashdata('retornoExito', '<strong>Correcto!</strong> El Plan Integrado fue eliminado exitosamente.');
+			} else {
+				$data["result"] = "error";
+				$data["mensaje"] = "Error!!! Ask for help.";
+				$this->session->set_flashdata('retornoError', '<strong>Error!</strong> Ask for help');
+			}
+			echo json_encode($data);
+    }
+
+    /**
+	 * Lista de Plan Integrado
+     * @since 30/03/2023
+     * @author AOCUBILLOSA
+	 */
+	public function planIntegrado()
+	{
+			$data['userRol'] = $this->session->userdata("role");
+			$dependencia = $this->session->userdata("dependencia");
+			$vigencia = $this->general_model->get_vigencia();
+			if ($data['userRol'] == ID_ROL_SUPER_ADMIN || $data['userRol'] == ID_ROL_ADMINISTRADOR || $data['userRol'] == ID_ROL_PLANEACION) {
+					$arrParam = array(
+					'vigencia' => $vigencia['vigencia']
+				);
+				$data['info'] = $this->settings_model->get_plan_integrado($arrParam);
+			} else {
+				$arrParam = array(
+					'vigencia' => $vigencia['vigencia'],
+					'dependencia' => $dependencia
+				);
+				$data['info'] = $this->settings_model->get_plan_integrado($arrParam);
+			}
+			$data['vigencia'] = $this->general_model->get_vigencia();
+
+			$data["view"] = 'plan_integrado';
+			$this->load->view("layout_calendar", $data);
+	}
+	
+    /**
+     * Cargo modal - formulario plan integrado
+     * @since 30/03/2023
+     * @author AOCUBILLOSA
+     */
+    public function cargarModalPlanIntegrado()
+	{
+			header("Content-Type: text/plain; charset=utf-8"); //Para evitar problemas de acentos
+			$data['information'] = FALSE;
+			$data['vigencia'] = $this->general_model->get_vigencia();
+			$data["idPlanIntegrado"] = $this->input->post("idPlanIntegrado");
+			if ($data["idPlanIntegrado"] != 'x') {
+				$arrParam = array(
+					"table" => "planes_integrados",
+					"order" => "id_plan_integrado",
+					"column" => "id_plan_integrado",
+					"id" => $data["idPlanIntegrado"]
+				);
+				$data['information'] = $this->general_model->get_basic_search($arrParam);
+			}
+			$arrParam = array(
+				"table" => "planes_institucionales",
+				"order" => "id_plan_institucional",
+				"id" => "x"
+			);
+			$data['listaPlanesInstitucionales'] = $this->general_model->get_basic_search($arrParam);
+			$this->load->view("plan_integrado_modal", $data);
+    }
+	
+	/**
+	 * Ingresar/Actualizar plan integrado
+     * @since 30/03/2023
+     * @author AOCUBILLOSA
+	 */
+	public function save_planIntegrado()
+	{
+			header('Content-Type: application/json');
+			$data = array();
+			$idPlanIntegrado = $this->input->post('hddId');
+			$msj = "Se adicionó el Plan Integrado!";
+			if ($idPlanIntegrado != '') {
+				$msj = "Se actualizó el Plan Integrado!";
+			}
+			if ($idPlanIntegrado = $this->settings_model->savePlanIntegrado()) {
+				$data["result"] = true;
+				$this->session->set_flashdata('retornoExito', '<strong>Correcto!</strong> ' . $msj);
+			} else {
+				$data["result"] = "error";
+				$this->session->set_flashdata('retornoError', '<strong>Error!</strong> Ask for help');
+			}
+			echo json_encode($data);
+    }
+
+    /**
+	 * Delete link acces
+     * @since 1/4/2020
+	 */
+	public function eliminar_planIntegrado()
+	{			
+			header('Content-Type: application/json');
+			$data = array();
+			$idPlanIntegrado = $this->input->post('identificador');
+			$vigencia = $this->general_model->get_vigencia();
+			$arrParam = array(
+				"idPlanIntegrado" => $idPlanIntegrado,
+				'vigencia' => $vigencia['vigencia']
+			);
+			$listaActividadesPI = $this->general_model->get_actividadesPI($arrParam);
+			if ($listaActividadesPI) {
+				$numeroActividad = $listaActividadesPI[0]['numero_actividad_pi'];
+				$this->settings_model->eliminar_ejecucionPI($numeroActividad);
+				$this->settings_model->eliminar_estadoPI($numeroActividad);
+				$this->settings_model->eliminar_historialPI($numeroActividad);
+				$this->settings_model->eliminar_auditoriaPI($numeroActividad);
+				$this->settings_model->eliminar_actividadPI($numeroActividad);
+			}
+			$arrParam = array(
+				"table" => "planes_integrados",
+				"primaryKey" => "id_plan_integrado",
+				"id" => $idPlanIntegrado
+			);
+			if ($this->general_model->deleteRecord($arrParam))
+			{
+				$data["result"] = true;
+				$this->session->set_flashdata('retornoExito', '<strong>Correcto!</strong> El Plan Integrado fue eliminado exitosamente.');
+			} else {
+				$data["result"] = "error";
+				$data["mensaje"] = "Error!!! Ask for help.";
+				$this->session->set_flashdata('retornoError', '<strong>Error!</strong> Ask for help');
+			}
+			echo json_encode($data);
+    }
+
+    /**
+	 * Save estado de la actividad PI
+     * @since 08/05/2023
+     * @author AOCUBILLOSA
+	 */
+	public function save_estado_actividadPI()
+	{			
+			header('Content-Type: application/json');
+			$data = array();
+			$data["idPlanIntegrado"] = $this->input->post('hddIdPlanIntegrado');
+			$numeroActividadPI = $this->input->post('hddNumeroActividadPI');
+			$numeroTrimestre = $this->input->post('hddNumeroTrimestre');
+			$observacion = $this->input->post('observacion');
+			$idEstado = $this->input->post('estado');
+			$data["record"] = $data["idPlanIntegrado"] . '/' . $numeroActividadPI . '/' . $numeroTrimestre;
+			$msj = "Se cambio el estado de la actividad para el <b>Trimestre " . $numeroTrimestre .  "</b>.";
+			
+			$vigencia = $this->general_model->get_vigencia();
+			$arrParam = array("
+				numeroActividadPI" => $numeroActividadPI,
+				'vigencia' => $vigencia['vigencia']
+			);
+			$listadoActividades = $this->general_model->get_actividadesPI($arrParam);
+
+			$cumplimientoX = 0;
+			$avancePOA = 0;
+			$cumplimientoActual = 0;
+			$ponderacion = $listadoActividades[0]['ponderacion_pi'];
+			//INICIO --- DEBO TENER EN CUENTA EL TRIMESTRE DE LOS DEMAS QUE ESTAN EN 5
+			$estadoActividad = $this->general_model->get_estados_actividadesPI($arrParam);
+
+			$estadoTrimestre1 = $estadoActividad[0]["estado_trimestre_1"];
+			$estadoTrimestre2 = $estadoActividad[0]["estado_trimestre_2"];
+			$estadoTrimestre3 = $estadoActividad[0]["estado_trimestre_3"];
+			$estadoTrimestre4 = $estadoActividad[0]["estado_trimestre_4"];
+
+			$incluirTrimestre = 0;
+			if(($numeroTrimestre != 1 && $estadoTrimestre1 == 5) || ($numeroTrimestre == 1 && $idEstado == 5)){
+				$incluirTrimestre = $incluirTrimestre . "," . 1;
+			}
+			if(($numeroTrimestre != 2 && $estadoTrimestre2 == 5) || ($numeroTrimestre == 2 && $idEstado == 5)){
+				$incluirTrimestre = $incluirTrimestre . "," . 2;
+			}
+			if(($numeroTrimestre != 3 && $estadoTrimestre3 == 5) || ($numeroTrimestre == 3 && $idEstado == 5)){
+				$incluirTrimestre = $incluirTrimestre . "," . 3;
+			}
+			if(($numeroTrimestre != 4 && $estadoTrimestre3 == 5) || ($numeroTrimestre == 4 && $idEstado == 5)){
+				$incluirTrimestre = $incluirTrimestre . "," . 4;
+			}
+			$arrParam = array(
+				"numeroActividadPI" => $numeroActividadPI,
+				"filtroTrimestre" => $incluirTrimestre
+			);
+			$sumaEjecutado = $this->general_model->sumarEjecutadoPI($arrParam);	
+			//FIN --- DEBO TENER EN CUENTA EL TRIMESTRE DE LOS DEMAS QUE ESTAN EN 5
+
+			$sumaProgramado = $this->general_model->sumarProgramadoPI($arrParam);
+			if($sumaProgramado['programado'] > 0){
+				$avancePOA = round(($sumaEjecutado['ejecutado']/$sumaProgramado['programado']) * $ponderacion,2);
+			}
+
+			if($sumaProgramado['programado'] > 0 && $sumaEjecutado){
+				$cumplimientoActual = round(($sumaEjecutado['ejecutado']/$sumaProgramado['programado']) * 100,2);
+			}
+
+			if($idEstado == 5){
+				$arrParam = array(
+					"numeroActividadPI" => $numeroActividadPI,
+					"numeroTrimestre" => $numeroTrimestre
+				);
+				$sumaProgramadoTrimestreX = $this->general_model->sumarProgramadoPI($arrParam);
+				$sumaEjecutadoTrimestreX = $this->general_model->sumarEjecutadoPI($arrParam);
+
+				if($sumaProgramadoTrimestreX['programado'] > 0){
+					$cumplimientoX = round($sumaEjecutadoTrimestreX['ejecutado'] / $sumaProgramadoTrimestreX['programado'] * 100,2);
+				}
+			}
+
+			$arrParam = array(
+				"numeroActividadPI" => $numeroActividadPI,
+				"numeroTrimestre" => $numeroTrimestre,
+				"observacion" => $observacion,
+				"estado" => $idEstado,
+				"cumplimientoX" => $cumplimientoX,
+				"avancePOA" => $avancePOA,
+				"cumplimientoActual" => $cumplimientoActual
+			);
+			if($this->general_model->addHistorialActividadPI($arrParam)) 
+			{
+				//actualizo el estado del trimestre de la actividad
+				if($this->general_model->updateEstadoActividadTotalesPI($arrParam)){
+					//envio correos a los usuarios
+					if($idEstado == 3){
+						$mensaje = "se revisó la información registrada para la actividad <b>No. " . $numeroActividadPI  . "</b>, para el <b>Trimestre " . $numeroTrimestre . "</b>, fue <b>APROBADA</b> y se escalo al Área de Planeación para realizar el respectivo seguimiento.";
+					}elseif($idEstado == 4){
+						$mensaje = "se revisó la información registrada para la actividad <b>No. " . $numeroActividadPI  . "</b>, para el <b>Trimestre " . $numeroTrimestre . "</b>, fue <b>RECHAZADA</b>. Por favor ingresar y realizar los ajustes respectivos.";
+					}elseif($idEstado == 5){
+						$mensaje = "se realizó seguimiento a la información registrada para la actividad <b>No. " . $numeroActividadPI  . "</b>, para el <b>Trimestre " . $numeroTrimestre. "</b> y fue <b>APROBADA</b> por Planeación.";
+					}elseif($idEstado == 6){
+						$mensaje = "se realizó seguimiento a la información registrada para la actividad <b>No. " . $numeroActividadPI  . "</b>, para el <b>Trimestre " . $numeroTrimestre . "</b> y fue RECHAZADA por Planeación. Por favor ingresar y realizar los ajustes respectivos.";
+					}elseif($idEstado == 7){
+						$mensaje = "se realizó seguimiento a la información registrada para la actividad <b>No. " . $numeroActividadPI  . "</b>, para el <b>Trimestre " . $numeroTrimestre . "</b> y fue INCUMPLIDA. Por favor ingresar y realizar los ajustes respectivos.";
+					}
+
+					$mensaje .= "<br><br><b>Observación: </b>" . $observacion;
+
+					//INICIO
+					//SE BUSCA EL ENLACE DE LA DEPENDENCIA Y SE ENVIA CORREO
+		            $arrParam2 = array(
+		                "numeroActividadPI" => $numeroActividadPI,
+		                "idRol" => ID_ROL_ENLACE
+		            );
+		            $listaUsuarios = $this->general_model->get_user_encargado_by_actividadPI($arrParam2);
+
+		            if($listaUsuarios){
+		            	foreach ($listaUsuarios as $infoUsuario):
+							$arrParam = array(
+								"mensaje" => $mensaje,
+								"idUsuario" => $infoUsuario["id_user"]
+							);
+							//$this->send_email($arrParam);
+						endforeach;
+		            }
+
+					//SE BUSCA USUARIOS DE PLANEACION Y SE ENVIA CORREO
+					if($idEstado == 3){
+			            $arrParam2 = array(
+			                "idRole" => ID_ROL_PLANEACION
+			            );
+			            $listaUsuarios = $this->general_model->get_user($arrParam2);
+
+			            if($listaUsuarios){
+			            	foreach ($listaUsuarios as $infoUsuario):
+								$arrParam = array(
+									"mensaje" => $mensaje,
+									"idUsuario" => $infoUsuario["id_user"]
+								);
+								//$this->send_email($arrParam);
+							endforeach;
+			            }
+		        	}
+		            //FIN
+				}
+				
+				$data["result"] = true;
+				$data["mensaje"] = $msj;
+				$this->session->set_flashdata('retornoExito', $msj);
+			} else {
+				$data["result"] = "error";
+				$data["mensaje"] = "Error!!! Ask for help.";
+				$this->session->set_flashdata('retornoError', '<strong>Error!!!</strong> Ask for help');
+			}
+
+			echo json_encode($data);
+    }
+
+    /**
+     * Datos de actividades por TRIMESTRE
+     * @since 17/04/2022
+     * @author BMOTTAG
+     */
+	public function update_trimestrePI()
+	{
+		header('Content-Type: application/json');
+
+		$data["idPlanIntegrado"] = $this->input->post('idPlanIntegrado');
+		$data["numeroActividadPI"] = $numeroActividadPI = $this->input->post('numeroActividadPI');
+		$cumplimientoTrimestre = $this->input->post('cumplimientoTrimestre');
+		$avancePOA = $this->input->post('avancePOA');
+		$numeroTrimestre = $this->input->post('numeroTrimestre');
+
+		$banderaActividad = true;
+		$estadoActividad = 2;
+		if ($this->settings_model->guardarTrimestrePI($banderaActividad, $estadoActividad, $numeroActividadPI, $cumplimientoTrimestre, $avancePOA, $numeroTrimestre)){
+
+			$arrParam = array(
+				"numeroActividadPI" => $numeroActividadPI,
+				"numeroTrimestre" => $numeroTrimestre,
+				"observacion" => 'Se cerro el trimestre por parte del ENLACE.',
+				"estado" => 2
+			);
+			$this->general_model->addHistorialActividadPI($arrParam);
+
+			//INICIO
+			//SE BUSCA EL SUPERVISOR DE LA DEPENDENCIA Y SE ENVIA CORREO
+            $arrParam2 = array(
+                "numeroActividadPI" => $numeroActividadPI,
+                "idRol" => ID_ROL_SUPERVISOR
+            );
+            $listaSupervisores = $this->general_model->get_user_encargado_by_actividad($arrParam2);
+
+            if($listaSupervisores){
+            	foreach ($listaSupervisores as $infoSupervisor):
+					$arrParam = array(
+						"mensaje" => 'la actividad <b>No. ' . $numeroActividadPI . '</b> fue <b>CERRADA</b> por el ENLACE para el <b>Trimeste '. $numeroTrimestre .'</b>, por favor ingresar a la plataforma y revisar la información.',
+						"idUsuario" => $infoSupervisor["id_user"]
+					);
+					//$this->send_email($arrParam);
+				endforeach;
+            }
+            //FIN
+
+			$data["result"] = true;
+			$data["msj"] = "Se cerro el trimestre.";
+		} else {
+			$data["result"] = true;
+		}
+		echo json_encode($data);
+    }
+
+    /**
+     * Eliminar actividad PI
+     * @since 08/05/2023
+     * @author AOCUBILLOSA
+     */
+	public function delete_actividadPI()
+	{
+		header('Content-Type: application/json');
+		$data["idActividad"] = $this->input->post('idActividad');
+		$arrParam = array("idActividad" => $data["idActividad"]);
+		$infoActividad = $this->general_model->get_actividadesPI($arrParam);
+		$data["idPlanIntegrado"] = $infoActividad[0]['fk_id_plan_integrado'];
+		$numeroActividad = $infoActividad[0]['numero_actividad_pi'];
+		$this->settings_model->eliminar_ejecucionPI($numeroActividad);
+		$this->settings_model->eliminar_estadoPI($numeroActividad);
+		$this->settings_model->eliminar_historialPI($numeroActividad);
+		$this->settings_model->eliminar_auditoriaPI($numeroActividad);
+		$arrParam = array(
+			"table" => " actividades_pi",
+			"primaryKey" => "id_actividad_pi",
+			"id" => $data["idActividad"]
+		);
+		if ($this->general_model->deleteRecord($arrParam)) {
+			$data["result"] = true;
+			$this->session->set_flashdata('retornoExito', '<strong>Correcto!</strong> Se eliminó la actividad');
+		} else {
+			$data["result"] = true;
+		}
+		echo json_encode($data);
+    }
+
+    /**
+     * Cargo modal - formulario programa actividad PI
+     * @since 08/05/2023
+     */
+    public function cargarModalProgramarActividadPI() 
+	{
+			header("Content-Type: text/plain; charset=utf-8"); //Para evitar problemas de acentos
+			$data["idActividadPI"] = $this->input->post("idActividadPI");
+			$arrParam = array(
+				"table" => "param_meses",
+				"order" => "id_mes",
+				"id" => "x"
+			);
+			$data['listaMeses'] = $this->general_model->get_basic_search($arrParam);
+			$arrParam = array("idActividadPI" => $data["idActividadPI"]);
+			$data['information'] = $this->general_model->get_actividadesPI($arrParam);
+			$data["idPlanIntegrado"] = $data['information'][0]['fk_id_plan_integrado'];
+			$this->load->view("actividad_pi_programar_modal", $data);
+    }
+
+    /**
+	 * Guardar programado actividades PI
+	 * @since 08/05/2023
+     * @author AOCUBILLOSA
+	 */
+	public function guardar_programadoPI()
+	{			
+			header('Content-Type: application/json');
+			$data = array();
+			$idPlanIntegrado = $this->input->post('hddIdPlanIntegrado');
+			$numeroActividad = $this->input->post('hddNumeroActividad');
+			
+			$data["idRecord"] = $idPlanIntegrado . "/" . $numeroActividad;
+		
+			$msj = "Se guardo la información!";
+
+			//validar si ya exite programacion para el mes enviado
+			$validarMes = false;
+
+			$arrParam = array(
+				'numeroActividad' => $numeroActividad,
+				'idMes' => $this->input->post('mes')
+			);
+			$validarMes = $this->general_model->get_ejecucion_actividadesPI($arrParam);
+
+			if($validarMes){
+					$data["result"] = "error";
+					$data["mensaje"] = " Error. Este mes ya se encuentra dentro de la programación.";
+					$this->session->set_flashdata('retornoError', 'Este mes ya se encuentra dentro de la programación');
+			}else{
+				if ($this->settings_model->guardarProgramadoPI()) 
+				{				
+					$data["result"] = true;		
+					$this->session->set_flashdata('retornoExito', '<strong>Correcto!</strong> ' . $msj);
+				} else {
+					$data["result"] = "error";
+					$this->session->set_flashdata('retornoError', '<strong>Error!</strong> Ask for help');
+				}
+			}
+		
+			echo json_encode($data);
+    }
+
+    /**
+	 * Actualizar programacion PI
+     * @since 08/05/2023
+     * @author AOCUBILLOSA
+	 */
+	public function update_programacion_PI()
+	{					
+			$numeroActividadPI = $this->input->post('hddNumeroActividadPI');
+			$idPlanIntegrado = $this->input->post('hddIdPlanIntegrado');
+			$jsondataForm = json_encode($_POST["form"]);
+
+			if ($this->settings_model->guardarProgramacionPI()) {
+				$arrParam = array(
+					"numeroActividadPI" => $numeroActividadPI,
+					"numeroTrimestre" => "",
+					"jsondataForm" => $jsondataForm
+				);
+				//ingreso todos los cambios en la tabla de auditoria
+				$this->general_model->addAuditoriaActividadEjecucionPI($arrParam);
+				$data["result"] = true;
+				$this->session->set_flashdata('retornoExito', "Se actualizó la información!!");
+			} else {
+				$data["result"] = "error";
+				$this->session->set_flashdata('retornoError', '<strong>Error!!!</strong> Ask for help');
+			}
+
+			redirect(base_url('settings/actividadesPI/' . $idPlanIntegrado . '/' . $numeroActividadPI), 'refresh');
+    }
+
+    /**
+	 * Actualizar ejecucion
+     * @since 18/06/2022
+     * @author BMOTTAG
+	 */
+	public function update_ejecucion_PI()
+	{					
+			$numeroActividad = $this->input->post('hddNumeroActividad');
+			$idPlanIntegrado = $this->input->post('hddIdPlanIntegrado');
+			$jsondataForm = json_encode($_POST["form"]);
+
+			$datos = $this->input->post('form');
+			if($datos) {
+				$tot = count($datos['id']);
+
+				$descripcion_actividad = "";
+				$evidencia = "";
+				for ($i = 0; $i < $tot; $i++) 
+				{	
+					if($i != 0){
+						if($datos['descripcion'][$i] != ""){
+							$descripcion_actividad .= "<br>";
+						}
+						if($datos['evidencia'][$i] != ""){
+							$evidencia .= "<br>";
+						}
+					}
+					$descripcion_actividad .= $datos['descripcion'][$i];
+					$evidencia .= $datos['evidencia'][$i];
+				}
+			}
+
+			if ($this->settings_model->guardarEjecucionPI()) {
+				//actualizo el estado del trimestre de la actividad
+				$arrParam = array(
+					"numeroActividadPI" => $numeroActividad,
+					"numeroTrimestre" => $this->input->post('hddNumeroTrimestre'),
+					"observacion" => $this->input->post('observacion'),
+					"estado" => 1,
+					"descripcion_actividad" => $descripcion_actividad,
+					"evidencia" => $evidencia,
+					"jsondataForm" => $jsondataForm
+
+				);
+				$this->general_model->addHistorialActividadPI($arrParam);
+
+				//actualizo el estado del trimestre de la actividad
+				$this->general_model->updateEstadoActividadPI($arrParam);
+				//ingreso todos los cambios en la tabla de auditoria
+				$this->general_model->addAuditoriaActividadEjecucionPI($arrParam);
+
+				$data["result"] = true;
+				$this->session->set_flashdata('retornoExito', "Se actualizó la información!!");
+			} else {
+				$data["result"] = "error";
+				$this->session->set_flashdata('retornoError', '<strong>Error!!!</strong> Ask for help');
+			}
+
+			redirect(base_url('settings/actividadesPI/' . $idPlanIntegrado . '/' . $numeroActividad), 'refresh');
+    }
+
+    /**
+     * Delete Ejecucion
+     * @since 17/04/2022
+     * @author BMOTTAG
+     */
+    public function deleteEjecucionPI($idPlanIntegrado, $idActividad, $idEjecucion) 
+	{
+			if (empty($idPlanIntegrado) || empty($idActividad) || empty($idEjecucion) ) {
+				show_error('ERROR!!! - You are in the wrong place.');
+			}
+		
+			$arrParam = array(
+				"table" => "actividad_ejecucion_pi",
+				"primaryKey" => "id_ejecucion_actividad_pi",
+				"id" => $idEjecucion
+			);
+
+			if ($this->general_model->deleteRecord($arrParam)) {
+				$this->session->set_flashdata('retornoExito', 'Se elimio la ejecución de la actividad.');
+			} else {
+				$this->session->set_flashdata('retornoError', '<strong>Error!!!</strong> Ask for help');
+			}
+
+			redirect(base_url('settings/actividadesPI/' . $idPlanIntegrado . '/' . $idActividad), 'refresh');
+    }
+
+    /**
+	 * Evio de correo
+     * @since 08/05/2023
+     * @author AOCUBILLOSA
+	 */
+	public function send_email($arrData)
+	{
+			$arrParam = array('idUser' => $arrData["idUsuario"]);
+			$infoUsuario = $this->general_model->get_user($arrParam);
+			//$to = $infoUsuario[0]['email'];
+			$to = "andres.cubillos@jbb.gov.co";
+
+			//busco datos parametricos de configuracion para envio de correo
+			$arrParam2 = array(
+				"table" => "parametros",
+				"order" => "id_parametro",
+				"id" => "x"
+			);
+			$parametric = $this->general_model->get_basic_search($arrParam2);
+
+			$paramHost = $parametric[0]["parametro_valor"];
+			$paramUsername = $parametric[1]["parametro_valor"];
+			$paramPassword = $parametric[2]["parametro_valor"];
+			$paramFromName = $parametric[3]["parametro_valor"];
+			$paramCompanyName = $parametric[4]["parametro_valor"];
+			$paramAPPName = $parametric[5]["parametro_valor"];
+
+			//mensaje del correo
+			$msj = 'Sr.(a) ' . $infoUsuario[0]['first_name'] . ', ';
+			$msj .= $arrData["mensaje"] . '</br></br>';
+			$msj .= '<strong>Enlace aplicación: </strong>';
+
+			$msj .= "<a href='" . base_url() . "'>APP Programa Institucional - Cuadro de Mando</a>";
+									
+			$mensaje = "<p>$msj</p>
+						<p>Cordialmente,</p>
+						<p><strong>$paramCompanyName</strong></p>";		
+
+			require_once(APPPATH.'libraries/PHPMailer/class.phpmailer.php');
+            $mail = new PHPMailer(true);
+
+            $mail->IsSMTP(); // set mailer to use SMTP
+            $mail->Host = $paramHost; // specif smtp server
+            $mail->SMTPSecure= "tls"; // Used instead of TLS when only POP mail is selected
+            $mail->Port = 587; // Used instead of 587 when only POP mail is selected
+            $mail->SMTPAuth = true;
+			$mail->Username = $paramUsername; // SMTP username
+            $mail->Password = $paramPassword; // SMTP password
+            $mail->FromName = $paramFromName;
+            $mail->From = $paramUsername;
+            $mail->AddAddress($to, 'Usuario JBB Bienes');
+            $mail->WordWrap = 50;
+            $mail->CharSet = 'UTF-8';
+            $mail->IsHTML(true); // set email format to HTML
+            $mail->Subject = $paramCompanyName . ' - ' . $paramAPPName;
+            $mail->Body = nl2br ($mensaje,false);
+            $mail->Send();
+			return true;
+	}
+
+	/**
+	 * RESUMEN
+	 * @since 30/05/2023
+	 */
+	public function reportePlanIntegrado()
+	{	
+		$fechaActual = date('Y-m-d');
+		$vigencia = $this->general_model->get_vigencia();
+		header('Content-Type: application/vnd.ms-excel');
+		header('Content-Disposition:attachment;filename=plan_integrado_'.$fechaActual.'.xlsx');
+
+		$arrParam = array();
+		$listaActividades = $this->general_model->get_actividades_pi_full($arrParam);
+
+		$spreadsheet = new Spreadsheet();
+		$spreadsheet->getActiveSheet()->setTitle('Plan Integral');
+
+		$img1 = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
+		$img1->setPath('images/logo_alcaldia.png');
+		$img1->setCoordinates('A1');
+		$img1->setOffsetX(100);
+		$img1->setOffsetY(10);
+		$img1->setWorksheet($spreadsheet->getActiveSheet());
+
+		$img2 = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
+		$img2->setPath('images/logo_bogota.png');
+		$img2->setCoordinates('AP1');
+		$img2->setOffsetX(10);
+		$img2->setOffsetY(10);
+		$img2->setWorksheet($spreadsheet->getActiveSheet());
+
+		$spreadsheet->getActiveSheet()->mergeCells('A1:A5');
+		$spreadsheet->getActiveSheet()->mergeCells('AP1:AP5');
+		$spreadsheet->getActiveSheet()->mergeCells('B1:AO1');
+		$spreadsheet->getActiveSheet()->mergeCells('B2:AO2');
+		$spreadsheet->getActiveSheet()->mergeCells('B3:AO3');
+		$spreadsheet->getActiveSheet()->mergeCells('B4:V4');
+		$spreadsheet->getActiveSheet()->mergeCells('W4:AH4');
+		$spreadsheet->getActiveSheet()->mergeCells('AI4:AL4');
+		$spreadsheet->getActiveSheet()->mergeCells('AM4:AO4');
+		$spreadsheet->getActiveSheet()->mergeCells('B5:V5');
+		$spreadsheet->getActiveSheet()->mergeCells('W5:AH5');
+		$spreadsheet->getActiveSheet()->mergeCells('AI5:AL5');
+		$spreadsheet->getActiveSheet()->mergeCells('AM5:AO5');
+		$spreadsheet->getActiveSheet()->mergeCells('A6:AP6');
+		$spreadsheet->getActiveSheet()->mergeCells('A7:A8');
+		$spreadsheet->getActiveSheet()->mergeCells('B7:B8');
+		$spreadsheet->getActiveSheet()->mergeCells('C7:C8');
+		$spreadsheet->getActiveSheet()->mergeCells('D7:D8');
+		$spreadsheet->getActiveSheet()->mergeCells('E7:E8');
+
+		$spreadsheet->getActiveSheet(0)->setCellValue('F7', 'Programación');
+		$spreadsheet->getActiveSheet()->mergeCells('F7:Q7');
+
+		$spreadsheet->getActiveSheet(0)->setCellValue('R7', 'Ejecución');
+		$spreadsheet->getActiveSheet()->mergeCells('R7:AC7');
+
+		$spreadsheet->getActiveSheet()->mergeCells('AD7:AD8');
+		$spreadsheet->getActiveSheet()->mergeCells('AE7:AE8');
+		$spreadsheet->getActiveSheet()->mergeCells('AF7:AF8');
+		$spreadsheet->getActiveSheet()->mergeCells('AG7:AG8');
+		$spreadsheet->getActiveSheet()->mergeCells('AH7:AH8');
+		$spreadsheet->getActiveSheet()->mergeCells('AI7:AI8');
+		$spreadsheet->getActiveSheet()->mergeCells('AJ7:AJ8');
+		$spreadsheet->getActiveSheet()->mergeCells('AK7:AK8');
+		$spreadsheet->getActiveSheet()->mergeCells('AL7:AL8');
+		$spreadsheet->getActiveSheet()->mergeCells('AM7:AM8');
+		$spreadsheet->getActiveSheet()->mergeCells('AN7:AN8');
+		$spreadsheet->getActiveSheet()->mergeCells('AO7:AO8');
+		$spreadsheet->getActiveSheet()->mergeCells('AO7:AO8');
+
+		$spreadsheet->getActiveSheet(0)
+							->setCellValue('B1', 'MANUAL DE PROCESOS Y PROCEDIMIENTOS')
+							->setCellValue('B2', 'DYP - DIRECCIONAMIENTO Y PLANEACIÓN')
+							->setCellValue('B3', 'MATRIZ PLAN DE ACCIÓN INSTITUCIONAL')
+							->setCellValue('B4', 'Código:')
+							->setCellValue('W4', 'Versión:')
+							->setCellValue('AI4', 'Fecha:')
+							->setCellValue('AM4', 'Página:')
+							->setCellValue('B5', 'DYP.PR.17.F.01')
+							->setCellValue('W5', '3')
+							->setCellValue('AI5', '05/07/2023')
+							->setCellValue('AM5', '5 de 5')
+							->setCellValue('A6', 'Vigencia: ' . $vigencia['vigencia']);
+
+
+		$spreadsheet->getActiveSheet(0)
+							->setCellValue('A7', 'Nombre del Plan Institucional y Estratégico')
+							->setCellValue('B7', 'Dependencia')
+							->setCellValue('C7', 'Actividad')
+							->setCellValue('D7', 'ID Actividad')
+							->setCellValue('E7', 'Ponderación')
+							->setCellValue('F8', 'Enero')
+							->setCellValue('G8', 'Febrero')
+							->setCellValue('H8', 'Marzo')
+							->setCellValue('I8', 'Abril')
+							->setCellValue('J8', 'Mayo')
+							->setCellValue('K8', 'Junio')
+							->setCellValue('L8', 'Julio')
+							->setCellValue('M8', 'Agosto')
+							->setCellValue('N8', 'Septiembre')
+							->setCellValue('O8', 'Octubre')
+							->setCellValue('P8', 'Noviembre')
+							->setCellValue('Q8', 'Diciembre')
+							->setCellValue('R8', 'Enero')
+							->setCellValue('S8', 'Febrero')
+							->setCellValue('T8', 'Marzo')
+							->setCellValue('U8', 'Abril')
+							->setCellValue('V8', 'Mayo')
+							->setCellValue('W8', 'Junio')
+							->setCellValue('X8', 'Julio')
+							->setCellValue('Y8', 'Agrosto')
+							->setCellValue('Z8', 'Septiembre')
+							->setCellValue('AA8', 'Octubre')
+							->setCellValue('AB8', 'Noviembre')
+							->setCellValue('AC8', 'Diciembre')
+							->setCellValue('AD7', 'Total')
+							->setCellValue('AE7', 'Descripcion Trimestre I')
+							->setCellValue('AF7', 'Descripcion Trimestre II')
+							->setCellValue('AG7', 'Descripcion Trimestre III')
+							->setCellValue('AH7', 'Descripcion Trimestre IV')
+							->setCellValue('AI7', 'Evidencia Trimestre I')
+							->setCellValue('AJ7', 'Evidencia Trimestre II')
+							->setCellValue('AK7', 'Evidencia Trimestre III')
+							->setCellValue('AL7', 'Evidencia Trimestre IV')
+							->setCellValue('AM7', 'Observacion OAP Trimestre I')
+							->setCellValue('AN7', 'Observacion OAP Trimestre II')
+							->setCellValue('AO7', 'Observacion OAP Trimestre III')
+							->setCellValue('AP7', 'Observacion OAP Trimestre IV');
+
+		$j=9;
+		if($listaActividades){
+			foreach ($listaActividades as $lista):
+				$arrParam = array("numeroActividadPI" => $lista['numero_actividad_pi']);
+				$infoEjecucion = $this->general_model->get_ejecucion_actividadesPI($arrParam);
+
+				$arrParam = array("numeroActividadPI" => $lista['numero_actividad_pi']);
+				$ejecucionActividadesPI = $this->general_model->get_ejecucion_actividadesPI($arrParam);
+
+				if (!empty($ejecucionActividadesPI[0]['descripcion_actividades']) && !empty($ejecucionActividadesPI[1]['descripcion_actividades']) && !empty($ejecucionActividadesPI[2]['descripcion_actividades'])) {
+					$descTrim1 = $ejecucionActividadesPI[0]['mes'] . ': ' . $ejecucionActividadesPI[0]['descripcion_actividades'] . "\n" . $ejecucionActividadesPI[1]['mes'] . ': ' . $ejecucionActividadesPI[1]['descripcion_actividades'] . "\n" . $ejecucionActividadesPI[2]['mes'] . ': ' . $ejecucionActividadesPI[2]['descripcion_actividades'];
+				} else {
+					$descTrim1 = '';
+				}
+
+				if (!empty($ejecucionActividadesPI[3]['descripcion_actividades']) && !empty($ejecucionActividadesPI[4]['descripcion_actividades']) && !empty($ejecucionActividadesPI[5]['descripcion_actividades'])) {
+					$descTrim2 = $ejecucionActividadesPI[3]['mes'] . ': ' . $ejecucionActividadesPI[3]['descripcion_actividades'] . "\n" . $ejecucionActividadesPI[4]['mes'] . ': ' . $ejecucionActividadesPI[4]['descripcion_actividades'] . "\n" . $ejecucionActividadesPI[5]['mes'] . ': ' . $ejecucionActividadesPI[5]['descripcion_actividades'];
+				} else {
+					$descTrim2 = '';
+				}
+
+				if (!empty($ejecucionActividadesPI[6]['descripcion_actividades']) && !empty($ejecucionActividadesPI[7]['descripcion_actividades']) && !empty($ejecucionActividadesPI[8]['descripcion_actividades'])) {
+					$descTrim3 = $ejecucionActividadesPI[6]['mes'] . ': ' . $ejecucionActividadesPI[6]['descripcion_actividades'] . "\n" . $ejecucionActividadesPI[7]['mes'] . ': ' . $ejecucionActividadesPI[7]['descripcion_actividades'] . "\n" . $ejecucionActividadesPI[8]['mes'] . ': ' . $ejecucionActividadesPI[8]['descripcion_actividades'];
+				} else {
+					$descTrim3 = '';
+				}
+
+				if (!empty($ejecucionActividadesPI[9]['descripcion_actividades']) && !empty($ejecucionActividadesPI[10]['descripcion_actividades']) && !empty($ejecucionActividadesPI[11]['descripcion_actividades'])) {
+					$descTrim4 = $ejecucionActividadesPI[9]['mes'] . ': ' . $ejecucionActividadesPI[9]['descripcion_actividades'] . "\n" . $ejecucionActividadesPI[10]['mes'] . ': ' . $ejecucionActividadesPI[10]['descripcion_actividades'] ."\n" . $ejecucionActividadesPI[11]['mes'] . ': ' . $ejecucionActividadesPI[11]['descripcion_actividades'];
+				} else {
+					$descTrim4 = '';
+				}
+
+				if (!empty($ejecucionActividadesPI[0]['evidencias']) && !empty($ejecucionActividadesPI[1]['evidencias']) && !empty($ejecucionActividadesPI[2]['evidencias'])) {
+					$evidTrim1 = $ejecucionActividadesPI[0]['mes'] . ': ' . $ejecucionActividadesPI[0]['evidencias'] . "\n" . $ejecucionActividadesPI[1]['mes'] . ': ' . $ejecucionActividadesPI[1]['evidencias'] . "\n" . $ejecucionActividadesPI[2]['mes'] . ': ' . $ejecucionActividadesPI[2]['evidencias'];
+				} else {
+					$evidTrim1 = '';
+				}
+
+				if (!empty($ejecucionActividadesPI[3]['evidencias']) && !empty($ejecucionActividadesPI[4]['evidencias']) && !empty($ejecucionActividadesPI[5]['evidencias'])) {
+					$evidTrim2 = $ejecucionActividadesPI[3]['mes'] . ': ' . $ejecucionActividadesPI[3]['evidencias'] . "\n" . $ejecucionActividadesPI[4]['mes'] . ': ' . $ejecucionActividadesPI[4]['evidencias'] . "\n" . $ejecucionActividadesPI[5]['mes'] . ': ' . $ejecucionActividadesPI[5]['evidencias'];
+				} else {
+					$evidTrim2 = '';
+				}
+
+				if (!empty($ejecucionActividadesPI[6]['evidencias']) && !empty($ejecucionActividadesPI[7]['evidencias']) && !empty($ejecucionActividadesPI[8]['evidencias'])) {
+					$evidTrim3 = $ejecucionActividadesPI[6]['mes'] . ': ' . $ejecucionActividadesPI[6]['evidencias'] . "\n" . $ejecucionActividadesPI[7]['mes'] . ': ' . $ejecucionActividadesPI[7]['evidencias'] . "\n" . $ejecucionActividadesPI[8]['mes'] . ': ' . $ejecucionActividadesPI[8]['evidencias'];
+				} else {
+					$evidTrim3 = '';
+				}
+
+				if (!empty($ejecucionActividadesPI[9]['evidencias']) && !empty($ejecucionActividadesPI[10]['evidencias']) && !empty($ejecucionActividadesPI[11]['evidencias'])) {
+					$evidTrim4 = $ejecucionActividadesPI[9]['mes'] . ': ' . $ejecucionActividadesPI[9]['evidencias'] . "\n" . $ejecucionActividadesPI[10]['mes'] . ': ' . $ejecucionActividadesPI[10]['evidencias'] ."\n" . $ejecucionActividadesPI[11]['mes'] . ': ' . $ejecucionActividadesPI[11]['evidencias'];
+				} else {
+					$evidTrim4 = '';
+				}
+
+				$spreadsheet->getActiveSheet()
+							->setCellValue('A'.$j, $lista['plan_institucional'])
+							->setCellValue('B'.$j, $lista['dependencia'])
+							->setCellValue('C'.$j, $lista['descripcion_actividad_pi'])
+							->setCellValue('D'.$j, $lista['numero_actividad_pi'])
+							->setCellValue('E'.$j, $lista['ponderacion_pi']);
+
+				foreach ($infoEjecucion as $ejecucion):
+					if($ejecucion['fk_id_mes'] == 1){
+						$spreadsheet->getActiveSheet()->setCellValue('F'.$j, $ejecucion['programado']);
+						$spreadsheet->getActiveSheet()->setCellValue('R'.$j, $ejecucion['ejecutado']);
+						break;
+					}
+				endforeach;
+
+				foreach ($infoEjecucion as $ejecucion):
+					if($ejecucion['fk_id_mes'] == 2){
+						$spreadsheet->getActiveSheet()->setCellValue('G'.$j, $ejecucion['programado']);
+						$spreadsheet->getActiveSheet()->setCellValue('S'.$j, $ejecucion['ejecutado']);
+						break;
+					}
+				endforeach;
+
+				foreach ($infoEjecucion as $ejecucion):
+					if($ejecucion['fk_id_mes'] == 3){
+						$spreadsheet->getActiveSheet()->setCellValue('H'.$j, $ejecucion['programado']);
+						$spreadsheet->getActiveSheet()->setCellValue('T'.$j, $ejecucion['ejecutado']);
+						break;
+					}
+				endforeach;
+
+				foreach ($infoEjecucion as $ejecucion):
+					if($ejecucion['fk_id_mes'] == 4){
+						$spreadsheet->getActiveSheet()->setCellValue('I'.$j, $ejecucion['programado']);
+						$spreadsheet->getActiveSheet()->setCellValue('U'.$j, $ejecucion['ejecutado']);
+						break;
+					}
+				endforeach;
+
+				foreach ($infoEjecucion as $ejecucion):
+					if($ejecucion['fk_id_mes'] == 5){
+						$spreadsheet->getActiveSheet()->setCellValue('J'.$j, $ejecucion['programado']);
+						$spreadsheet->getActiveSheet()->setCellValue('V'.$j, $ejecucion['ejecutado']);
+						break;
+					}
+				endforeach;
+
+				foreach ($infoEjecucion as $ejecucion):
+					if($ejecucion['fk_id_mes'] == 6){
+						$spreadsheet->getActiveSheet()->setCellValue('K'.$j, $ejecucion['programado']);
+						$spreadsheet->getActiveSheet()->setCellValue('W'.$j, $ejecucion['ejecutado']);
+						break;
+					}
+				endforeach;
+
+				foreach ($infoEjecucion as $ejecucion):
+					if($ejecucion['fk_id_mes'] == 7){
+						$spreadsheet->getActiveSheet()->setCellValue('L'.$j, $ejecucion['programado']);
+						$spreadsheet->getActiveSheet()->setCellValue('X'.$j, $ejecucion['ejecutado']);
+						break;
+					}
+				endforeach;
+
+				foreach ($infoEjecucion as $ejecucion):
+					if($ejecucion['fk_id_mes'] == 8){
+						$spreadsheet->getActiveSheet()->setCellValue('M'.$j, $ejecucion['programado']);
+						$spreadsheet->getActiveSheet()->setCellValue('Y'.$j, $ejecucion['ejecutado']);
+						break;
+					}
+				endforeach;
+
+				foreach ($infoEjecucion as $ejecucion):
+					if($ejecucion['fk_id_mes'] == 9){
+						$spreadsheet->getActiveSheet()->setCellValue('N'.$j, $ejecucion['programado']);
+						$spreadsheet->getActiveSheet()->setCellValue('Z'.$j, $ejecucion['ejecutado']);
+						break;
+					}
+				endforeach;
+
+				foreach ($infoEjecucion as $ejecucion):
+					if($ejecucion['fk_id_mes'] == 10){
+						$spreadsheet->getActiveSheet()->setCellValue('O'.$j, $ejecucion['programado']);
+						$spreadsheet->getActiveSheet()->setCellValue('AA'.$j, $ejecucion['ejecutado']);
+						break;
+					}
+				endforeach;
+
+				foreach ($infoEjecucion as $ejecucion):
+					if($ejecucion['fk_id_mes'] == 11){
+						$spreadsheet->getActiveSheet()->setCellValue('P'.$j, $ejecucion['programado']);
+						$spreadsheet->getActiveSheet()->setCellValue('AB'.$j, $ejecucion['ejecutado']);
+						break;
+					}
+				endforeach;
+
+				foreach ($infoEjecucion as $ejecucion):
+					if($ejecucion['fk_id_mes'] == 12){
+						$spreadsheet->getActiveSheet()->setCellValue('Q'.$j, $ejecucion['programado']);
+						$spreadsheet->getActiveSheet()->setCellValue('AC'.$j, $ejecucion['ejecutado']);
+						break;
+					}
+				endforeach;
+				$spreadsheet->getActiveSheet()->setCellValue('AD'.$j, $lista['ponderacion_pi']);
+				$spreadsheet->getActiveSheet()->setCellValue('AE'.$j, $descTrim1);
+				$spreadsheet->getActiveSheet()->getStyle('AE'.$j)->getAlignment()->setWrapText(true);
+				$spreadsheet->getActiveSheet()->setCellValue('AF'.$j, $descTrim2);
+				$spreadsheet->getActiveSheet()->getStyle('AF'.$j)->getAlignment()->setWrapText(true);
+				$spreadsheet->getActiveSheet()->setCellValue('AG'.$j, $descTrim3);
+				$spreadsheet->getActiveSheet()->getStyle('AG'.$j)->getAlignment()->setWrapText(true);
+				$spreadsheet->getActiveSheet()->setCellValue('AH'.$j, $descTrim4);
+				$spreadsheet->getActiveSheet()->getStyle('AH'.$j)->getAlignment()->setWrapText(true);
+				$spreadsheet->getActiveSheet()->setCellValue('AI'.$j, $evidTrim1);
+				$spreadsheet->getActiveSheet()->getStyle('AI'.$j)->getAlignment()->setWrapText(true);
+				$spreadsheet->getActiveSheet()->setCellValue('AJ'.$j, $evidTrim2);
+				$spreadsheet->getActiveSheet()->getStyle('AJ'.$j)->getAlignment()->setWrapText(true);
+				$spreadsheet->getActiveSheet()->setCellValue('AK'.$j, $evidTrim3);
+				$spreadsheet->getActiveSheet()->getStyle('AK'.$j)->getAlignment()->setWrapText(true);
+				$spreadsheet->getActiveSheet()->setCellValue('AL'.$j, $evidTrim4);
+				$spreadsheet->getActiveSheet()->getStyle('AL'.$j)->getAlignment()->setWrapText(true);
+				$spreadsheet->getActiveSheet()
+								->setCellValue('AM'.$j, $lista['mensaje_poa_trimestre_1'])
+								->setCellValue('AN'.$j, $lista['mensaje_poa_trimestre_2'])
+								->setCellValue('AO'.$j, $lista['mensaje_poa_trimestre_3'])
+								->setCellValue('AP'.$j, $lista['mensaje_poa_trimestre_4']);
+				$j++;
+			endforeach;
+		}
+
+		// Set column widths
+		$spreadsheet->getActiveSheet()->getColumnDimension('A')->setWidth(45);
+		$spreadsheet->getActiveSheet()->getColumnDimension('B')->setWidth(40);
+		$spreadsheet->getActiveSheet()->getColumnDimension('C')->setWidth(40);
+		$spreadsheet->getActiveSheet()->getColumnDimension('D')->setWidth(12);
+		$spreadsheet->getActiveSheet()->getColumnDimension('E')->setWidth(12);
+		$spreadsheet->getActiveSheet()->getColumnDimension('F')->setWidth(10);
+		$spreadsheet->getActiveSheet()->getColumnDimension('G')->setWidth(10);
+		$spreadsheet->getActiveSheet()->getColumnDimension('H')->setWidth(10);
+		$spreadsheet->getActiveSheet()->getColumnDimension('I')->setWidth(10);
+		$spreadsheet->getActiveSheet()->getColumnDimension('J')->setWidth(10);
+		$spreadsheet->getActiveSheet()->getColumnDimension('K')->setWidth(10);
+		$spreadsheet->getActiveSheet()->getColumnDimension('L')->setWidth(10);
+		$spreadsheet->getActiveSheet()->getColumnDimension('M')->setWidth(10);
+		$spreadsheet->getActiveSheet()->getColumnDimension('N')->setWidth(10);
+		$spreadsheet->getActiveSheet()->getColumnDimension('O')->setWidth(10);
+		$spreadsheet->getActiveSheet()->getColumnDimension('P')->setWidth(10);
+		$spreadsheet->getActiveSheet()->getColumnDimension('Q')->setWidth(10);
+		$spreadsheet->getActiveSheet()->getColumnDimension('R')->setWidth(10);
+		$spreadsheet->getActiveSheet()->getColumnDimension('S')->setWidth(10);
+		$spreadsheet->getActiveSheet()->getColumnDimension('T')->setWidth(10);
+		$spreadsheet->getActiveSheet()->getColumnDimension('U')->setWidth(10);
+		$spreadsheet->getActiveSheet()->getColumnDimension('V')->setWidth(10);
+		$spreadsheet->getActiveSheet()->getColumnDimension('W')->setWidth(10);
+		$spreadsheet->getActiveSheet()->getColumnDimension('X')->setWidth(10);
+		$spreadsheet->getActiveSheet()->getColumnDimension('Y')->setWidth(10);
+		$spreadsheet->getActiveSheet()->getColumnDimension('Z')->setWidth(10);
+		$spreadsheet->getActiveSheet()->getColumnDimension('AA')->setWidth(10);
+		$spreadsheet->getActiveSheet()->getColumnDimension('AB')->setWidth(10);
+		$spreadsheet->getActiveSheet()->getColumnDimension('AC')->setWidth(10);
+		$spreadsheet->getActiveSheet()->getColumnDimension('AD')->setWidth(10);
+		$spreadsheet->getActiveSheet()->getColumnDimension('AE')->setWidth(40);
+		$spreadsheet->getActiveSheet()->getColumnDimension('AF')->setWidth(40);
+		$spreadsheet->getActiveSheet()->getColumnDimension('AG')->setWidth(40);
+		$spreadsheet->getActiveSheet()->getColumnDimension('AH')->setWidth(40);
+		$spreadsheet->getActiveSheet()->getColumnDimension('AI')->setWidth(40);
+		$spreadsheet->getActiveSheet()->getColumnDimension('AJ')->setWidth(40);
+		$spreadsheet->getActiveSheet()->getColumnDimension('AK')->setWidth(40);
+		$spreadsheet->getActiveSheet()->getColumnDimension('AL')->setWidth(40);
+		$spreadsheet->getActiveSheet()->getColumnDimension('AM')->setWidth(40);
+		$spreadsheet->getActiveSheet()->getColumnDimension('AN')->setWidth(40);
+		$spreadsheet->getActiveSheet()->getColumnDimension('AO')->setWidth(40);
+		$spreadsheet->getActiveSheet()->getColumnDimension('AP')->setWidth(40);
+
+		// Set fonts
+		$spreadsheet->getActiveSheet()->getStyle('B1:AO3')->getFont()->setSize(14);
+		$spreadsheet->getActiveSheet()->getStyle('B1:AO3')->getFont()->setBold(true);
+ 		$spreadsheet->getActiveSheet()->getStyle('B1:AO3')->getFill()->setFillType(Fill::FILL_SOLID);
+ 		$spreadsheet->getActiveSheet()->getStyle('B1:AO3')->getFill()->getStartColor()->setARGB('236e09');
+ 		$spreadsheet->getActiveSheet()->getStyle('B1:AO3')->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
+		$spreadsheet->getActiveSheet()->getStyle('B1:AO3')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+		$spreadsheet->getActiveSheet()->getStyle('B1:AO3')->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+
+		$spreadsheet->getActiveSheet()->getStyle('B4:AO5')->getFont()->setSize(11);
+		$spreadsheet->getActiveSheet()->getStyle('B4:AO5')->getFont()->setBold(true);
+ 		$spreadsheet->getActiveSheet()->getStyle('B4:AO5')->getFill()->setFillType(Fill::FILL_SOLID);
+ 		$spreadsheet->getActiveSheet()->getStyle('B4:AO5')->getFill()->getStartColor()->setARGB('236e09');
+ 		$spreadsheet->getActiveSheet()->getStyle('B4:AO5')->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
+		$spreadsheet->getActiveSheet()->getStyle('B4:AO5')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+		$spreadsheet->getActiveSheet()->getStyle('B4:AO5')->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+
+		$spreadsheet->getActiveSheet()->getStyle('A6')->getFont()->setSize(11);
+		$spreadsheet->getActiveSheet()->getStyle('A6')->getFont()->setBold(true);
+ 		$spreadsheet->getActiveSheet()->getStyle('A6')->getFill()->setFillType(Fill::FILL_SOLID);
+		$spreadsheet->getActiveSheet()->getStyle('A6')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+		$spreadsheet->getActiveSheet()->getStyle('A6')->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+
+		$spreadsheet->getActiveSheet()->getStyle('A7:AP8')->getFont()->setSize(11);
+		$spreadsheet->getActiveSheet()->getStyle('A7:AP8')->getFont()->setBold(true);
+		$spreadsheet->getActiveSheet()->getStyle('A7:AP8')->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
+ 		$spreadsheet->getActiveSheet()->getStyle('A7:AP8')->getFill()->setFillType(Fill::FILL_SOLID);
+		$spreadsheet->getActiveSheet()->getStyle('A7:AP8')->getFill()->getStartColor()->setARGB('808080');
+		$spreadsheet->getActiveSheet()->getStyle('A7:AP8')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+		$spreadsheet->getActiveSheet()->getStyle('A7:AP8')->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+
+		$spreadsheet->getActiveSheet()->getRowDimension('1')->setRowHeight(20);
+		$spreadsheet->getActiveSheet()->getRowDimension('2')->setRowHeight(20);
+		$spreadsheet->getActiveSheet()->getRowDimension('3')->setRowHeight(20);
+		$spreadsheet->getActiveSheet()->getRowDimension('4')->setRowHeight(20);
+		$spreadsheet->getActiveSheet()->getRowDimension('5')->setRowHeight(20);
+		$spreadsheet->getActiveSheet()->getRowDimension('6')->setRowHeight(20);
+		$spreadsheet->getActiveSheet()->getRowDimension('7')->setRowHeight(20);
+		$spreadsheet->getActiveSheet()->getRowDimension('8')->setRowHeight(70);
+
+		$spreadsheet->getActiveSheet()->getStyle('A1:AP5')->applyFromArray(
+		    [
+		        'borders' => [
+		            'allBorders' => ['borderStyle' => Border::BORDER_THIN],
+		        ],
+		    ]
+		);
+
+		$spreadsheet->getActiveSheet()->getStyle('A7:AP8')->applyFromArray(
+		    [
+		        'borders' => [
+		            'allBorders' => ['borderStyle' => Border::BORDER_THIN],
+		        ],
+		    ]
+		);
+
+		$spreadsheet->getActiveSheet()->getStyle('F8:AC8')->applyFromArray(
+		    [
+			    'alignment' => [
+			        'textRotation' => 90,
+			        'readOrder' => Alignment::READORDER_RTL,
+			        'wrapText' => TRUE
+			    ]
+		    ]
+		);
+
+		$spreadsheet->getActiveSheet()->getStyle('A1:A5')->applyFromArray(
+		    [
+			    'alignment' => [
+			        'wrapText' => TRUE
+			    ]
+		    ]
+		);
+
+		$spreadsheet->setActiveSheetIndex(0);
+		$writer = new Xlsx($spreadsheet);
+		$writer->save('php://output');
+	}
 }

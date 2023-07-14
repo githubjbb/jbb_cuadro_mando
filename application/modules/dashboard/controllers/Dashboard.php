@@ -585,7 +585,12 @@ class Dashboard extends CI_Controller {
 			}
 
 			//INICIO LISTAS PARA FILTROS
-			$arrParam = array("filtroEstrategias" => $valor);
+			$arrParam = array();
+			$sesion = $this->session->userdata();
+			if ($sesion['role'] != 5 && $sesion['dependencia'] != 3)
+			{
+				$arrParam = array("filtroEstrategias" => $valor);
+		    }
 			$data['listaNumeroObjetivoEstrategicos'] = $this->general_model->get_objetivos_estrategicos($arrParam);
 
 	        $arrParam = array();
@@ -1018,7 +1023,7 @@ class Dashboard extends CI_Controller {
 				"filtro" => true
 			);
 			$data['listaDependencia'] = $this->general_model->get_app_dependencias($arrParam);
-
+		
 			$vigencia = $this->general_model->get_vigencia();
 			$arrParam = array(
 				"idDependencia" => $idDependencia,
@@ -1057,7 +1062,12 @@ class Dashboard extends CI_Controller {
 			}
 
 			//INICIO LISTAS PARA FILTROS
-			$arrParam = array("filtroEstrategias" => $valor);
+			$arrParam = array();
+			$sesion = $this->session->userdata();
+			if ($sesion['role'] != 4 && $sesion['dependencia'] != 3)
+			{
+				$arrParam = array("filtroEstrategias" => $valor);
+		    }
 			$data['listaNumeroObjetivoEstrategicos'] = $this->general_model->get_objetivos_estrategicos($arrParam);
 
 	        $arrParam = array();

@@ -252,7 +252,7 @@ if ($retornoError) {
                                             </button>
                                             </p>
                                             <button title="Eliminar Plan Estratégico" type="button" id="<?php echo $lista['id_cuadro_base']; ?>" class='btn btn-danger btn-xs' title="Eliminar">
-                                              <i class="fa fa-trash-o"></i>
+                                              Eliminar <i class="fa fa-trash-o"></i>
                                             </button>
                                             
                                             

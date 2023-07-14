@@ -76,7 +76,7 @@ $(function(){
 							<tr>
 								<th width="5%" class="text-center">No.</th>
 								<th width="80%" class="text-center">Logro</th>
-								<th width="15%" class="text-center">Editar</th>
+								<th width="15%" class="text-center">Editar/Eliminar</th>
 							</tr>
 						</thead>
 						<tbody>							
@@ -91,7 +91,7 @@ $(function(){
 										Editar <span class="glyphicon glyphicon-edit" aria-hidden="true">
 									</button>
 									<button type="button" id="<?php echo $lista['id_logros']; ?>" class='btn btn-danger btn-xs' title="Eliminar">
-											<i class="fa fa-trash-o"></i>
+										Eliminar <i class="fa fa-trash-o"></i>
 									</button>
 						<?php
 									echo "</td>";
