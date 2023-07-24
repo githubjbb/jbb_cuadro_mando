@@ -114,6 +114,6 @@
 				</div>
 			</div>
 		</div>
-		<p class="text-danger text-left">Clave usuarios nuevos: <strong>Jardin2021<strong>	</p>	
+		<!--<p class="text-danger text-left">Clave usuarios nuevos: <strong>Jardin2021<strong></p>-->
 	</form>
 </div>

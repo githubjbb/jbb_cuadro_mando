@@ -105,7 +105,7 @@ $(function(){
 								
 								<?php if(!$deshabilitar){ ?>
 								<th class="text-center">Editar</th>
-								<th class="text-center">Contraseña</th>
+								<!--<th class="text-center">Contraseña</th>-->
 								<?php } ?>
 								
 								<th class="text-center">Correo</th>
@@ -168,14 +168,14 @@ if($count == 10){
 									</button>
 						<?php
 									echo "</td>";
-									echo "<td class='text-center'>";
+									//echo "<td class='text-center'>";
 							?>
-									<a href="<?php echo base_url("settings/email/" . $lista['id_user']); ?>" class="btn btn-default btn-xs">Reiniciar <span class="glyphicon glyphicon-lock" aria-hidden="true"></a> 
+									<!--<a href="<?php echo base_url("settings/email/" . $lista['id_user']); ?>" class="btn btn-default btn-xs">Reiniciar <span class="glyphicon glyphicon-lock" aria-hidden="true"></a> 
 	
-									<a href="<?php echo base_url("settings/change_password/" . $lista['id_user']); ?>" class="btn btn-default btn-xs">Cambiar Contraseña <span class="glyphicon glyphicon-lock" aria-hidden="true"></a>
+									<a href="<?php echo base_url("settings/change_password/" . $lista['id_user']); ?>" class="btn btn-default btn-xs">Cambiar Contraseña <span class="glyphicon glyphicon-lock" aria-hidden="true"></a>-->
 									
 							<?php
-									echo "</td>";
+									//echo "</td>";
 									}
 									
 									echo "<td>" . $lista['email'] . "</td>";
