@@ -58,7 +58,7 @@ $(function(){
                     <div class="row">
                         <div class="col-lg-12">
                             <i class="fa fa-bell fa-fw"></i> No. Actividades: <b><?php echo $nroActividades; ?></b>
-                            <div class="pull-right">
+                            <!--<div class="pull-right">
                                 <div class="btn-group">
                                 <?php 
                                     if($userRol == ID_ROL_SUPER_ADMIN || $userRol == ID_ROL_ADMINISTRADOR || $userRol == ID_ROL_PLANEACION){
@@ -68,7 +68,7 @@ $(function(){
                                     }
                                 ?>
                                 </div>
-                            </div>
+                            </div>-->
                         </div>
                     </div>
                 </div>

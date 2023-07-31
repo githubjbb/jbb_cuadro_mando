@@ -3764,18 +3764,312 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
 	 * RESUMEN
 	 * @since 30/05/2023
 	 */
-	public function reportePlanIntegrado()
+	public function reporteMatrizPAI()
 	{	
 		$fechaActual = date('Y-m-d');
 		$vigencia = $this->general_model->get_vigencia();
 		header('Content-Type: application/vnd.ms-excel');
-		header('Content-Disposition:attachment;filename=plan_integrado_'.$fechaActual.'.xlsx');
+		header('Content-Disposition:attachment;filename=matriz_PAI_'.$fechaActual.'.xlsx');
 
 		$arrParam = array();
 		$listaActividades = $this->general_model->get_actividades_pi_full($arrParam);
+		$arrParam = array(
+			'vigencia' => $vigencia['vigencia']
+		);
+		$indicadoresGestion = $this->settings_model->get_indicadores_gestion($arrParam);
+
+		/**
+			INDICADORES DE GESTION
+		**/
 
 		$spreadsheet = new Spreadsheet();
-		$spreadsheet->getActiveSheet()->setTitle('Plan Integral');
+		$spreadsheet->getActiveSheet()->setTitle('Indicadores de Gestión');
+
+		$img1 = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
+		$img1->setPath('images/logo_alcaldia.png');
+		$img1->setCoordinates('A1');
+		$img1->setOffsetX(20);
+		$img1->setOffsetY(10);
+		$img1->setWorksheet($spreadsheet->getActiveSheet());
+
+		$img2 = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
+		$img2->setPath('images/logo_bogota.png');
+		$img2->setCoordinates('BA1');
+		$img2->setOffsetX(10);
+		$img2->setOffsetY(10);
+		$img2->setWorksheet($spreadsheet->getActiveSheet());
+
+		$spreadsheet->getActiveSheet()->mergeCells('A1:A5');
+		$spreadsheet->getActiveSheet()->mergeCells('BA1:BA5');
+		$spreadsheet->getActiveSheet()->mergeCells('B1:AZ1');
+		$spreadsheet->getActiveSheet()->mergeCells('B2:AZ2');
+		$spreadsheet->getActiveSheet()->mergeCells('B3:AZ3');
+		$spreadsheet->getActiveSheet()->mergeCells('B4:T4');
+		$spreadsheet->getActiveSheet()->mergeCells('U4:AJ4');
+		$spreadsheet->getActiveSheet()->mergeCells('AK4:AT4');
+		$spreadsheet->getActiveSheet()->mergeCells('AU4:AZ4');
+		$spreadsheet->getActiveSheet()->mergeCells('B5:T5');
+		$spreadsheet->getActiveSheet()->mergeCells('U5:AJ5');
+		$spreadsheet->getActiveSheet()->mergeCells('AK5:AT5');
+		$spreadsheet->getActiveSheet()->mergeCells('AU5:AZ5');
+		$spreadsheet->getActiveSheet()->mergeCells('A6:BA6');
+
+		$spreadsheet->getActiveSheet(0)
+							->setCellValue('B1', 'MANUAL DE PROCESOS Y PROCEDIMIENTOS')
+							->setCellValue('B2', 'DYP - DIRECCIONAMIENTO Y PLANEACIÓN')
+							->setCellValue('B3', 'MATRIZ PLAN DE ACCIÓN INSTITUCIONAL')
+							->setCellValue('B4', 'Código:')
+							->setCellValue('U4', 'Versión:')
+							->setCellValue('AK4', 'Fecha:')
+							->setCellValue('AU4', 'Página:')
+							->setCellValue('B5', 'DYP.PR.17.F.01')
+							->setCellValue('U5', '3')
+							->setCellValue('AK5', '05/07/2023')
+							->setCellValue('AU5', '4 de 5')
+							->setCellValue('A6', 'Vigencia: ' . $vigencia['vigencia']);
+
+
+		$spreadsheet->getActiveSheet(0)
+							->setCellValue('A7', 'Código')
+							->setCellValue('B7', 'Nombre')
+							->setCellValue('C7', 'Estado')
+							->setCellValue('D7', 'Objetivo Indicador')
+							->setCellValue('E7', 'Dependencia')
+							->setCellValue('F7', 'Proceso')
+							->setCellValue('G7', 'Objetivo Proceso')
+							->setCellValue('H7', 'Responsable')
+							->setCellValue('I7', 'Tipo indicador')
+							->setCellValue('J7', 'Tendencia')
+							->setCellValue('K7', 'Periodicidad')
+							->setCellValue('L7', 'Fuente Información')
+							->setCellValue('M7', 'Línea base')
+							->setCellValue('N7', 'Unidad de Medida')
+							->setCellValue('O7', 'Fecha Creación')
+							->setCellValue('P7', 'Fórmula')
+							->setCellValue('Q7', 'Enero')
+							->setCellValue('R7', 'Seguimiento')
+							->setCellValue('S7', 'Seguimiento OAP')
+							->setCellValue('T7', 'Febrero')
+							->setCellValue('U7', 'Seguimiento')
+							->setCellValue('V7', 'Seguimiento OAP')
+							->setCellValue('W7', 'Marzo')
+							->setCellValue('X7', 'Seguimiento')
+							->setCellValue('Y7', 'Seguimiento OAP')
+							->setCellValue('Z7', 'Abril')
+							->setCellValue('AA7', 'Seguimiento')
+							->setCellValue('AB7', 'Seguimiento OAP')
+							->setCellValue('AC7', 'Mayo')
+							->setCellValue('AD7', 'Seguimiento')
+							->setCellValue('AE7', 'Seguimiento OAP')
+							->setCellValue('AF7', 'Junio')
+							->setCellValue('AG7', 'Seguimiento')
+							->setCellValue('AH7', 'Seguimiento OAP')
+							->setCellValue('AI7', 'Julio')
+							->setCellValue('AJ7', 'Seguimiento')
+							->setCellValue('AK7', 'Seguimiento OAP')
+							->setCellValue('AL7', 'Agosto')
+							->setCellValue('AM7', 'Seguimiento')
+							->setCellValue('AN7', 'Seguimiento OAP')
+							->setCellValue('AO7', 'Septiembre')
+							->setCellValue('AP7', 'Seguimiento')
+							->setCellValue('AQ7', 'Seguimiento OAP')
+							->setCellValue('AR7', 'Octubre')
+							->setCellValue('AS7', 'Seguimiento')
+							->setCellValue('AT7', 'Seguimiento OAP')
+							->setCellValue('AU7', 'Noviembre')
+							->setCellValue('AV7', 'Seguimiento')
+							->setCellValue('AW7', 'Seguimiento OAP')
+							->setCellValue('AX7', 'Diciembre')
+							->setCellValue('AY7', 'Seguimiento')
+							->setCellValue('AZ7', 'Seguimiento OAP')
+							->setCellValue('BA7', 'Ejecución Acumulada');
+
+		$j=8;
+		if($indicadoresGestion){
+			foreach ($indicadoresGestion as $lista):
+				$spreadsheet->getActiveSheet()
+							->setCellValue('A'.$j, $lista['codigo'])
+							->setCellValue('B'.$j, $lista['nombre'])
+							->setCellValue('C'.$j, $lista['estado'])
+							->setCellValue('D'.$j, $lista['objetivo_indicador'])
+							->setCellValue('E'.$j, $lista['dependencia'])
+							->setCellValue('F'.$j, $lista['proceso'])
+							->setCellValue('G'.$j, $lista['objetivo_proceso'])
+							->setCellValue('H'.$j, $lista['responsable'])
+							->setCellValue('I'.$j, $lista['tipo_indicador'])
+							->setCellValue('J'.$j, $lista['tendencia'])
+							->setCellValue('K'.$j, $lista['periodicidad'])
+							->setCellValue('L'.$j, $lista['fuente_informacion'])
+							->setCellValue('M'.$j, $lista['linea_base'])
+							->setCellValue('N'.$j, $lista['unidad_medida'])
+							->setCellValue('O'.$j, $lista['fecha_creacion'])
+							->setCellValue('P'.$j, $lista['formula'])
+							->setCellValue('Q'.$j, $lista['enero'])
+							->setCellValue('R'.$j, $lista['seguimiento_ene'])
+							->setCellValue('S'.$j, $lista['seguimiento_oap_ene'])
+							->setCellValue('T'.$j, $lista['febrero'])
+							->setCellValue('U'.$j, $lista['seguimiento_feb'])
+							->setCellValue('V'.$j, $lista['seguimiento_oap_feb'])
+							->setCellValue('W'.$j, $lista['marzo'])
+							->setCellValue('X'.$j, $lista['seguimiento_mar'])
+							->setCellValue('Y'.$j, $lista['seguimiento_oap_mar'])
+							->setCellValue('Z'.$j, $lista['abril'])
+							->setCellValue('AA'.$j, $lista['seguimiento_abr'])
+							->setCellValue('AB'.$j, $lista['seguimiento_oap_abr'])
+							->setCellValue('AC'.$j, $lista['mayo'])
+							->setCellValue('AD'.$j, $lista['seguimiento_may'])
+							->setCellValue('AE'.$j, $lista['seguimiento_oap_may'])
+							->setCellValue('AF'.$j, $lista['junio'])
+							->setCellValue('AG'.$j, $lista['seguimiento_jun'])
+							->setCellValue('AH'.$j, $lista['seguimiento_oap_jun'])
+							->setCellValue('AI'.$j, $lista['julio'])
+							->setCellValue('AJ'.$j, $lista['seguimiento_jul'])
+							->setCellValue('AK'.$j, $lista['seguimiento_oap_jul'])
+							->setCellValue('AL'.$j, $lista['agosto'])
+							->setCellValue('AM'.$j, $lista['seguimiento_ago'])
+							->setCellValue('AN'.$j, $lista['seguimiento_oap_ago'])
+							->setCellValue('AO'.$j, $lista['septiembre'])
+							->setCellValue('AP'.$j, $lista['seguimiento_sep'])
+							->setCellValue('AQ'.$j, $lista['seguimiento_oap_sep'])
+							->setCellValue('AR'.$j, $lista['octubre'])
+							->setCellValue('AS'.$j, $lista['seguimiento_oct'])
+							->setCellValue('AT'.$j, $lista['seguimiento_oap_oct'])
+							->setCellValue('AU'.$j, $lista['noviembre'])
+							->setCellValue('AV'.$j, $lista['seguimiento_nov'])
+							->setCellValue('AW'.$j, $lista['seguimiento_oap_nov'])
+							->setCellValue('AX'.$j, $lista['diciembre'])
+							->setCellValue('AY'.$j, $lista['seguimiento_dic'])
+							->setCellValue('AZ'.$j, $lista['seguimiento_oap_dic'])
+							->setCellValue('BA'.$j, $lista['ejecucion_acumulada']);
+				$j++;
+			endforeach;
+		}
+
+		// Set column widths
+		$spreadsheet->getActiveSheet()->getColumnDimension('A')->setWidth(20);
+		$spreadsheet->getActiveSheet()->getColumnDimension('B')->setWidth(50);
+		$spreadsheet->getActiveSheet()->getColumnDimension('C')->setWidth(10);
+		$spreadsheet->getActiveSheet()->getColumnDimension('D')->setWidth(50);
+		$spreadsheet->getActiveSheet()->getColumnDimension('E')->setWidth(35);
+		$spreadsheet->getActiveSheet()->getColumnDimension('F')->setWidth(35);
+		$spreadsheet->getActiveSheet()->getColumnDimension('G')->setWidth(50);
+		$spreadsheet->getActiveSheet()->getColumnDimension('H')->setWidth(50);
+		$spreadsheet->getActiveSheet()->getColumnDimension('I')->setWidth(20);
+		$spreadsheet->getActiveSheet()->getColumnDimension('J')->setWidth(20);
+		$spreadsheet->getActiveSheet()->getColumnDimension('K')->setWidth(20);
+		$spreadsheet->getActiveSheet()->getColumnDimension('L')->setWidth(50);
+		$spreadsheet->getActiveSheet()->getColumnDimension('M')->setWidth(15);
+		$spreadsheet->getActiveSheet()->getColumnDimension('N')->setWidth(20);
+		$spreadsheet->getActiveSheet()->getColumnDimension('O')->setWidth(20);
+		$spreadsheet->getActiveSheet()->getColumnDimension('P')->setWidth(50);
+		$spreadsheet->getActiveSheet()->getColumnDimension('Q')->setWidth(15);
+		$spreadsheet->getActiveSheet()->getColumnDimension('R')->setWidth(50);
+		$spreadsheet->getActiveSheet()->getColumnDimension('S')->setWidth(50);
+		$spreadsheet->getActiveSheet()->getColumnDimension('T')->setWidth(15);
+		$spreadsheet->getActiveSheet()->getColumnDimension('U')->setWidth(50);
+		$spreadsheet->getActiveSheet()->getColumnDimension('V')->setWidth(50);
+		$spreadsheet->getActiveSheet()->getColumnDimension('W')->setWidth(15);
+		$spreadsheet->getActiveSheet()->getColumnDimension('X')->setWidth(50);
+		$spreadsheet->getActiveSheet()->getColumnDimension('Y')->setWidth(50);
+		$spreadsheet->getActiveSheet()->getColumnDimension('Z')->setWidth(15);
+		$spreadsheet->getActiveSheet()->getColumnDimension('AA')->setWidth(50);
+		$spreadsheet->getActiveSheet()->getColumnDimension('AB')->setWidth(50);
+		$spreadsheet->getActiveSheet()->getColumnDimension('AC')->setWidth(15);
+		$spreadsheet->getActiveSheet()->getColumnDimension('AD')->setWidth(50);
+		$spreadsheet->getActiveSheet()->getColumnDimension('AE')->setWidth(50);
+		$spreadsheet->getActiveSheet()->getColumnDimension('AF')->setWidth(15);
+		$spreadsheet->getActiveSheet()->getColumnDimension('AG')->setWidth(50);
+		$spreadsheet->getActiveSheet()->getColumnDimension('AH')->setWidth(50);
+		$spreadsheet->getActiveSheet()->getColumnDimension('AI')->setWidth(15);
+		$spreadsheet->getActiveSheet()->getColumnDimension('AJ')->setWidth(50);
+		$spreadsheet->getActiveSheet()->getColumnDimension('AK')->setWidth(50);
+		$spreadsheet->getActiveSheet()->getColumnDimension('AL')->setWidth(15);
+		$spreadsheet->getActiveSheet()->getColumnDimension('AM')->setWidth(50);
+		$spreadsheet->getActiveSheet()->getColumnDimension('AN')->setWidth(50);
+		$spreadsheet->getActiveSheet()->getColumnDimension('AO')->setWidth(15);
+		$spreadsheet->getActiveSheet()->getColumnDimension('AP')->setWidth(50);
+		$spreadsheet->getActiveSheet()->getColumnDimension('AQ')->setWidth(50);
+		$spreadsheet->getActiveSheet()->getColumnDimension('AR')->setWidth(15);
+		$spreadsheet->getActiveSheet()->getColumnDimension('AS')->setWidth(50);
+		$spreadsheet->getActiveSheet()->getColumnDimension('AT')->setWidth(50);
+		$spreadsheet->getActiveSheet()->getColumnDimension('AU')->setWidth(15);
+		$spreadsheet->getActiveSheet()->getColumnDimension('AV')->setWidth(50);
+		$spreadsheet->getActiveSheet()->getColumnDimension('AW')->setWidth(50);
+		$spreadsheet->getActiveSheet()->getColumnDimension('AX')->setWidth(15);
+		$spreadsheet->getActiveSheet()->getColumnDimension('AY')->setWidth(50);
+		$spreadsheet->getActiveSheet()->getColumnDimension('AZ')->setWidth(50);
+		$spreadsheet->getActiveSheet()->getColumnDimension('BA')->setWidth(40);
+
+		// Set fonts
+		$spreadsheet->getActiveSheet()->getStyle('B1:AZ3')->getFont()->setSize(14);
+		$spreadsheet->getActiveSheet()->getStyle('B1:AZ3')->getFont()->setBold(true);
+ 		$spreadsheet->getActiveSheet()->getStyle('B1:AZ3')->getFill()->setFillType(Fill::FILL_SOLID);
+ 		$spreadsheet->getActiveSheet()->getStyle('B1:AZ3')->getFill()->getStartColor()->setARGB('236e09');
+ 		$spreadsheet->getActiveSheet()->getStyle('B1:AZ3')->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
+		$spreadsheet->getActiveSheet()->getStyle('B1:AZ3')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+		$spreadsheet->getActiveSheet()->getStyle('B1:AZ3')->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+
+		$spreadsheet->getActiveSheet()->getStyle('B4:AZ5')->getFont()->setSize(11);
+		$spreadsheet->getActiveSheet()->getStyle('B4:AZ5')->getFont()->setBold(true);
+ 		$spreadsheet->getActiveSheet()->getStyle('B4:AZ5')->getFill()->setFillType(Fill::FILL_SOLID);
+ 		$spreadsheet->getActiveSheet()->getStyle('B4:AZ5')->getFill()->getStartColor()->setARGB('236e09');
+ 		$spreadsheet->getActiveSheet()->getStyle('B4:AZ5')->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
+		$spreadsheet->getActiveSheet()->getStyle('B4:AZ5')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+		$spreadsheet->getActiveSheet()->getStyle('B4:AZ5')->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+
+		$spreadsheet->getActiveSheet()->getStyle('A6')->getFont()->setSize(11);
+		$spreadsheet->getActiveSheet()->getStyle('A6')->getFont()->setBold(true);
+ 		$spreadsheet->getActiveSheet()->getStyle('A6')->getFill()->setFillType(Fill::FILL_SOLID);
+		$spreadsheet->getActiveSheet()->getStyle('A6')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+		$spreadsheet->getActiveSheet()->getStyle('A6')->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+
+		$spreadsheet->getActiveSheet()->getStyle('A7:BA7')->getFont()->setSize(11);
+		$spreadsheet->getActiveSheet()->getStyle('A7:BA7')->getFont()->setBold(true);
+		$spreadsheet->getActiveSheet()->getStyle('A7:BA7')->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
+ 		$spreadsheet->getActiveSheet()->getStyle('A7:BA7')->getFill()->setFillType(Fill::FILL_SOLID);
+		$spreadsheet->getActiveSheet()->getStyle('A7:BA7')->getFill()->getStartColor()->setARGB('808080');
+		$spreadsheet->getActiveSheet()->getStyle('A7:BA7')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+		$spreadsheet->getActiveSheet()->getStyle('A7:BA7')->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+
+		$spreadsheet->getActiveSheet()->getRowDimension('1')->setRowHeight(20);
+		$spreadsheet->getActiveSheet()->getRowDimension('2')->setRowHeight(20);
+		$spreadsheet->getActiveSheet()->getRowDimension('3')->setRowHeight(20);
+		$spreadsheet->getActiveSheet()->getRowDimension('4')->setRowHeight(20);
+		$spreadsheet->getActiveSheet()->getRowDimension('5')->setRowHeight(20);
+		$spreadsheet->getActiveSheet()->getRowDimension('6')->setRowHeight(20);
+		$spreadsheet->getActiveSheet()->getRowDimension('7')->setRowHeight(30);
+
+		$spreadsheet->getActiveSheet()->getStyle('A1:BA5')->applyFromArray(
+		    [
+		        'borders' => [
+		            'allBorders' => ['borderStyle' => Border::BORDER_THIN],
+		        ],
+		    ]
+		);
+
+		$spreadsheet->getActiveSheet()->getStyle('A7:BA7')->applyFromArray(
+		    [
+		        'borders' => [
+		            'allBorders' => ['borderStyle' => Border::BORDER_THIN],
+		        ],
+		    ]
+		);
+
+		$spreadsheet->getActiveSheet()->getStyle('A1:A5')->applyFromArray(
+		    [
+			    'alignment' => [
+			        'wrapText' => TRUE
+			    ]
+		    ]
+		);
+
+		/**
+			PLAN INTEGRADO
+		**/
+
+		$spreadsheet->createSheet();
+		$spreadsheet->setActiveSheetIndex(1);
+		$spreadsheet->getActiveSheet()->setTitle('Plan Integrado');
 
 		$img1 = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
 		$img1->setPath('images/logo_alcaldia.png');
@@ -3829,7 +4123,7 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
 		$spreadsheet->getActiveSheet()->mergeCells('AM7:AM8');
 		$spreadsheet->getActiveSheet()->mergeCells('AN7:AN8');
 		$spreadsheet->getActiveSheet()->mergeCells('AO7:AO8');
-		$spreadsheet->getActiveSheet()->mergeCells('AO7:AO8');
+		$spreadsheet->getActiveSheet()->mergeCells('AP7:AP8');
 
 		$spreadsheet->getActiveSheet(0)
 							->setCellValue('B1', 'MANUAL DE PROCESOS Y PROCEDIMIENTOS')
@@ -4196,5 +4490,44 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
 		$spreadsheet->setActiveSheetIndex(0);
 		$writer = new Xlsx($spreadsheet);
 		$writer->save('php://output');
+	}
+
+	/**
+	 * Indicadores de Gestion
+	 * @since 28/07/2023
+	 * @author AOCUBILLOSA
+	 */
+	public function indicadores_gestion()
+	{
+			$vigencia = $this->general_model->get_vigencia();
+			$arrParam = array(
+				'vigencia' => $vigencia['vigencia']
+			);
+			$data['info'] = $this->settings_model->get_indicadores_gestion($arrParam);
+			$data['vigencia'] = $this->general_model->get_vigencia();
+			$data["view"] = "indicadores_gestion";
+			$this->load->view("layout_calendar", $data);
+	}
+
+	/**
+	 * Eliminar indicadores de gestion
+	 * @since 28/07/2023
+	 */
+	public function delete_indicadores_gestion()
+	{
+			header('Content-Type: application/json');
+			$data = array();
+			$vigencia = $this->general_model->get_vigencia();
+			if ($this->settings_model->eliminarIndicadoresGestion($vigencia['vigencia'])) {
+				$data["msj"] = " la tabla indicadores_gestion.";
+				$data["result"] = true;
+				$data["mensaje"] = "Se eliminaron los registros.";
+				$this->session->set_flashdata('retornoExito', 'Se eliminó los registros de ' . $data["msj"]);
+			} else {
+				$data["result"] = "error";
+				$data["mensaje"] = "Error!!! Contactarse con el Administrador.";
+				$this->session->set_flashdata('retornoError', '<strong>Error!!!</strong> Contactarse con el Administrador');
+			}
+			echo json_encode($data);
 	}
 }

@@ -1,175 +1,6 @@
-<script>
-$(function(){ 
-	$(".btn-danger").click(function () {	
-			
-			//Activa icono guardando
-			if(window.confirm('Esta seguro de eliminar los registros de la Base de Datos?'))
-			{
-					$(".btn-danger").attr('disabled','-1');
-					$.ajax ({
-						type: 'POST',
-						url: base_url + 'settings/eliminar_db',
-						cache: false,
-						success: function(data){
-												
-							if( data.result == "error" )
-							{
-								alert(data.mensaje);
-								$(".btn-danger").removeAttr('disabled');							
-								return false;
-							} 
-											
-							if( data.result )//true
-							{	                                                        
-								$(".btn-danger").removeAttr('disabled');
-
-								var url = base_url + "settings/atencion_eliminar";
-								$(location).attr("href", url);
-							}
-							else
-							{
-								alert('Error. Reload the web page.');
-								$(".btn-danger").removeAttr('disabled');
-							}	
-						},
-						error: function(result) {
-							alert('Error. Reload the web page.');
-							$(".btn-danger").removeAttr('disabled');
-						}
-
-					});
-			}
-	});
-	
-	$(".btn-warning").click(function () {	
-			
-			//Activa icono guardando
-			if(window.confirm('Esta seguro de eliminar los registros de la Base de Datos?'))
-			{
-					$(".btn-warning").attr('disabled','-1');
-					$.ajax ({
-						type: 'POST',
-						url: base_url + 'settings/eliminar_metas_objetivos_db',
-						cache: false,
-						success: function(data){
-												
-							if( data.result == "error" )
-							{
-								alert(data.mensaje);
-								$(".btn-warning").removeAttr('disabled');							
-								return false;
-							} 
-											
-							if( data.result )//true
-							{	                                                        
-								$(".btn-warning").removeAttr('disabled');
-
-								var url = base_url + "settings/atencion_eliminar";
-								$(location).attr("href", url);
-							}
-							else
-							{
-								alert('Error. Reload the web page.');
-								$(".btn-warning").removeAttr('disabled');
-							}	
-						},
-						error: function(result) {
-							alert('Error. Reload the web page.');
-							$(".btn-warning").removeAttr('disabled');
-						}
-
-					});
-			}
-	});
-	
-	$(".btn-info").click(function () {	
-			
-			//Activa icono guardando
-			if(window.confirm('Esta seguro de eliminar los registros de la Base de Datos?'))
-			{
-					$(".btn-info").attr('disabled','-1');
-					$.ajax ({
-						type: 'POST',
-						url: base_url + 'settings/eliminar_indicadores_objetivos_db',
-						cache: false,
-						success: function(data){
-												
-							if( data.result == "error" )
-							{
-								alert(data.mensaje);
-								$(".btn-info").removeAttr('disabled');							
-								return false;
-							} 
-											
-							if( data.result )//true
-							{	                                                        
-								$(".btn-info").removeAttr('disabled');
-
-								var url = base_url + "settings/atencion_eliminar";
-								$(location).attr("href", url);
-							}
-							else
-							{
-								alert('Error. Reload the web page.');
-								$(".btn-info").removeAttr('disabled');
-							}	
-						},
-						error: function(result) {
-							alert('Error. Reload the web page.');
-							$(".btn-info").removeAttr('disabled');
-						}
-
-					});
-			}
-	});
-	
-	$(".btn-atencion").click(function () {	
-			
-			//Activa icono guardando
-			if(window.confirm('Esta seguro de eliminar los registros de la Base de Datos?'))
-			{
-					$(".btn-atencion").attr('disabled','-1');
-					$.ajax ({
-						type: 'POST',
-						url: base_url + 'settings/eliminar_resultados_objetivos_db',
-						cache: false,
-						success: function(data){
-												
-							if( data.result == "error" )
-							{
-								alert(data.mensaje);
-								$(".btn-atencion").removeAttr('disabled');							
-								return false;
-							} 
-											
-							if( data.result )//true
-							{	                                                        
-								$(".btn-atencion").removeAttr('disabled');
-
-								var url = base_url + "settings/atencion_eliminar";
-								$(location).attr("href", url);
-							}
-							else
-							{
-								alert('Error. Reload the web page.');
-								$(".btn-atencion").removeAttr('disabled');
-							}	
-						},
-						error: function(result) {
-							alert('Error. Reload the web page.');
-							$(".btn-atencion").removeAttr('disabled');
-						}
-
-					});
-			}
-	});
-	
-	
-});
-</script>
+<script type="text/javascript" src="<?php echo base_url("assets/js/validate/settings/eliminar_db.js"); ?>"></script>
 
 <div id="page-wrapper">
-
 	<br>
 	<div class="row">
 		<div class="col-md-12">
@@ -283,71 +114,62 @@ if ($retornoError) {
 					<i class="fa fa-gears"></i> SUBIR REGISTROS A LA BASE DE DATOS
 				</div>
 				<div class="panel-body">
-									
 					<div class="row">
-						
 						<div class="col-lg-3">	
 							<div class="alert alert-success">
 								Subir registros a la tabla <strong>Actividades</strong>.
 								<br><br>
-<a class="btn btn-success btn-xs" href=" <?php echo base_url(). 'settings/subir_archivo/cargar_actividades'; ?> ">
-Subir Actividades <span class="glyphicon glyphicon glyphicon-chevron-right" aria-hidden="true"></span></a> 
-								
+								<a class="btn btn-success btn-xs" href=" <?php echo base_url(). 'settings/subir_archivo/cargar_actividades'; ?> ">
+									Subir Actividades<span class="glyphicon glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+								</a>
 								<br><br>
 								Subir registros a la tabla <strong>Actividades Ejecución</strong>.
 								<br><br>
-<a class="btn btn-success btn-xs" href=" <?php echo base_url(). 'settings/subir_archivo/cargar_actividades_ejecucion'; ?> ">
-Subir Actividades Ejecución <span class="glyphicon glyphicon glyphicon-chevron-right" aria-hidden="true"></span></a> 
-
+								<a class="btn btn-success btn-xs" href=" <?php echo base_url(). 'settings/subir_archivo/cargar_actividades_ejecucion'; ?> ">
+									Subir Actividades Ejecución<span class="glyphicon glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+								</a>
 								<br><br>
 								Actualizar mensaje de POA para primer trimestre
 								<br><br>
-<a class="btn btn-success btn-xs" href=" <?php echo base_url(). 'settings/subir_archivo/cargar_mensaje_poa'; ?> ">
-Subir Mensaje POA TRIM. I <span class="glyphicon glyphicon glyphicon-chevron-right" aria-hidden="true"></span></a> 
-
+								<a class="btn btn-success btn-xs" href=" <?php echo base_url(). 'settings/subir_archivo/cargar_mensaje_poa'; ?> ">
+									Subir Mensaje POA TRIM. I<span class="glyphicon glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+								</a>
 								<br><br>
 								Actualizar Plan Institucional
 								<br><br>
-<a class="btn btn-success btn-xs" href=" <?php echo base_url(). 'settings/subir_archivo/cargar_plan_institucional'; ?> ">
-Actualizar Plan Institucional <span class="glyphicon glyphicon glyphicon-chevron-right" aria-hidden="true"></span></a> 
-
-						
+								<a class="btn btn-success btn-xs" href=" <?php echo base_url(). 'settings/subir_archivo/cargar_plan_institucional'; ?> ">
+									Actualizar Plan Institucional <span class="glyphicon glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+								</a>
 							</div>
 						</div>
-						
 						<div class="col-lg-3">	
 							<div class="alert alert-success">
 								Subir registros a la tabla <strong>Metas Objetivos Estratégicos</strong>. 
 								<br><br>
-<a class="btn btn-success btn-xs" href=" <?php echo base_url(). 'settings/subir_archivo/cargar_metas_objetivos_estrategicos'; ?> ">
-Subir Metas <span class="glyphicon glyphicon glyphicon-chevron-right" aria-hidden="true"></span></a> 
-						
+								<a class="btn btn-success btn-xs" href=" <?php echo base_url(). 'settings/subir_archivo/cargar_metas_objetivos_estrategicos'; ?> ">
+									Subir Metas <span class="glyphicon glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+								</a>
 							</div>
 						</div>
-						
 						<div class="col-lg-3">	
 							<div class="alert alert-success">
 								Subir registros a la tabla <strong>Indicadores Objetivos Estratégicos</strong>. 
 								<br><br>
-<a class="btn btn-success btn-xs" href=" <?php echo base_url(). 'settings/subir_archivo/cargar_indicadores_objetivos_estrategicos'; ?> ">
-Subir Indicadores <span class="glyphicon glyphicon glyphicon-chevron-right" aria-hidden="true"></span></a> 
-
+								<a class="btn btn-success btn-xs" href=" <?php echo base_url(). 'settings/subir_archivo/cargar_indicadores_objetivos_estrategicos'; ?> ">
+									Subir Indicadores <span class="glyphicon glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+								</a>
 							</div>
 						</div>
-					
 						<div class="col-lg-3">	
 							<div class="alert alert-success">
 								Subir registros a la tabla <strong>Resultados Objetivos Estratégicos</strong>. 
 								<br><br>
-<a class="btn btn-success btn-xs" href=" <?php echo base_url(). 'settings/subir_archivo/cargar_resultados_objetivos_estrategicos'; ?> ">
-Subir Resultados <span class="glyphicon glyphicon glyphicon-chevron-right" aria-hidden="true"></span></a> 
-						
+								<a class="btn btn-success btn-xs" href=" <?php echo base_url(). 'settings/subir_archivo/cargar_resultados_objetivos_estrategicos'; ?> ">
+									Subir Resultados <span class="glyphicon glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+								</a>
 							</div>
 						</div>
-						
 					</div>
-					
-					
 				</div>
 			</div>
 		</div>

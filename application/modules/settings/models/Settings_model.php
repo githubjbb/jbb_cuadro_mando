@@ -727,6 +727,20 @@
 		}
 
 		/**
+		 * Cargar informacion 
+		 * @since 25/07/2023
+		 */
+		public function cargar_indicadores_gestion($lista) 
+		{
+				$query = $this->db->insert('indicadores_gestion', $lista);
+				if ($query) {
+					return true;
+				} else {
+					return false;
+				}
+		}
+
+		/**
 		 * IMPORTAR ACTIVIDAD
 		 * @since 24/06/2022
 		 */
@@ -1441,4 +1455,38 @@
 				return false;
 			}
 	    }
+
+	    /**
+		 * Consulta lista indicadores de gestion
+		 * @since 28/07/2023
+		 * @author AOCUBILLOSA
+		 */
+		public function get_indicadores_gestion($arrData) {
+				$this->db->select();
+				if (array_key_exists("vigencia", $arrData)) {
+					$this->db->where('I.vigencia', $arrData['vigencia']);
+				}
+				$this->db->order_by('id_indicador_g', 'asc');
+				$query = $this->db->get('indicadores_gestion I');
+				if ($query->num_rows() > 0) {
+					return $query->result_array();
+				} else {
+					return false;
+				}
+		}
+
+		/**
+		 * Eliminar registros de la tabla indicadores_gestion
+		 * @since  28/07/2023
+		 */
+		public function eliminarIndicadoresGestion($vigencia)
+		{
+				$sql = "DELETE FROM indicadores_gestion WHERE vigencia = $vigencia";
+				$query = $this->db->query($sql);
+				if ($query) {
+					return true;
+				} else {
+					return false;
+				}
+		}
 	}
