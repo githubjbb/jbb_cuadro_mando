@@ -1335,8 +1335,121 @@
 				}
 				
 				if ($query){
-					return true;
-				} else{
+					$numeroActividadPI = $this->input->post('hddNumeroActividadPI');
+					$arrParam = array("numeroActividadPI" => $numeroActividadPI);
+					$ponderacion = $this->general_model->get_actividadesPI($arrParam);
+					$estadoActividad = $this->general_model->get_estados_actividadesPI($arrParam);
+					$sumaProgramado = $this->general_model->sumarProgramadoPI($arrParam);
+
+					$arrParam['numeroTrimestre'] = 1;
+					$sumaProgramadoTrimestre1 = $this->general_model->sumarProgramadoPI($arrParam);
+					$sumaEjecutadoTrimestre1 = $this->general_model->sumarEjecutadoPI($arrParam);
+					$arrParam['numeroTrimestre'] = 2;
+					$sumaProgramadoTrimestre2 = $this->general_model->sumarProgramadoPI($arrParam);
+					$sumaEjecutadoTrimestre2 = $this->general_model->sumarEjecutadoPI($arrParam);
+					$arrParam['numeroTrimestre'] = 3;
+					$sumaProgramadoTrimestre3 = $this->general_model->sumarProgramadoPI($arrParam);
+					$sumaEjecutadoTrimestre3 = $this->general_model->sumarEjecutadoPI($arrParam);
+					$arrParam['numeroTrimestre'] = 4;
+					$sumaProgramadoTrimestre4 = $this->general_model->sumarProgramadoPI($arrParam);
+					$sumaEjecutadoTrimestre4 = $this->general_model->sumarEjecutadoPI($arrParam);
+
+					$sumaEjecutado['ejecutado'] = 0;
+					if ($estadoActividad[0]['estado_trimestre_1'] == 5){
+						$sumaEjecutado['ejecutado'] += $sumaEjecutadoTrimestre1['ejecutado'];
+					}
+					if ($estadoActividad[0]['estado_trimestre_2'] == 5){
+						$sumaEjecutado['ejecutado'] += $sumaEjecutadoTrimestre2['ejecutado'];
+					}
+					if ($estadoActividad[0]['estado_trimestre_3'] == 5){
+						$sumaEjecutado['ejecutado'] += $sumaEjecutadoTrimestre3['ejecutado'];
+					}
+					if ($estadoActividad[0]['estado_trimestre_4'] == 5){
+						$sumaEjecutado['ejecutado'] += $sumaEjecutadoTrimestre4['ejecutado'];
+					}
+
+					$valorProgramadoTotal = round($sumaProgramado['programado'],2);
+					$valorProgramadoTrimestre1 = round($sumaProgramadoTrimestre1['programado'],2);
+					$valorProgramadoTrimestre2 = round($sumaProgramadoTrimestre2['programado'],2);
+					$valorProgramadoTrimestre3 = round($sumaProgramadoTrimestre3['programado'],2);
+					$valorProgramadoTrimestre4 = round($sumaProgramadoTrimestre4['programado'],2);
+					
+					$cumplimiento1 = 0;
+					$cumplimiento2 = 0;
+					$cumplimiento3 = 0;
+					$cumplimiento4 = 0;
+
+					$avancePOA = 0;
+					if($sumaProgramado['programado'] > 0){
+						$avancePOA = round(($sumaEjecutado['ejecutado']/$sumaProgramado['programado']) * $ponderacion[0]['ponderacion_pi'],2);
+					}
+					if ($estadoActividad[0]['estado_trimestre_1'] == 5){
+						if($sumaProgramadoTrimestre1['programado'] > 0) {
+							$cumplimiento1 = round($sumaEjecutadoTrimestre1['ejecutado'] / $sumaProgramadoTrimestre1['programado'] * 100,2);
+						} else {
+							if($sumaEjecutadoTrimestre1['ejecutado'] > 0) {
+								$cumplimiento1 = 100;
+							} else {
+								$cumplimiento1 = 0;
+							}
+						}
+					} else {
+						$cumplimiento1 = 0;
+					}
+					if ($estadoActividad[0]['estado_trimestre_2'] == 5){
+						if($sumaProgramadoTrimestre2['programado'] > 0) {
+							$cumplimiento2 = round($sumaEjecutadoTrimestre2['ejecutado'] / $sumaProgramadoTrimestre2['programado'] * 100,2);
+						} else {
+							if($sumaEjecutadoTrimestre2['ejecutado'] > 0) {
+								$cumplimiento2 = 100;
+							} else {
+								$cumplimiento2 = 0;
+							}
+						}
+					} else {
+						$cumplimiento2 = 0;
+					}
+					if ($estadoActividad[0]['estado_trimestre_3'] == 5){
+						if($sumaProgramadoTrimestre3['programado'] > 0) {
+							$cumplimiento3 = round($sumaEjecutadoTrimestre3['ejecutado'] / $sumaProgramadoTrimestre3['programado'] * 100,2);
+						} else {
+							if($sumaEjecutadoTrimestre3['ejecutado'] > 0) {
+								$cumplimiento3 = 100;
+							} else {
+								$cumplimiento3 = 0;
+							}
+						}
+					} else {
+						$cumplimiento3 = 0;
+					}
+					if ($estadoActividad[0]['estado_trimestre_4'] == 5){
+						if($sumaProgramadoTrimestre4['programado'] > 0) {
+							$cumplimiento4 = round($sumaEjecutadoTrimestre4['ejecutado'] / $sumaProgramadoTrimestre4['programado'] * 100,2);
+						} else {
+							if($sumaEjecutadoTrimestre4['ejecutado'] > 0) {
+								$cumplimiento4 = 100;
+							} else {
+								$cumplimiento4 = 0;
+							}
+						}
+					} else {
+						$cumplimiento4 = 0;
+					}
+
+					$cumplimiento = ($valorProgramadoTrimestre1*($cumplimiento1/100)) + ($valorProgramadoTrimestre2*($cumplimiento2/100)) + ($valorProgramadoTrimestre3*($cumplimiento3/100)) + ($valorProgramadoTrimestre4*($cumplimiento4/100));
+
+					$data = array(
+						'avance_poa' => $avancePOA,
+						'cumplimiento' => $cumplimiento
+					);
+					$this->db->where('fk_numero_actividad_pi', $numeroActividadPI);
+					$query = $this->db->update('actividad_estado_pi', $data);
+					if ($query){
+						return true;
+					} else {
+						return false;
+					}
+				} else {
 					return false;
 				}
 		}

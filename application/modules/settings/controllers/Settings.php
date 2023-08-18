@@ -3324,9 +3324,8 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
 			$msj = "Se cambio el estado de la actividad para el <b>Trimestre " . $numeroTrimestre .  "</b>.";
 			
 			$vigencia = $this->general_model->get_vigencia();
-			$arrParam = array("
-				numeroActividadPI" => $numeroActividadPI,
-				'vigencia' => $vigencia['vigencia']
+			$arrParam = array(
+				'numeroActividadPI' => $numeroActividadPI
 			);
 			$listadoActividades = $this->general_model->get_actividadesPI($arrParam);
 
