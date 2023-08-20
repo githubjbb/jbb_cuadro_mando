@@ -79,7 +79,9 @@ if ($retornoError) {
         <div class="col-lg-12">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <i class="fa fa-cogs fa-fw"></i> <b>PLAN ESTRATÉGICO <?php echo $vigencia['vigencia']; ?></b>
+                    <h4 class="list-group-item-heading">
+                        <i class="fa fa-cogs fa-fw"></i> PLAN ESTRATÉGICO <?php echo $vigencia['vigencia']; ?>
+                    </h4>
                 </div>
                 <div class="panel-body">
                     <?php 

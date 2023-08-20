@@ -22,36 +22,17 @@ $(function(){
 		<div class="col-md-12">
 			<div class="panel panel-primary">
 				<div class="panel-heading">
-					<div class="row">
-                        <div class="col-lg-12">
-							<h4 class="list-group-item-heading">
-								<i class="fa fa-gear fa-fw"></i> PLAN INTEGRADO - PLANES INTEGRADOS
-							</h4>
-							<!--<div class="pull-right">
-                    			<div class="btn-group">
-				                    <?php
-				                    	$arrParam = array();
-										$listaActividades = $this->general_model->get_actividades_pi_full($arrParam);
-				                        if($listaActividades && ($userRol == ID_ROL_SUPER_ADMIN || $userRol == ID_ROL_ADMINISTRADOR || $userRol == ID_ROL_PLANEACION)){
-				                    ?>
-				                        <a href="<?php echo base_url("settings/reporteMatrizPAI"); ?>" class="btn btn-primary btn-xs" target="_blank"><span class="fa fa-file-excel-o" aria-hidden="true" ></span> Descargar Plan Integrado</a>
-				                    <?php 
-				                        }
-				                    ?>
-				                </div>
-				            </div>-->
-                    	</div>
-                    </div>
+					<h4 class="list-group-item-heading">
+						<i class="fa fa-gear fa-fw"></i> PLAN INTEGRADO - PLANES INTEGRADOS
+					</h4>
 				</div>
 			</div>
 		</div>
-		<!-- /.col-lg-12 -->				
 	</div>
 	
-	<!-- /.row -->
 	<div class="row">
 		<div class="col-lg-12">
-			<div class="panel panel-default">
+			<div class="panel panel-info">
 				<div class="panel-heading">
 					<i class="fa fa-crosshairs"></i> LISTA PLANES INTEGRADOS
 					<div class="pull-right">

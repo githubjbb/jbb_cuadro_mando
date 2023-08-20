@@ -75,6 +75,23 @@ class General_model extends CI_Model {
 	}
 
 	/**
+	 * Consultar fechas limites
+	 * @author AOCUBILLOSA
+	 * @since 20/08/2023
+	 */
+	public function get_fechas_limites($data) 
+	{	
+		$this->db->select();
+		$this->db->where('vigencia', $data['vigencia']);
+		$query = $this->db->get('param_fechas_limites');
+		if ($query->num_rows() > 0) {
+			return $query->result_array();
+		} else {
+			return false;
+		}
+	}
+
+	/**
 	 * Cambiar Vigencia
 	 * @author AOCUBILLOSA
 	 * @since 04/01/2023
@@ -82,16 +99,16 @@ class General_model extends CI_Model {
 	public function cambiar_vigencia()
 	{
 		$vigencia = $this->input->post('vigencia');
-		$data = array(
+		$arrData = array(
 			'vigencia' => $vigencia
 		);
-		$query = $this->db->update('param_vigencia', $data);
+		$query = $this->db->update('param_vigencia', $arrData);
 
 		if ($query) {
-			$limite1 = $this->get_fecha_limite1();
-			$limite2 = $this->get_fecha_limite2();
-			$limite3 = $this->get_fecha_limite3();
-			$limite4 = $this->get_fecha_limite4();
+			$limite1 = $this->get_fecha_limite1($arrData);
+			$limite2 = $this->get_fecha_limite2($arrData);
+			$limite3 = $this->get_fecha_limite3($arrData);
+			$limite4 = $this->get_fecha_limite4($arrData);
 			$fecha1 = explode('-', $limite1['fecha']);
 			$fecha2 = explode('-', $limite2['fecha']);
 			$fecha3 = explode('-', $limite3['fecha']);
@@ -112,20 +129,21 @@ class General_model extends CI_Model {
 			$newFecha2 = $vigencia . '-' . $mes2 . '-' . $dia2;
 			$newFecha3 = $vigencia . '-' . $mes3 . '-' . $dia3;
 			$newFecha4 = $vigencia + 1 . '-' . $mes4 . '-' . $dia4;
-			$this->update_fecha_limite1($newFecha1);
-			$this->update_fecha_limite2($newFecha2);
-			$this->update_fecha_limite3($newFecha3);
-			$this->update_fecha_limite4($newFecha4);
+			$this->update_fecha_limite1($arrData, $newFecha1);
+			$this->update_fecha_limite2($arrData, $newFecha2);
+			$this->update_fecha_limite3($arrData, $newFecha3);
+			$this->update_fecha_limite4($arrData, $newFecha4);
 			return true;
 		} else {
 			return false;
 		}
 	}
 
-	public function get_fecha_limite1()
+	public function get_fecha_limite1($arrData)
 	{
 		$this->db->select('fecha');
 		$this->db->where('numero_trimestre', 1);
+		$this->db->where('vigencia', $arrData['vigencia']);
 		$query = $this->db->get('param_fechas_limites');
 		if ($query->num_rows() > 0) {
 			return $query->row_array();
@@ -134,10 +152,11 @@ class General_model extends CI_Model {
 		}
 	}
 
-	public function get_fecha_limite2()
+	public function get_fecha_limite2($arrData)
 	{
 		$this->db->select('fecha');
 		$this->db->where('numero_trimestre', 2);
+		$this->db->where('vigencia', $arrData['vigencia']);
 		$query = $this->db->get('param_fechas_limites');
 		if ($query->num_rows() > 0) {
 			return $query->row_array();
@@ -146,10 +165,11 @@ class General_model extends CI_Model {
 		}
 	}
 
-	public function get_fecha_limite3()
+	public function get_fecha_limite3($arrData)
 	{
 		$this->db->select('fecha');
 		$this->db->where('numero_trimestre', 3);
+		$this->db->where('vigencia', $arrData['vigencia']);
 		$query = $this->db->get('param_fechas_limites');
 		if ($query->num_rows() > 0) {
 			return $query->row_array();
@@ -158,10 +178,11 @@ class General_model extends CI_Model {
 		}
 	}
 
-	public function get_fecha_limite4()
+	public function get_fecha_limite4($arrData)
 	{
 		$this->db->select('fecha');
 		$this->db->where('numero_trimestre', 4);
+		$this->db->where('vigencia', $arrData['vigencia']);
 		$query = $this->db->get('param_fechas_limites');
 		if ($query->num_rows() > 0) {
 			return $query->row_array();
@@ -170,31 +191,35 @@ class General_model extends CI_Model {
 		}
 	}
 
-	public function update_fecha_limite1($fecha)
+	public function update_fecha_limite1($arrData, $fecha)
 	{
 		$data = array('fecha' => $fecha);
 		$this->db->where('numero_trimestre', 1);
+		$this->db->where('vigencia', $arrData['vigencia']);
 		$query = $this->db->update('param_fechas_limites', $data);
 	}
 
-	public function update_fecha_limite2($fecha)
+	public function update_fecha_limite2($arrData, $fecha)
 	{
 		$data = array('fecha' => $fecha);
 		$this->db->where('numero_trimestre', 2);
+		$this->db->where('vigencia', $arrData['vigencia']);
 		$query = $this->db->update('param_fechas_limites', $data);
 	}
 
-	public function update_fecha_limite3($fecha)
+	public function update_fecha_limite3($arrData, $fecha)
 	{
 		$data = array('fecha' => $fecha);
 		$this->db->where('numero_trimestre', 3);
+		$this->db->where('vigencia', $arrData['vigencia']);
 		$query = $this->db->update('param_fechas_limites', $data);
 	}
 
-	public function update_fecha_limite4($fecha)
+	public function update_fecha_limite4($arrData, $fecha)
 	{
 		$data = array('fecha' => $fecha);
 		$this->db->where('numero_trimestre', 4);
+		$this->db->where('vigencia', $arrData['vigencia']);
 		$query = $this->db->update('param_fechas_limites', $data);
 	}
 

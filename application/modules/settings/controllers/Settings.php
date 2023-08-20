@@ -1767,8 +1767,8 @@ class Settings extends CI_Controller {
 	{		
 			$data["error"] = $error;
 			$data["success"] = $success;
-			$data["view"] = "cargar_informacion";
 			$data["model"] = $model;
+			$data["view"] = "cargar_informacion";
 			$this->load->view("layout_calendar", $data);
 	}
 
@@ -1783,26 +1783,22 @@ class Settings extends CI_Controller {
             $config['allowed_types'] = 'csv';
             $config['max_size'] = '5000';
             $config['file_name'] = $model . '.csv';
-
             $this->load->library('upload', $config);
             $bandera = false;
             if (!$this->upload->do_upload()) {
                 $error = $this->upload->display_errors();
                 $msgError = html_escape(substr($error, 3, -4));
-                $this->subir_archivo($msgError);
-            }else {
+                $this->subir_archivo($model, $msgError);
+            } else {
                 $file_info = $this->upload->data();
                 $data = array('upload_data' => $this->upload->data());
-
                 $archivo = $file_info['file_name'];
-
 				$registros = array();
 				if (($fichero = fopen(FCPATH . 'tmp/' . $archivo, "a+")) !== FALSE) {
 					// Lee los nombres de los campos
 					$nombres_campos = fgetcsv($fichero, 0, ";");
 					$num_campos = count($nombres_campos);
 					// Lee los registros
-
 					while (($datos = fgetcsv($fichero, 0, ";")) !== FALSE) {
 						// Crea un array asociativo con los nombres y valores de los campos
 						for ($icampo = 0; $icampo < $num_campos; $icampo++) {
@@ -1812,7 +1808,6 @@ class Settings extends CI_Controller {
 						$registros[] = $registro;
 					}
 					fclose($fichero);
-
 					$x=0;
 					$errores = array();
 					$bandera = false;
@@ -1823,23 +1818,19 @@ class Settings extends CI_Controller {
 								//cargo registros en la tabla de estado actividad
 								$this->settings_model->cargar_actividades_estados($lista);
 							}
-						}else{
+						} else {
 							$errores["numero_registro"] = $x;
 							$bandera = true;
 						}
 					}
 				}
             }
-			
-			$vista = $model;
-
 			$success = 'El archivo se cargó correctamente.';
-
 			if($bandera){
 				$registros = implode(",", $errores["numero_registro"]);
 				$success = 'El archivo se cargó pero hay errores en los siguientes registros:::' . $registros;
 			}
-			$this->subir_archivo($vista,'', $success);
+			$this->subir_archivo($model, '', $success);
     }
 
 	/**
@@ -2132,14 +2123,13 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
 	 */
 	public function fechas_limite()
 	{
-			$arrParam = array(
-				"table" => "param_fechas_limites",
-				"order" => "id_fecha",
-				"id" => "x"
-			);
-			$data['info'] = $this->general_model->get_basic_search($arrParam);
 			$data['vigencia'] = $this->general_model->get_vigencia();
-
+			$arrParam = array(
+				"vigencia" => $data['vigencia']['vigencia']
+			);
+			$data['info'] = $this->general_model->get_fechas_limites($arrParam);
+			//pr($data['info']); exit;
+			
 			$data["view"] = 'fechas';
 			$this->load->view("layout_calendar", $data);
 	}
