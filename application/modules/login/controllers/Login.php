@@ -26,7 +26,7 @@ class Login extends CI_Controller {
 	        $passwd = $this->input->post("inputPassword");
 
 	        $ldapuser = $login;
-	        $ldappass = ldap_escape($passwd, null, LDAP_ESCAPE_FILTER);
+	        $ldappass = ldap_escape($passwd, ".,_,-,+,*,#,$,%,&,@", LDAP_ESCAPE_FILTER);
 	        
 	        $ds = ldap_connect("192.168.0.44", "389") or die("No es posible conectar con el directorio activo.");  // Servidor LDAP!
 	        if (!$ds) {
