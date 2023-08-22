@@ -1,6 +1,19 @@
 <script type="text/javascript" src="<?php echo base_url("assets/js/validate/settings/plan_integrado.js"); ?>"></script>
 <script>
-$(function(){ 
+$(function(){
+	$(".btn-primary").click(function () {	
+			var oID = $(this).attr("id");
+            $.ajax ({
+                type: 'POST',
+				url: base_url + 'settings/cargarModalPlanIntegrado',
+                data: {'idPlanIntegrado': oID},
+                cache: false,
+                success: function (data) {
+                    $('#tablaDatos').html(data);
+                }
+            });
+	});
+
 	$(".btn-success").click(function () {	
 			var oID = $(this).attr("id");
             $.ajax ({
@@ -12,7 +25,7 @@ $(function(){
                     $('#tablaDatos').html(data);
                 }
             });
-	});	
+	});
 });
 </script>
 
@@ -23,7 +36,7 @@ $(function(){
 			<div class="panel panel-primary">
 				<div class="panel-heading">
 					<h4 class="list-group-item-heading">
-						<i class="fa fa-gear fa-fw"></i> PLAN INTEGRADO - PLANES INTEGRADOS
+						<i class="fa fa-gear fa-fw"></i> PLAN INTEGRADO - PLANES INTEGRADOS <?php echo $vigencia['vigencia']; ?>
 					</h4>
 				</div>
 			</div>
@@ -40,7 +53,7 @@ $(function(){
 							<?php
 								if($userRol == ID_ROL_SUPER_ADMIN || $userRol == ID_ROL_ADMINISTRADOR || $userRol == ID_ROL_PLANEACION){
 							?>
-								<button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#modal" id="x">
+								<button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#modal" id="x">
 										<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Adicionar Plan Integrado
 								</button>
 							<?php } ?>

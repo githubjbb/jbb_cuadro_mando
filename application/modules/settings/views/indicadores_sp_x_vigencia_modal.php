@@ -35,10 +35,9 @@
 					<select name="vigencia" id="vigencia" class="form-control" required>
 						<option value='' >Select...</option>
 						<?php
-							$year = date('Y');
-							$lastYear = $year - 2;
-							$nextYear = $year + 3;
-							for ($i = $lastYear; $i < $nextYear; $i++) {
+							$firstYear = 2020;
+							$lastYear = 2024;
+							for ($i = $firstYear; $i <= $lastYear; $i++) {
 						?>
 							<option value='<?php echo $i; ?>' <?php
 							if ($information && $i == $information[0]["vigencia_indicador"]) {

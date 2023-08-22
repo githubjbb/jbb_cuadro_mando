@@ -35,7 +35,8 @@
 		                } ?>
 		            </div>
 
-			        <form name="formCargue" id="formCargue" role="form" method="post" enctype="multipart/form-data" action="<?php echo site_url("/settings/do_upload/" . $model); ?>">
+			        <form name="formCargue" id="formCargue" role="form" method="post" enctype="multipart/form-data" action="<?php echo site_url("/settings/do_upload/" . $model . '/' . $vigencia); ?>">
+			        	<input type="hidden" id="vigencia" name="vigencia" value="<?php echo $vigencia; ?>"/>
 			            <div class="row">
 			                <div class="form-group col-md-4">
 			                    <label>Ajuntar Archivo:</label>

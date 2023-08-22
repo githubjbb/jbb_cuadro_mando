@@ -565,7 +565,7 @@ class General_model extends CI_Model {
 		 */
 		public function get_lista_cuadro_mando($arrData) 
 		{		
-				$this->db->select("C.*, CONCAT(numero_proyecto_inversion, ' ', nombre_proyecto_inversion) proyecto_inversion, id_meta_proyecto_inversion, CONCAT(numero_meta_proyecto, ' ', meta_proyecto) meta_proyecto, presupuesto_meta, CONCAT(numero_proposito, ' ', proposito) proposito, CONCAT(numero_logro, ' ', logro) logro, CONCAT(numero_programa, ' ', programa) programa, CONCAT(numero_programa_estrategico, ' ', programa_estrategico) programa_estrategico, CONCAT(numero_meta_pdd, ' ', meta_pdd) meta_pdd, CONCAT(numero_ods, ' ', ods) ods, CONCAT(id_dimension, ' ', nombre_dimension) dimension");				
+				$this->db->select("C.*, CONCAT(numero_proyecto_inversion, ' ', nombre_proyecto_inversion) proyecto_inversion, id_meta_proyecto_inversion, numero_meta_proyecto, CONCAT(numero_meta_proyecto, ' ', meta_proyecto) meta_proyecto, presupuesto_meta, CONCAT(numero_proposito, ' ', proposito) proposito, CONCAT(numero_logro, ' ', logro) logro, CONCAT(numero_programa, ' ', programa) programa, CONCAT(numero_programa_estrategico, ' ', programa_estrategico) programa_estrategico, CONCAT(numero_meta_pdd, ' ', meta_pdd) meta_pdd, CONCAT(I1.numero_indicador, ' ', I1.indicador_sp) indicador_sp1, CONCAT(I2.numero_indicador, ' ', I2.indicador_sp) indicador_sp2, CONCAT(numero_ods, ' ', ods) ods, CONCAT(id_dimension, ' ', nombre_dimension) dimension");				
 				$this->db->join('proyecto_inversion PI', 'PI.numero_proyecto_inversion = C.fk_numero_proyecto_inversion', 'INNER');
 				$this->db->join('meta_proyecto_inversion M', 'M.nu_meta_proyecto = C.fk_nu_meta_proyecto_inversion', 'INNER');
 				$this->db->join('propositos X', 'X.numero_proposito = C.fk_numero_proposito', 'INNER');
@@ -575,6 +575,8 @@ class General_model extends CI_Model {
 				$this->db->join('meta_pdd Z', 'Z.numero_meta_pdd = C.fk_numero_meta_pdd', 'INNER');
 				$this->db->join('ods O', 'O.numero_ods = C.fk_numero_ods', 'INNER');
 				$this->db->join('param_dimensiones_mipg D', 'D.id_dimension = C.fk_id_dimension', 'LEFT');
+				$this->db->join('indicadores I1', 'C.indicador_1 = I1.numero_indicador', 'LEFT');
+				$this->db->join('indicadores I2', 'C.indicador_2 = I2.numero_indicador', 'LEFT');
 
 				if (array_key_exists("idCuadroBase", $arrData)) {
 					$this->db->where('C.id_cuadro_base', $arrData["idCuadroBase"]);

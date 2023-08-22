@@ -72,6 +72,34 @@
 		<div class="row">
 			<div class="col-sm-12">
 				<div class="form-group text-left">
+					<label class="control-label" for="id_indicador_1">Indicador 1: *</label>
+					<select name="id_indicador_1" id="id_indicador_1" class="form-control" required >
+						<option value="">Seleccione...</option>
+						<?php for ($i = 0; $i < count($listaIndicadores); $i++) { ?>
+							<option value="<?php echo $listaIndicadores[$i]["numero_indicador"]; ?>" <?php if($information && $information[0]["indicador_1"] == $listaIndicadores[$i]["numero_indicador"]) { echo "selected"; }  ?>><?php echo $listaIndicadores[$i]["numero_indicador"] . ' ' . $listaIndicadores[$i]["indicador_sp"]; ?></option>		
+						<?php } ?>
+					</select>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="form-group text-left">
+					<label class="control-label" for="id_indicador_2">Indicador 2: *</label>
+					<select name="id_indicador_2" id="id_indicador_2" class="form-control" required >
+						<option value="">Seleccione...</option>
+						<?php for ($i = 0; $i < count($listaIndicadores); $i++) { ?>
+							<option value="<?php echo $listaIndicadores[$i]["numero_indicador"]; ?>" <?php if($information && $information[0]["indicador_2"] == $listaIndicadores[$i]["numero_indicador"]) { echo "selected"; }  ?>><?php echo $listaIndicadores[$i]["numero_indicador"] . ' ' . $listaIndicadores[$i]["indicador_sp"]; ?></option>		
+						<?php } ?>
+					</select>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="form-group text-left">
 					<label class="control-label" for="id_meta_pdd">Meta PDD: *</label>
 					<select name="id_meta_pdd" id="id_meta_pdd" class="form-control" required >
 						<option value="">Seleccione...</option>

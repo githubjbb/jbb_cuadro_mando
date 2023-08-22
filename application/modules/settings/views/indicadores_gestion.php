@@ -54,8 +54,8 @@
                         <div class="pull-right">
                             <div class="btn-group">
                                 <?php if(!$info){ ?>
-                                    <a class="btn btn-primary btn-xs" href=" <?php echo base_url(). 'settings/subir_archivo/cargar_indicadores_gestion'; ?> ">
-                                        Subir Indicadores de Gestión <span class="glyphicon glyphicon-upload" aria-hidden="true"></span>
+                                    <a class="btn btn-primary btn-xs" href=" <?php echo base_url(). 'settings/subir_archivo/cargar_indicadores_gestion/'.$vigencia['vigencia']; ?> ">
+                                        Subir Indicadores de Gestión <?php echo $vigencia['vigencia']; ?> <span class="glyphicon glyphicon-upload" aria-hidden="true"></span>
                                     </a>
                                 <?php } else { ?>
                                     <button class="btn btn-danger btn-xs">Eliminar Indicadores de Gestión <?php echo $vigencia['vigencia']; ?> <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>

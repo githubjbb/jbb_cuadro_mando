@@ -35,7 +35,7 @@ $(function(){
 			<div class="panel panel-primary">
 				<div class="panel-heading">
 					<h4 class="list-group-item-heading">
-					<i class="fa fa-gear fa-fw"></i> RESUMEN - OBJETIVOS ESTRATÉGICOS
+					<i class="fa fa-gear fa-fw"></i> RESUMEN - OBJETIVOS ESTRATÉGICOS <?php echo $vigencia['vigencia']; ?>
 					</h4>
 				</div>
 			</div>

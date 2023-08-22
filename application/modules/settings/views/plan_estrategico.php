@@ -102,10 +102,10 @@ if ($retornoError) {
                                     </div>
 
                                     <div class="col-lg-3">
-<?php
-    $userRol = $this->session->userdata("role");          
-    if($userRol == ID_ROL_SUPER_ADMIN || $userRol == ID_ROL_ADMINISTRADOR){
-?>
+                                    <?php
+                                        $userRol = $this->session->userdata("role");          
+                                        if($userRol == ID_ROL_SUPER_ADMIN || $userRol == ID_ROL_ADMINISTRADOR){
+                                    ?>
                                         <div class="pull-right">
                                             <div class="btn-group">                                                                             
                                                 <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#modal" id="<?php echo $lista['numero_objetivo_estrategico']; ?>">
@@ -113,7 +113,7 @@ if ($retornoError) {
                                                 </button>
                                             </div>
                                         </div>
-<?php } ?>
+                                    <?php } ?>
                                     </div>
                                 </div>                      
                             </div>
@@ -196,6 +196,8 @@ if ($retornoError) {
                                                 <th><small>Meta PDD</small></th>
                                                 <th><small>Programa SEGPLAN</small></th>
                                                 <th><small>Programa Estratégico</small></th>
+                                                <th><small>Indicador1</small></th>
+                                                <th><small>Indicador2</small></th>
                                                 <th><small>Logro</small></th>
                                                 <th><small>Propósito</small></th>
                                                 <th><small>ODS</small></th>
@@ -229,6 +231,8 @@ if ($retornoError) {
                                             echo "<td><small>" . $lista["meta_pdd"] . "</small></td>";
                                             echo "<td><small>" . $lista["programa"] . "</small></td>";
                                             echo "<td><small>" . $lista["programa_estrategico"] . "</small></td>";
+                                            echo "<td><small>" . $lista["indicador_sp1"] . "</small></td>";
+                                            echo "<td><small>" . $lista["indicador_sp2"] . "</small></td>";
                                             echo "<td><small>" . $lista["logro"] . "</small></td>";
                                             echo "<td><small>" . $lista["proposito"] . "</small></td>";
                                             echo "<td><small>" . $lista["ods"] . "</small></td>";
@@ -242,7 +246,7 @@ if ($retornoError) {
                                             echo "</small></td>";
                                             echo "<td class='text-center'>";
                                             echo "<p><a title='Ver Actividades' class='btn btn-success btn-xs' href='" . base_url('dashboard/actividades/' . $lista["id_cuadro_base"]) . "'> Ver Actividades <span class='glyphicon glyphicon-eye-open' aria-hidden='true'></a></p>";
-?>
+                                        ?>
                                             <p>
                                             <button title="Editar Plan Estratégico" type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#modal" id="<?php echo $lista['id_cuadro_base']; ?>" >
                                                 Editar Plan <span class="glyphicon glyphicon-edit" aria-hidden="true">
@@ -256,9 +260,7 @@ if ($retornoError) {
                                             <button title="Eliminar Plan Estratégico" type="button" id="<?php echo $lista['id_cuadro_base']; ?>" class='btn btn-danger btn-xs' title="Eliminar">
                                               Eliminar <i class="fa fa-trash-o"></i>
                                             </button>
-                                            
-                                            
-<?php
+                                        <?php
                                             echo "</td>";
                                             echo "</tr>";
                                         endforeach
@@ -269,9 +271,9 @@ if ($retornoError) {
                         </div>
                     </div>
                 </div>
-                    <?php
-                        endforeach;
-                    ?>      
+                <?php
+                    endforeach;
+                ?>
                 </div>
             </div>
         </div>
@@ -279,11 +281,10 @@ if ($retornoError) {
 </div>
 
 <!--INICIO Modal -->
-<div class="modal fade text-center" id="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">    
+<div class="modal fade text-center" id="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content" id="tablaDatos">
-
         </div>
     </div>
-</div>                       
+</div>
 <!--FIN Modal  -->

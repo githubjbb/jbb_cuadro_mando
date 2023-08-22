@@ -606,6 +606,7 @@ class Resumen extends CI_Controller {
 	public function objetivos_estrategicos()
 	{			
 			$arrParam = array();
+			$data['vigencia'] = $this->general_model->get_vigencia();
 			$data['info'] = $this->general_model->get_objetivos_estrategicos($arrParam);
 			$data["view"] = 'objetivos_estrategicos';
 			$this->load->view("layout_calendar", $data);

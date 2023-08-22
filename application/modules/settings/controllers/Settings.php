@@ -1392,6 +1392,13 @@ class Settings extends CI_Controller {
 			$data['listaPrograma'] = $this->general_model->get_basic_search($arrParam);
 
 			$arrParam = array(
+				"table" => " indicadores",
+				"order" => "numero_indicador",
+				"id" => "x"
+			);
+			$data['listaIndicadores'] = $this->general_model->get_basic_search($arrParam);
+
+			$arrParam = array(
 				"table" => "meta_pdd",
 				"order" => "numero_meta_pdd",
 				"id" => "x"
@@ -1411,7 +1418,6 @@ class Settings extends CI_Controller {
 				"id" => "x"
 			);
 			$data['listaDimensionesMIPG'] = $this->general_model->get_basic_search($arrParam);
-						
 			$this->load->view("plan_estrategico_modal", $data);
     }
 	
@@ -1763,11 +1769,12 @@ class Settings extends CI_Controller {
 	 * Cargar la informacion
      * @since 20/06/2022
 	 */
-	public function subir_archivo($model, $error="", $success="")
-	{		
+	public function subir_archivo($model, $vigencia="", $error="", $success="")
+	{
+			$data["model"] = $model;
+			$data["vigencia"] = $vigencia;
 			$data["error"] = $error;
 			$data["success"] = $success;
-			$data["model"] = $model;
 			$data["view"] = "cargar_informacion";
 			$this->load->view("layout_calendar", $data);
 	}
@@ -1776,19 +1783,18 @@ class Settings extends CI_Controller {
 	 *Cargue de archivo
      * @since 20/06/2022
 	 */
-	public function do_upload($model)
+	public function do_upload($model, $vigencia="")
 	{		
             $config['upload_path'] = './tmp/';
             $config['overwrite'] = true;
             $config['allowed_types'] = 'csv';
             $config['max_size'] = '5000';
-            $config['file_name'] = $model . '.csv';
+            $config['file_name'] = $model . '_' . $vigencia . '.csv';
             $this->load->library('upload', $config);
             $bandera = false;
             if (!$this->upload->do_upload()) {
                 $error = $this->upload->display_errors();
                 $msgError = html_escape(substr($error, 3, -4));
-                $this->subir_archivo($model, $msgError);
             } else {
                 $file_info = $this->upload->data();
                 $data = array('upload_data' => $this->upload->data());
@@ -1803,6 +1809,13 @@ class Settings extends CI_Controller {
 						// Crea un array asociativo con los nombres y valores de los campos
 						for ($icampo = 0; $icampo < $num_campos; $icampo++) {
 							$registro[$nombres_campos[$icampo]] = utf8_encode($datos[$icampo]);
+							if($model == "cargar_indicadores_gestion"){
+								$registro['vigencia'] = $vigencia;
+							} else if($model == "cargar_meta_proyectos_inversion") {
+								$registro['vigencia_meta_proyecto'] = $vigencia;
+							} else if($model == "cargar_indicadores_segplan") {
+								$registro['vigencia_indicador'] = $vigencia;
+							}
 						}
 						// Añade el registro leido al array de registros
 						$registros[] = $registro;
@@ -1825,12 +1838,16 @@ class Settings extends CI_Controller {
 					}
 				}
             }
-			$success = 'El archivo se cargó correctamente.';
-			if($bandera){
-				$registros = implode(",", $errores["numero_registro"]);
-				$success = 'El archivo se cargó pero hay errores en los siguientes registros:::' . $registros;
-			}
-			$this->subir_archivo($model, '', $success);
+            if (!empty($msgError)) {
+            	$this->subir_archivo($model, $vigencia, $msgError, '');
+            } else {
+            	$success = 'El archivo se cargó correctamente.';
+				if($bandera){
+					$registros = implode(",", $errores["numero_registro"]);
+					$success = 'El archivo se cargó pero hay errores en los siguientes registros:::' . $registros;
+				}
+				$this->subir_archivo($model, $vigencia, '', $success);
+            }
     }
 
 	/**
@@ -4527,6 +4544,7 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
 	/**
 	 * Eliminar indicadores de gestion
 	 * @since 28/07/2023
+	 * @author AOCUBILLOSA
 	 */
 	public function delete_indicadores_gestion()
 	{
@@ -4544,5 +4562,66 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
 				$this->session->set_flashdata('retornoError', '<strong>Error!!!</strong> Contactarse con el Administrador');
 			}
 			echo json_encode($data);
+	}
+
+	/**
+	 * Eliminar meta proyectos inversion
+	 * @since 20/07/2023
+	 * @author AOCUBILLOSA
+	 */
+	public function delete_meta_proyectos_inversion($vigencia)
+	{
+			header('Content-Type: application/json');
+			$data = array();
+			if ($this->settings_model->eliminarMetaProyectosInversion($vigencia)) {
+				$data["msj"] = " la tabla meta_proyecto_inversion.";
+				$data["result"] = true;
+				$data["mensaje"] = "Se eliminaron los registros.";
+				$this->session->set_flashdata('retornoExito', 'Se eliminó los registros de ' . $data["msj"]);
+			} else {
+				$data["result"] = "error";
+				$data["mensaje"] = "Error!!! Contactarse con el Administrador.";
+				$this->session->set_flashdata('retornoError', '<strong>Error!!!</strong> Contactarse con el Administrador');
+			}
+			echo json_encode($data);
+	}
+
+	/**
+	 * Eliminar indicadores segplan
+	 * @since 20/07/2023
+	 * @author AOCUBILLOSA
+	 */
+	public function delete_indicadores_segplan($vigencia)
+	{
+			header('Content-Type: application/json');
+			$data = array();
+			if ($this->settings_model->eliminarIndicadoresSegplan($vigencia)) {
+				$data["msj"] = " la tabla indicadores_x_vigencia.";
+				$data["result"] = true;
+				$data["mensaje"] = "Se eliminaron los registros.";
+				$this->session->set_flashdata('retornoExito', 'Se eliminó los registros de ' . $data["msj"]);
+			} else {
+				$data["result"] = "error";
+				$data["mensaje"] = "Error!!! Contactarse con el Administrador.";
+				$this->session->set_flashdata('retornoError', '<strong>Error!!!</strong> Contactarse con el Administrador');
+			}
+			echo json_encode($data);
+	}
+
+	/**
+	 * Relacion SEGPLAN
+	 * @since 21/08/2023
+	 * @author AOCUBILLOSA
+	 */
+	public function relacion_segplan()
+	{
+			$vigencia = $this->general_model->get_vigencia();
+			$arrParam = array(
+				'vigencia' => $vigencia['vigencia']
+			);
+			$data['info'] = $this->general_model->get_lista_cuadro_mando($arrParam);
+			$data['vigencia'] = $this->general_model->get_vigencia();
+			$data["view"] = "relacion_segplan";
+			$this->load->view("layout_calendar", $data);
 	}
 }

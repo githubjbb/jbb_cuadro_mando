@@ -17,7 +17,7 @@
 		<div class="col-lg-12">
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					<i class="fa fa-crosshairs"></i> RESUMEN PLANES INSTITUCIONALES <?php echo $vigencia ?>
+					<i class="fa fa-crosshairs"></i> RESUMEN PLANES INSTITUCIONALES
 				</div>
 				<div class="panel-body">
 

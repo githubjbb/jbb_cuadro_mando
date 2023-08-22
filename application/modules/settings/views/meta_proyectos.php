@@ -19,19 +19,28 @@ $(function(){
 <div id="page-wrapper">
 	<br>
 	<div class="row">
+		<input type="hidden" id="vigencia" name="vigencia" value="<?php echo $vigencia; ?>"/>
 		<div class="col-md-12">
 			<div class="panel panel-primary">
 				<div class="panel-heading">
-					<h4 class="list-group-item-heading">
-					<i class="fa fa-gear fa-fw"></i> CONFIGURACIÓN - METAS PROYECTOS INVERSIÓN
-					</h4>
+					<i class="fa fa-gear fa-fw"></i> <b>CONFIGURACIÓN - METAS PROYECTOS INVERSIÓN</b>
+					<div class="pull-right">
+						<div class="btn-group">
+							<?php if(!$info){ ?>
+								<a class="btn btn-info btn-xs" href=" <?php echo base_url(). 'settings/subir_archivo/cargar_meta_proyectos_inversion/'.$vigencia; ?> ">
+                                    Subir Meta Proyectos Inversión <?php echo $vigencia; ?> <span class="glyphicon glyphicon-upload" aria-hidden="true"></span>
+                                </a>
+							<?php } else { ?>
+								<button class="btn btn-warning btn-xs">Eliminar Meta Proyectos Inversión <?php echo $vigencia; ?> <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                                </button>
+                            <?php } ?>
+						</div>
+					</div>
 				</div>
 			</div>
-		</div>
-		<!-- /.col-lg-12 -->				
+		</div>				
 	</div>
 	
-	<!-- /.row -->
 	<div class="row">
 		<div class="col-lg-12">
 			<div class="panel panel-default">
@@ -46,27 +55,26 @@ $(function(){
 					</div>
 				</div>
 				<div class="panel-body small">
-
-<?php
-	$retornoExito = $this->session->flashdata('retornoExito');
-	if ($retornoExito) {
-?>
-		<div class="alert alert-success ">
-			<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-			<?php echo $retornoExito ?>		
-		</div>
-<?php
-	}
-	$retornoError = $this->session->flashdata('retornoError');
-	if ($retornoError) {
-?>
-		<div class="alert alert-danger ">
-			<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-			<?php echo $retornoError ?>
-		</div>
-<?php
-	}
-?> 
+				<?php
+					$retornoExito = $this->session->flashdata('retornoExito');
+					if ($retornoExito) {
+				?>
+						<div class="alert alert-success ">
+							<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+							<?php echo $retornoExito ?>		
+						</div>
+				<?php
+					}
+					$retornoError = $this->session->flashdata('retornoError');
+					if ($retornoError) {
+				?>
+						<div class="alert alert-danger ">
+							<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+							<?php echo $retornoError ?>
+						</div>
+				<?php
+					}
+				?>
 				<ul class="nav nav-tabs">
 					<li <?php if($vigencia == 2020){ echo "class='active'";} ?>><a href="<?php echo base_url("settings/metas_proyectos/2020"); ?>"><b>2020</b></a>
 					</li>

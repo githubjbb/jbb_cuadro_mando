@@ -379,6 +379,8 @@
 					'fk_numero_programa' => $this->input->post('id_programa_sp'),
 					'fk_numero_programa_estrategico' => $this->input->post('id_programa_estrategico'),
 					'fk_numero_meta_pdd' => $this->input->post('id_meta_pdd'),
+					'indicador_1' => $this->input->post('id_indicador_1'),
+					'indicador_2' => $this->input->post('id_indicador_2'),
 					'fk_numero_ods' => $this->input->post('id_ods'),
 					'fk_id_dimension' => $this->input->post('id_dimension'),
 					'vigencia' => $vigencia['vigencia']
@@ -525,6 +527,9 @@
 				$sql = "DELETE FROM actividades";
 				$query = $this->db->query($sql);
 				
+				$sql = "ALTER TABLE actividad_ejecucion AUTO_INCREMENT=1";
+				$sql = "ALTER TABLE actividad_estado AUTO_INCREMENT=1";
+				$sql = "ALTER TABLE actividad_historial AUTO_INCREMENT=1";
 				$sql = "ALTER TABLE actividades AUTO_INCREMENT=1";
 				$query = $this->db->query($sql);
 
@@ -733,6 +738,34 @@
 		public function cargar_indicadores_gestion($lista) 
 		{
 				$query = $this->db->insert('indicadores_gestion', $lista);
+				if ($query) {
+					return true;
+				} else {
+					return false;
+				}
+		}
+
+		/**
+		 * Cargar informacion 
+		 * @since 20/08/2023
+		 */
+		public function cargar_meta_proyectos_inversion($lista) 
+		{
+				$query = $this->db->insert('meta_proyecto_inversion', $lista);
+				if ($query) {
+					return true;
+				} else {
+					return false;
+				}
+		}
+
+		/**
+		 * Cargar informacion 
+		 * @since 21/08/2023
+		 */
+		public function cargar_indicadores_segplan($lista) 
+		{
+				$query = $this->db->insert('indicadores_x_vigencia', $lista);
 				if ($query) {
 					return true;
 				} else {
@@ -1595,6 +1628,36 @@
 		public function eliminarIndicadoresGestion($vigencia)
 		{
 				$sql = "DELETE FROM indicadores_gestion WHERE vigencia = $vigencia";
+				$query = $this->db->query($sql);
+				if ($query) {
+					return true;
+				} else {
+					return false;
+				}
+		}
+
+		/**
+		 * Eliminar registros de la tabla meta_proyectos
+		 * @since  20/08/2023
+		 */
+		public function eliminarMetaProyectosInversion($vigencia)
+		{
+				$sql = "DELETE FROM meta_proyecto_inversion WHERE vigencia_meta_proyecto = $vigencia";
+				$query = $this->db->query($sql);
+				if ($query) {
+					return true;
+				} else {
+					return false;
+				}
+		}
+
+		/**
+		 * Eliminar registros de la tabla indicadores_x_vigencia
+		 * @since  21/08/2023
+		 */
+		public function eliminarIndicadoresSegplan($vigencia)
+		{
+				$sql = "DELETE FROM indicadores_x_vigencia WHERE vigencia_indicador = $vigencia";
 				$query = $this->db->query($sql);
 				if ($query) {
 					return true;
