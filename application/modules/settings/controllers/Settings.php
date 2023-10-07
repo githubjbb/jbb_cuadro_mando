@@ -119,13 +119,13 @@ class Settings extends CI_Controller {
 			if ($idUser == '') {
 				$data["state"] = 1;//para el direccionamiento del JS, cuando es usuario nuevo no se envia state
 
-				$ldapuser = $this->session->userdata('logUser');
-				$ldappass = ldap_escape($this->session->userdata('password'), ".,_,-,+,*,#,$,%,&,@", LDAP_ESCAPE_FILTER);
 				$ds = ldap_connect("192.168.0.44", "389") or die("No es posible conectar con el directorio activo.");  // Servidor LDAP!
 		        if (!$ds) {
 		            echo "<br /><h4>Servidor LDAP no disponible</h4>";
 		            @ldap_close($ds);
 		        } else {
+		        	$ldapuser = $this->session->userdata('logUser');
+					$ldappass = ldap_escape($this->session->userdata('password'), ".,_,-,+,*,#,$,%,&,@", LDAP_ESCAPE_FILTER);
 		            $ldapdominio = "jardin";
 		            $ldapusercn = $ldapdominio . "\\" . $ldapuser;
 		            $binddn = "dc=jardin, dc=local";
@@ -1364,39 +1364,53 @@ class Settings extends CI_Controller {
 			$data['listaMetasProyectos'] = $this->general_model->get_basic_search($arrParam);
 
 			$arrParam = array(
-				"table" => " propositos",
+				"table" => "propositos",
 				"order" => "numero_proposito",
 				"id" => "x"
 			);
 			$data['listaPropositos'] = $this->general_model->get_basic_search($arrParam);
 
 			$arrParam = array(
-				"table" => " logros",
+				"table" => "logros",
 				"order" => "numero_logro",
 				"id" => "x"
 			);
 			$data['listaLogros'] = $this->general_model->get_basic_search($arrParam);
 
 			$arrParam = array(
-				"table" => " programa",
+				"table" => "programa",
 				"order" => "numero_programa",
 				"id" => "x"
 			);
 			$data['listaProgramaSEGPLAN'] = $this->general_model->get_basic_search($arrParam);
 
 			$arrParam = array(
-				"table" => " programa_estrategico",
+				"table" => "programa_estrategico",
 				"order" => "numero_programa_estrategico",
 				"id" => "x"
 			);
 			$data['listaPrograma'] = $this->general_model->get_basic_search($arrParam);
 
 			$arrParam = array(
-				"table" => " indicadores",
+				"table" => "indicadores",
 				"order" => "numero_indicador",
 				"id" => "x"
 			);
 			$data['listaIndicadores'] = $this->general_model->get_basic_search($arrParam);
+
+			$arrParam = array(
+				"table" => "objetivos_generales",
+				"order" => "numero_objetivo_general",
+				"id" => "x"
+			);
+			$data['listaGenerales'] = $this->general_model->get_basic_search($arrParam);
+
+			$arrParam = array(
+				"table" => "objetivos_especificos",
+				"order" => "numero_objetivo_especifico",
+				"id" => "x"
+			);
+			$data['listaEspecificos'] = $this->general_model->get_basic_search($arrParam);
 
 			$arrParam = array(
 				"table" => "meta_pdd",
@@ -2989,17 +3003,20 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
 					$data['listaHistorial3'] = false;
 					$data['listaHistorial4'] = false;
 					//fechas limite de registro
-					$arrParamFechas = array(
-						"table" => "param_fechas_limites",
-						"order" => "id_fecha",
-						"column" => "numero_trimestre",
-						"id" => $numeroTrimestrePI
+					$arrParam = array(
+						"numeroTrimestre" => $numeroTrimestrePI,
+						'vigencia' => $vigencia['vigencia']
 					);
-					$data['infoFechaLimite'] = $this->general_model->get_basic_search($arrParamFechas);
-				}else{
-					$arrParam = array("numeroActividadPI" => $numeroActividadPI);
+					$data['infoFechaLimite'] = $this->settings_model->get_fecha_limite($arrParam);
+					$arrParam = array(
+						"numeroActividadPI" => $data['listaActividadesPI'][0]['numero_actividad_pi'],
+						"numeroTrimestrePI" => $numeroTrimestrePI
+					);
+					$data['infoEjecucion'] = $this->general_model->get_ejecucion_actividadesPI($arrParam);
+				} else {
+					$arrParam = array("numeroActividadPI" => $data['listaActividadesPI'][0]['numero_actividad_pi']);
+					$data['infoEjecucion'] = $this->general_model->get_ejecucion_actividadesPI($arrParam);
 				}
-				$data['infoEjecucion'] = $this->general_model->get_ejecucion_actividadesPI($arrParam);
 			}
 			$data["activarBTN1"] = true; //para activar el boton
 			$userRol = $this->session->userdata("role");
@@ -4624,4 +4641,221 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
 			$data["view"] = "relacion_segplan";
 			$this->load->view("layout_calendar", $data);
 	}
+
+	/**
+	 * Mestas Sectoriales
+	 * @since 28/08/2023
+	 * @author AOCUBILLOSA
+	 */
+	public function metasSectoriales()
+	{
+			$vigencia = $this->general_model->get_vigencia();
+			$arrParam = array(
+				'vigencia' => $vigencia['vigencia']
+			);
+			$data['info'] = $this->settings_model->get_metas_sectoriales($arrParam);
+			$data['vigencia'] = $this->general_model->get_vigencia();
+			$data["view"] = "metas_sectoriales";
+			$this->load->view("layout_calendar", $data);
+	}
+
+	/**
+	 * Lista de Objetivos Generales
+     * @since 25/09/2023
+     * @author AOCUBILLOSA
+	 */
+	public function objetivos_generales()
+	{
+			$arrParam = array(
+				"table" => " objetivos_generales",
+				"order" => "numero_objetivo_general",
+				"id" => "x"
+			);
+			$data['info'] = $this->general_model->get_basic_search($arrParam);
+			$data["view"] = 'objetivos_generales';
+			$this->load->view("layout_calendar", $data);
+	}
+
+	/**
+     * Cargo modal - formulario objetivos generales
+     * @since 25/09/2023
+     * @author AOCUBILLOSA
+     */
+    public function cargarModalGenerales() 
+	{
+			header("Content-Type: text/plain; charset=utf-8"); //Para evitar problemas de acentos
+			$data['information'] = FALSE;
+			$data["idGeneral"] = $this->input->post("idGeneral");	
+			if ($data["idGeneral"] != 'x') {
+				$arrParam = array(
+					"table" => " objetivos_generales",
+					"order" => "numero_objetivo_general",
+					"column" => "id_objetivo_general",
+					"id" => $data["idGeneral"]
+				);
+				$data['information'] = $this->general_model->get_basic_search($arrParam);
+			}
+			$this->load->view("objetivos_generales_modal", $data);
+    }
+	
+	/**
+	 * Ingresar/Actualizar objetivos generales
+     * @since 25/09/2023
+     * @author AOCUBILLOSA
+	 */
+	public function save_objetivos_generales()
+	{			
+			header('Content-Type: application/json');
+			$data = array();
+			$idGeneral = $this->input->post('hddId');
+			$msj = "Se adicionó el Objetivo General!";
+			if ($idGeneral != '') {
+				$msj = "Se actualizó el Objetivo General!";
+			}
+			if ($idGeneral = $this->settings_model->saveObjetivoGeneral()) {
+				$data["result"] = true;				
+				$this->session->set_flashdata('retornoExito', '<strong>Correcto!</strong> ' . $msj);
+			} else {
+				$data["result"] = "error";			
+				$this->session->set_flashdata('retornoError', '<strong>Error!</strong> Ask for help');
+			}
+			echo json_encode($data);
+    }
+
+    /**
+	 * Delete Objetivo General
+     * @since 25/09/2023
+     * @author AOCUBILLOSA
+	 */
+	public function delete_general()
+	{			
+			header('Content-Type: application/json');
+			$data = array();
+			$idGeneral = $this->input->post('identificador');
+			$arrParam = array(
+				"idGeneral" => $idGeneral
+			);
+			$infoCuadroBase = $this->general_model->get_lista_cuadro_mando($arrParam);
+			if($infoCuadroBase){
+					$data["result"] = "error";
+					$data["mensaje"] = "No se puede eliminar porque el Objetivo General ya esta relacionada en un Plan Estrategico.";
+					$this->session->set_flashdata('retornoError', '<strong>Error!</strong> Ask for help');
+			}else{
+				$arrParam = array(
+					"table" => "objetivos_generales",
+					"primaryKey" => "id_objetivo_general",
+					"id" => $idGeneral
+				);
+				if ($this->general_model->deleteRecord($arrParam))
+				{
+					$data["result"] = true;
+					$this->session->set_flashdata('retornoExito', '<strong>Correcto!</strong> Se eliminó el Objetivo General.');
+				} else {
+					$data["result"] = "error";
+					$data["mensaje"] = "Error!!! Ask for help.";
+					$this->session->set_flashdata('retornoError', '<strong>Error!</strong> Ask for help');
+				}
+			}
+			echo json_encode($data);
+    }
+
+    /**
+	 * Lista de Objetivos Especificos
+     * @since 25/09/2023
+     * @author AOCUBILLOSA
+	 */
+	public function objetivos_especificos()
+	{
+			$arrParam = array(
+				"table" => " objetivos_especificos",
+				"order" => "numero_objetivo_especifico",
+				"id" => "x"
+			);
+			$data['info'] = $this->general_model->get_basic_search($arrParam);
+			$data["view"] = 'objetivos_especificos';
+			$this->load->view("layout_calendar", $data);
+	}
+
+	/**
+     * Cargo modal - formulario objetivos especificos
+     * @since 25/09/2023
+     * @author AOCUBILLOSA
+     */
+    public function cargarModalEspecificos() 
+	{
+			header("Content-Type: text/plain; charset=utf-8"); //Para evitar problemas de acentos
+			$data['information'] = FALSE;
+			$data["idEspecifico"] = $this->input->post("idEspecifico");	
+			if ($data["idEspecifico"] != 'x') {
+				$arrParam = array(
+					"table" => " objetivos_especificos",
+					"order" => "numero_objetivo_especifico",
+					"column" => "id_objetivo_especifico",
+					"id" => $data["idEspecifico"]
+				);
+				$data['information'] = $this->general_model->get_basic_search($arrParam);
+			}
+			$this->load->view("objetivos_especificos_modal", $data);
+    }
+	
+	/**
+	 * Ingresar/Actualizar objetivos especificos
+     * @since 25/09/2023
+     * @author AOCUBILLOSA
+	 */
+	public function save_objetivos_especificos()
+	{			
+			header('Content-Type: application/json');
+			$data = array();
+			$idEspecifico = $this->input->post('hddId');
+			$msj = "Se adicionó el Objetivo Específico!";
+			if ($idEspecifico != '') {
+				$msj = "Se actualizó el Objetivo Específico!";
+			}
+			if ($idEspecifico = $this->settings_model->saveObjetivoEspecifico()) {
+				$data["result"] = true;				
+				$this->session->set_flashdata('retornoExito', '<strong>Correcto!</strong> ' . $msj);
+			} else {
+				$data["result"] = "error";			
+				$this->session->set_flashdata('retornoError', '<strong>Error!</strong> Ask for help');
+			}
+			echo json_encode($data);
+    }
+
+    /**
+	 * Delete Objetivo Especifico
+     * @since 25/09/2023
+     * @author AOCUBILLOSA
+	 */
+	public function delete_especifico()
+	{			
+			header('Content-Type: application/json');
+			$data = array();
+			$idEspecifico = $this->input->post('identificador');
+			$arrParam = array(
+				"idEspecifico" => $idEspecifico
+			);
+			$infoCuadroBase = $this->general_model->get_lista_cuadro_mando($arrParam);
+			if($infoCuadroBase){
+					$data["result"] = "error";
+					$data["mensaje"] = "No se puede eliminar porque el Objetivo Específico ya esta relacionada en un Plan Estrategico.";
+					$this->session->set_flashdata('retornoError', '<strong>Error!</strong> Ask for help');
+			}else{
+				$arrParam = array(
+					"table" => "objetivos_especificos",
+					"primaryKey" => "id_objetivo_especifico",
+					"id" => $idEspecifico
+				);
+				if ($this->general_model->deleteRecord($arrParam))
+				{
+					$data["result"] = true;
+					$this->session->set_flashdata('retornoExito', '<strong>Correcto!</strong> Se eliminó el Objetivo Específico.');
+				} else {
+					$data["result"] = "error";
+					$data["mensaje"] = "Error!!! Ask for help.";
+					$this->session->set_flashdata('retornoError', '<strong>Error!</strong> Ask for help');
+				}
+			}
+			echo json_encode($data);
+    }
 }

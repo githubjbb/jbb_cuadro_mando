@@ -198,6 +198,8 @@ if ($retornoError) {
                                                 <th><small>Programa Estratégico</small></th>
                                                 <th><small>Indicador1</small></th>
                                                 <th><small>Indicador2</small></th>
+                                                <th><small>Objetivo General</small></th>
+                                                <th><small>Objetivo Específico</small></th>
                                                 <th><small>Logro</small></th>
                                                 <th><small>Propósito</small></th>
                                                 <th><small>ODS</small></th>
@@ -233,6 +235,8 @@ if ($retornoError) {
                                             echo "<td><small>" . $lista["programa_estrategico"] . "</small></td>";
                                             echo "<td><small>" . $lista["indicador_sp1"] . "</small></td>";
                                             echo "<td><small>" . $lista["indicador_sp2"] . "</small></td>";
+                                            echo "<td><small>" . $lista["objetivo_general"] . "</small></td>";
+                                            echo "<td><small>" . $lista["objetivo_especifico"] . "</small></td>";
                                             echo "<td><small>" . $lista["logro"] . "</small></td>";
                                             echo "<td><small>" . $lista["proposito"] . "</small></td>";
                                             echo "<td><small>" . $lista["ods"] . "</small></td>";

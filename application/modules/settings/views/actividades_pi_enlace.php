@@ -453,14 +453,14 @@
 												$fechaActual = date("Y-m-d");
 
 												$fecha1= new DateTime($fechaActual);
-												$fecha2= new DateTime($infoFechaLimite[0]["fecha"]);
+												$fecha2= new DateTime($infoFechaLimite["fecha"]);
 												$diff = $fecha1->diff($fecha2);
 
-												if($infoFechaLimite[0]["fecha"] >= $fechaActual){
-													echo "Fecha limite de registro de información: <b>" . $infoFechaLimite[0]["fecha"] . "</b>.";
+												if($infoFechaLimite["fecha"] >= $fechaActual){
+													echo "Fecha limite de registro de información: <b>" . $infoFechaLimite["fecha"] . "</b>.";
 													echo "<br>" . $diff->days . " días para la entrega.";
 												}else{
-													echo "No es posible registrar la ejecución de la actividad, la fecha limite era <b>" . $infoFechaLimite[0]["fecha"] . "</b>.";
+													echo "No es posible registrar la ejecución de la actividad, la fecha limite era <b>" . $infoFechaLimite["fecha"] . "</b>.";
 												}
 											?>
 											</h4>
@@ -469,7 +469,7 @@
 
 							<?php
 								$fechaActual = date("Y-m-d");
-								if($infoFechaLimite[0]["fecha"] >= $fechaActual){
+								if($infoFechaLimite["fecha"] >= $fechaActual){
 							?>
 									<tr class="info">
 										<input type="hidden" id="hddNumeroTrimestre" name="hddNumeroTrimestre" value="<?php echo $numeroTrimestrePI; ?>"/>	

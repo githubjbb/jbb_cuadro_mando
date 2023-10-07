@@ -381,6 +381,8 @@
 					'fk_numero_meta_pdd' => $this->input->post('id_meta_pdd'),
 					'indicador_1' => $this->input->post('id_indicador_1'),
 					'indicador_2' => $this->input->post('id_indicador_2'),
+					'fk_objetivo_general' => $this->input->post('id_objetivo_general'),
+					'fk_objetivo_especifico' => $this->input->post('id_objetivo_especifico'),
 					'fk_numero_ods' => $this->input->post('id_ods'),
 					'fk_id_dimension' => $this->input->post('id_dimension'),
 					'vigencia' => $vigencia['vigencia']
@@ -1662,6 +1664,103 @@
 				if ($query) {
 					return true;
 				} else {
+					return false;
+				}
+		}
+
+		/**
+		 * Consulta lista mestas sectoriales
+		 * @since 28/08/2023
+		 * @author AOCUBILLOSA
+		 */
+		public function get_metas_sectoriales($arrData) {
+				$this->db->select();
+				$this->db->join('param_objetivos_pmr O', 'O.numero_objetivo_pmr = T.fk_numero_objetivo_pmr', 'INNER');
+				$this->db->join('param_elementos_pep_pmr E', 'E.id_elemento_pep_pmr = T.fk_id_elemento_pep_pmr', 'INNER');
+				$this->db->join('param_productos_pmr P', 'P.numero_producto_pmr = T.fk_numero_producto_pmr', 'INNER');
+				$this->db->join('proyecto_inversion PI', 'PI.numero_proyecto_inversion = T.fk_numero_proyecto_inversion', 'INNER');
+				$this->db->join('indicadores_pmr I', 'I.numero_indicador_pmr = T.fk_numero_indicador_pmr', 'INNER');
+				$this->db->join('param_unidad_medida_pmr U', 'U.id_unidad_medida_pmr = T.fk_id_unidad_medida_pmr', 'INNER');
+				$this->db->join('param_naturaleza_pmr N', 'N.id_naturaleza_pmr = T.fk_id_naturaleza_pmr', 'INNER');
+				$this->db->join('param_periodicidad_pmr PP', 'PP.id_periodicidad_pmr = T.fk_id_periodicidad_pmr', 'INNER');
+				if (array_key_exists("id_pmr", $arrData)) {
+					$this->db->where('T.id_pmr', $arrData['id_pmr']);
+				}
+				if (array_key_exists("vigencia", $arrData)) {
+					$this->db->where('T.vigencia', $arrData['vigencia']);
+				}
+				$this->db->order_by('fk_numero_indicador_pmr', 'asc');
+				$query = $this->db->get('tablero_pmr T');
+				if ($query->num_rows() > 0) {
+					return $query->result_array();
+				} else {
+					return false;
+				}
+		}
+
+		/**
+		 * Add/Edit OBJETIVO GENERAL
+		 * @since 25/09/2023
+		 */
+		public function saveObjetivoGeneral() 
+		{
+				$idGeneral = $this->input->post('hddId');
+				$data = array(
+					'numero_objetivo_general' => $this->input->post('numero_objetivo_general'),
+					'objetivo_general' => $this->input->post('objetivo_general')
+				);
+				//revisar si es para adicionar o editar
+				if ($idGeneral == '') {
+					$query = $this->db->insert('objetivos_generales', $data);		
+				} else {
+					$this->db->where('id_objetivo_general', $idGeneral);
+					$query = $this->db->update('objetivos_generales', $data);
+				}
+				if ($query) {
+					return true;
+				} else {
+					return false;
+				}
+		}
+
+		/**
+		 * Add/Edit OBJETIVO ESPECIFICO
+		 * @since 25/09/2023
+		 */
+		public function saveObjetivoEspecifico()
+		{
+				$idEspecifico = $this->input->post('hddId');
+				$data = array(
+					'numero_objetivo_especifico' => $this->input->post('numero_objetivo_especifico'),
+					'objetivo_especifico' => $this->input->post('objetivo_especifico')
+				);
+				//revisar si es para adicionar o editar
+				if ($idEspecifico == '') {
+					$query = $this->db->insert('objetivos_especificos', $data);		
+				} else {
+					$this->db->where('id_objetivo_especifico', $idEspecifico);
+					$query = $this->db->update('objetivos_especificos', $data);
+				}
+				if ($query) {
+					return true;
+				} else {
+					return false;
+				}
+		}
+
+		
+		/**
+		 * Obtener fecha limite
+		 * @since 05/10/2023
+		 */
+		public function get_fecha_limite($arrData) 
+		{
+				$this->db->where('numero_trimestre', $arrData["numeroTrimestre"]);
+				$this->db->where('vigencia', $arrData["vigencia"]);
+				$query = $this->db->get("param_fechas_limites");
+				if ($query->num_rows() > 0) {
+					return $query->row_array();
+				} else { 
 					return false;
 				}
 		}

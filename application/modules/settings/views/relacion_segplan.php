@@ -46,6 +46,7 @@
                         <thead>
                             <tr>
                                 <th>#</th>
+                                <th>Objetivo Estratégico</th>
                                 <th>Propósito</th>
                                 <th>Programa</th>
                                 <th>Meta Sectorial</th>
@@ -57,9 +58,12 @@
                         </thead>
                         <tbody>
                         <?php
+                            $i = 1;
                             foreach ($info as $lista):
+                                    
                                     echo "<tr>";
-                                    echo "<td>" . $lista['id_cuadro_base'] . "</td>";
+                                    echo "<td>" . $i . "</td>";
+                                    echo "<td>" . $lista['fk_numero_objetivo_estrategico'] . "</td>";
                                     echo "<td>" . $lista['fk_numero_proposito'] . "</td>";
                                     echo "<td>" . $lista['fk_numero_programa'] . "</td>";
                                     echo "<td>" . $lista['fk_numero_meta_pdd'] . "</td>";
@@ -68,6 +72,7 @@
                                     echo "<td>" . $lista['fk_numero_proyecto_inversion'] . "</td>";
                                     echo "<td>" . $lista['numero_meta_proyecto'] . "</td>";
                                     echo "</tr>";
+                                    $i++;
                             endforeach;
                         ?>
                         </tbody>

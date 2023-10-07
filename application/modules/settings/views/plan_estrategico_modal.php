@@ -100,6 +100,34 @@
 		<div class="row">
 			<div class="col-sm-12">
 				<div class="form-group text-left">
+					<label class="control-label" for="id_objetivo_general">Objetivo General: *</label>
+					<select name="id_objetivo_general" id="id_objetivo_general" class="form-control" required >
+						<option value="">Seleccione...</option>
+						<?php for ($i = 0; $i < count($listaGenerales); $i++) { ?>
+							<option value="<?php echo $listaGenerales[$i]["numero_objetivo_general"]; ?>" <?php if($information && $information[0]["fk_objetivo_general"] == $listaGenerales[$i]["numero_objetivo_general"]) { echo "selected"; }  ?>><?php echo $listaGenerales[$i]["numero_objetivo_general"] . ' ' . $listaGenerales[$i]["objetivo_general"]; ?></option>		
+						<?php } ?>
+					</select>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="form-group text-left">
+					<label class="control-label" for="id_objetivo_especifico">Objetivo Específico: *</label>
+					<select name="id_objetivo_especifico" id="id_objetivo_especifico" class="form-control" required >
+						<option value="">Seleccione...</option>
+						<?php for ($i = 0; $i < count($listaEspecificos); $i++) { ?>
+							<option value="<?php echo $listaEspecificos[$i]["numero_objetivo_especifico"]; ?>" <?php if($information && $information[0]["fk_objetivo_especifico"] == $listaEspecificos[$i]["numero_objetivo_especifico"]) { echo "selected"; }  ?>><?php echo $listaEspecificos[$i]["numero_objetivo_especifico"] . ' ' . $listaEspecificos[$i]["objetivo_especifico"]; ?></option>		
+						<?php } ?>
+					</select>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="form-group text-left">
 					<label class="control-label" for="id_meta_pdd">Meta PDD: *</label>
 					<select name="id_meta_pdd" id="id_meta_pdd" class="form-control" required >
 						<option value="">Seleccione...</option>
