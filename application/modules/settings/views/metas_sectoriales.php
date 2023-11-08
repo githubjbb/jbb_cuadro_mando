@@ -26,201 +26,153 @@
                         <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables">
                             <thead>
                                 <tr>
-                                    <th style='width: 7%'><small>Opciones</small></th>
-                                    <th><small>Indicador PMR</small></th>
-                                    <th><small>Actividades Relacionadas</small></th>
-                                    <th><small>Meta <?php echo $vigencia['vigencia'] ?></small></th>
-                                    <th><small>Unidad Medida</small></th>
-                                    <th><small>Avance Enero <?php echo $vigencia['vigencia'] ?></small></th>
-                                    <th><small>Avance Febrero <?php echo $vigencia['vigencia'] ?></small></th>
-                                    <th><small>Avance Marzo <?php echo $vigencia['vigencia'] ?></small></th>
-                                    <th><small>Avance Abril <?php echo $vigencia['vigencia'] ?></small></th>
-                                    <th><small>Avance Mayo <?php echo $vigencia['vigencia'] ?></small></th>
-                                    <th><small>Avance Junio <?php echo $vigencia['vigencia'] ?></small></th>
-                                    <th><small>Avance Julio <?php echo $vigencia['vigencia'] ?></small></th>
-                                    <th><small>Avance Agosto <?php echo $vigencia['vigencia'] ?></small></th>
-                                    <th><small>Avance Septiembre <?php echo $vigencia['vigencia'] ?></small></th>
-                                    <th><small>Avance Octubre <?php echo $vigencia['vigencia'] ?></small></th>
-                                    <th><small>Avance Noviembre <?php echo $vigencia['vigencia'] ?></small></th>
-                                    <th><small>Avance Diciembre <?php echo $vigencia['vigencia'] ?></small></th>
-                                    <th><small>Total Avance <?php echo $vigencia['vigencia'] ?></small></th>
-                                    <th><small>Naturaleza</small></th>
-                                    <th><small>Periodicidad</small></th>
-                                    <th><small>Elemento PEP</small></th>
-                                    <th><small>Producto</small></th>
-                                    <th><small>Objetivo</small></th>
+                                    <th><small>Proposito PDD</small></th>
+                                    <th><small>Programa General PDD</small></th>
                                     <th><small>Proyecto de Inversión</small></th>
+                                    <th><small>Gerencia Responsable</small></th>
+                                    <th><small>Meta Sectorial</small></th>
+                                    <th><small>Indicador Sectorial</small></th>
+                                    <th><small>Tipología del Indicador</small></th>
+                                    <th><small>Programación Indicador Sectorial <?php echo $vigencia['vigencia'] ?></small></th>
+                                    <th><small>Programación Indicador Sectorial Trimestre I</small></th>
+                                    <th><small>Magnitud Ejecutada Trimestre I</small></th>
+                                    <th><small>% de Avance Trimestre I</small></th>
+                                    <th><small>Programación Indicador Sectorial Trimestre II</small></th>
+                                    <th><small>Magnitud Ejecutada Trimestre II</small></th>
+                                    <th><small>% de Avance Trimestre II</small></th>
+                                    <th><small>Programación Indicador Sectorial Trimestre III</small></th>
+                                    <th><small>Magnitud Ejecutada Trimestre III</small></th>
+                                    <th><small>% de Avance Trimestre III</small></th>
+                                    <th><small>Programación Indicador Sectorial Trimestre IV</small></th>
+                                    <th><small>Magnitud Ejecutada Trimestre IV</small></th>
+                                    <th><small>% de Avance Trimestre IV</small></th>
                                 </tr>
                             </thead>
                             <?php
                             foreach ($info as $lista):
-                                $arrParams = array(
-                                    'fk_numero_indicador_pmr' => $lista['fk_numero_indicador_pmr'],
-                                    'vigencia' => $vigencia['vigencia']
-                                );
-                                $arrayActividades = $this->settings_model->get_actividades($arrParams);
-                                if ($arrayActividades > 0) {
-                                    $actividades = $arrayActividades[0]['numero_actividad'];
-                                    if (count($arrayActividades) > 1) {
-                                        for($i=1; $i<count($arrayActividades); $i++){
-                                            $actividades .= ' - ' . $arrayActividades[$i]['numero_actividad'];
-                                        }
-                                    }
-                                    
+                                $valorProgramadoTrimestre1 = 0;
+                                $valorProgramadoTrimestre2 = 0;
+                                $valorProgramadoTrimestre3 = 0;
+                                $valorProgramadoTrimestre4 = 0;
+                                $sumaEjecutadoTrimestre1 = 0;
+                                $sumaEjecutadoTrimestre2 = 0;
+                                $sumaEjecutadoTrimestre3 = 0;
+                                $sumaEjecutadoTrimestre4 = 0;
+                                $cumplimiento1 = 0;
+                                $cumplimiento2 = 0;
+                                $cumplimiento3 = 0;
+                                $cumplimiento4 = 0;
 
-                                    $arraySumatoriaMetas = $this->settings_model->sumatoria_metas($lista['fk_numero_indicador_pmr']);
-                                    $sumatoriaMetas = $arraySumatoriaMetas[0]['meta_plan_operativo_anual'];
-                                    if (count($arraySumatoriaMetas) > 1) {
-                                        for($i=1; $i<count($arraySumatoriaMetas); $i++){
-                                            $sumatoriaMetas .= $arraySumatoriaMetas[$i]['meta_plan_operativo_anual'];
-                                        }
-                                    }
+                                $arrParam = array("numeroActividad" => $lista["numero_actividad"]);
+                                $estadoActividad = $this->general_model->get_estados_actividades($arrParam);
 
-                                    $sumatoriaTotal = 0;
-                                    $arraySumatoriaEnero = $this->settings_model->sumatoria_mes($lista['fk_numero_indicador_pmr'], 1);
-                                    $sumatoriaEnero = $arraySumatoriaEnero[0]['ejecutado'];
-                                    if (count($arraySumatoriaEnero) > 1) {
-                                        for($i=1; $i<count($arraySumatoriaEnero); $i++){
-                                            $sumatoriaEnero .= $arraySumatoriaEnero[$i]['ejecutado'];
-                                            
-                                        }
-                                    }
-                                    $sumatoriaTotal += $sumatoriaEnero;
-
-                                    $arraySumatoriaFebrero = $this->settings_model->sumatoria_mes($lista['fk_numero_indicador_pmr'], 2);
-                                    $sumatoriaFebrero = $arraySumatoriaFebrero[0]['ejecutado'];
-                                    if (count($arraySumatoriaFebrero) > 1) {
-                                        for($i=1; $i<count($arraySumatoriaFebrero); $i++){
-                                            $sumatoriaFebrero .= $arraySumatoriaFebrero[$i]['ejecutado'];
-                                        }
-                                    }
-                                    $sumatoriaTotal += $sumatoriaFebrero;
-
-                                    $arraySumatoriaMarzo = $this->settings_model->sumatoria_mes($lista['fk_numero_indicador_pmr'], 3);
-                                    $sumatoriaMarzo = $arraySumatoriaMarzo[0]['ejecutado'];
-                                    if (count($arraySumatoriaMarzo) > 1) {
-                                        for($i=1; $i<count($arraySumatoriaMarzo); $i++){
-                                            $sumatoriaMarzo .= $arraySumatoriaMarzo[$i]['ejecutado'];
-                                        }
-                                    }
-                                    $sumatoriaTotal += $sumatoriaMarzo;
-
-                                    $arraySumatoriaAbril = $this->settings_model->sumatoria_mes($lista['fk_numero_indicador_pmr'], 4);
-                                    $sumatoriaAbril = $arraySumatoriaAbril[0]['ejecutado'];
-                                    if (count($arraySumatoriaAbril) > 1) {
-                                        for($i=1; $i<count($arraySumatoriaAbril); $i++){
-                                            $sumatoriaAbril .= $arraySumatoriaAbril[$i]['ejecutado'];
-                                        }
-                                    }
-                                    $sumatoriaTotal += $sumatoriaAbril;
-
-                                    $arraySumatoriaMayo = $this->settings_model->sumatoria_mes($lista['fk_numero_indicador_pmr'], 5);
-                                    $sumatoriaMayo = $arraySumatoriaMayo[0]['ejecutado'];
-                                    if (count($arraySumatoriaMayo) > 1) {
-                                        for($i=1; $i<count($arraySumatoriaMayo); $i++){
-                                            $sumatoriaMayo .= $arraySumatoriaMayo[$i]['ejecutado'];
-                                        }
-                                    }
-                                    $sumatoriaTotal += $sumatoriaMayo;
-
-                                    $arraySumatoriaJunio = $this->settings_model->sumatoria_mes($lista['fk_numero_indicador_pmr'], 6);
-                                    $sumatoriaJunio = $arraySumatoriaJunio[0]['ejecutado'];
-                                    if (count($arraySumatoriaJunio) > 1) {
-                                        for($i=1; $i<count($arraySumatoriaJunio); $i++){
-                                            $sumatoriaJunio .= $arraySumatoriaJunio[$i]['ejecutado'];
-                                        }
-                                    }
-                                    $sumatoriaTotal += $sumatoriaJunio;
-
-                                    $arraySumatoriaJulio = $this->settings_model->sumatoria_mes($lista['fk_numero_indicador_pmr'], 7);
-                                    $sumatoriaJulio = $arraySumatoriaJulio[0]['ejecutado'];
-                                    if (count($arraySumatoriaJulio) > 1) {
-                                        for($i=1; $i<count($arraySumatoriaJulio); $i++){
-                                            $sumatoriaJulio .= $arraySumatoriaJulio[$i]['ejecutado'];
-                                        }
-                                    }
-                                    $sumatoriaTotal += $sumatoriaJulio;
-
-                                    $arraySumatoriaAgosto = $this->settings_model->sumatoria_mes($lista['fk_numero_indicador_pmr'], 8);
-                                    $sumatoriaAgosto = $arraySumatoriaAgosto[0]['ejecutado'];
-                                    if (count($arraySumatoriaAgosto) > 1) {
-                                        for($i=1; $i<count($arraySumatoriaAgosto); $i++){
-                                            $sumatoriaAgosto .= $arraySumatoriaAgosto[$i]['ejecutado'];
-                                        }
-                                    }
-                                    $sumatoriaTotal += $sumatoriaAgosto;
-
-                                    $arraySumatoriaSeptiembre = $this->settings_model->sumatoria_mes($lista['fk_numero_indicador_pmr'], 9);
-                                    $sumatoriaSeptiembre = $arraySumatoriaSeptiembre[0]['ejecutado'];
-                                    if (count($arraySumatoriaSeptiembre) > 1) {
-                                        for($i=1; $i<count($arraySumatoriaSeptiembre); $i++){
-                                            $sumatoriaSeptiembre .= $arraySumatoriaSeptiembre[$i]['ejecutado'];
-                                        }
-                                    }
-                                    $sumatoriaTotal += $sumatoriaSeptiembre;
-
-                                    $arraySumatoriaOctubre = $this->settings_model->sumatoria_mes($lista['fk_numero_indicador_pmr'], 10);
-                                    $sumatoriaOctubre = $arraySumatoriaOctubre[0]['ejecutado'];
-                                    if (count($arraySumatoriaOctubre) > 1) {
-                                        for($i=1; $i<count($arraySumatoriaOctubre); $i++){
-                                            $sumatoriaOctubre .= $arraySumatoriaOctubre[$i]['ejecutado'];
-                                        }
-                                    }
-                                    $sumatoriaTotal += $sumatoriaOctubre;
-
-                                    $arraySumatoriaNoviembre = $this->settings_model->sumatoria_mes($lista['fk_numero_indicador_pmr'], 11);
-                                    $sumatoriaNoviembre = $arraySumatoriaNoviembre[0]['ejecutado'];
-                                    if (count($arraySumatoriaNoviembre) > 1) {
-                                        for($i=1; $i<count($arraySumatoriaNoviembre); $i++){
-                                            $sumatoriaNoviembre .= $arraySumatoriaNoviembre[$i]['ejecutado'];
-                                        }
-                                    }
-                                    $sumatoriaTotal += $sumatoriaNoviembre;
-
-                                    $arraySumatoriaDiciembre = $this->settings_model->sumatoria_mes($lista['fk_numero_indicador_pmr'], 12);
-                                    $sumatoriaDiciembre = $arraySumatoriaDiciembre[0]['ejecutado'];
-                                    if (count($arraySumatoriaDiciembre) > 1) {
-                                        for($i=1; $i<count($arraySumatoriaDiciembre); $i++){
-                                            $sumatoriaDiciembre .= $arraySumatoriaDiciembre[$i]['ejecutado'];
-                                        }
-                                    }
-                                    $sumatoriaTotal += $sumatoriaDiciembre;
-                                    echo "<tr>";
-                                    echo "<td class='text-center'>";
-                                    ?>
-                                    <button title="Editar Tablero PMR" type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#modal" id="<?php echo $lista['id_pmr']; ?>" >
-                                        <span class="glyphicon glyphicon-edit" aria-hidden="true">
-                                    </button>&nbsp;
-                                    <button title="Eliminar Tablero PMR" type="button" id="<?php echo $lista['id_pmr']; ?>" class='btn btn-danger btn-xs' title="Eliminar">
-                                        <i class="fa fa-trash-o"></i>
-                                    </button>
-                                    <?php
-                                    echo "</td>";
-                                    echo "<td><small>" . $lista["fk_numero_indicador_pmr"] . " " . $lista["indicador_pmr"] . "</small></td>";
-                                    echo "<td><small>" . $actividades . "</small></td>";
-                                    echo "<td><small>" . $sumatoriaMetas . "</small></td>";
-                                    echo "<td><small>" . $lista["unidad_medida_pmr"] . "</small></td>";
-                                    echo "<td><small>" . round($sumatoriaEnero, 3) . "</small></td>";
-                                    echo "<td><small>" . round($sumatoriaFebrero, 3) . "</small></td>";
-                                    echo "<td><small>" . round($sumatoriaMarzo, 3) . "</small></td>";
-                                    echo "<td><small>" . round($sumatoriaAbril, 3) . "</small></td>";
-                                    echo "<td><small>" . round($sumatoriaMayo, 3) . "</small></td>";
-                                    echo "<td><small>" . round($sumatoriaJunio, 3) . "</small></td>";
-                                    echo "<td><small>" . round($sumatoriaJulio, 3) . "</small></td>";
-                                    echo "<td><small>" . round($sumatoriaAgosto, 3) . "</small></td>";
-                                    echo "<td><small>" . round($sumatoriaSeptiembre, 3) . "</small></td>";
-                                    echo "<td><small>" . round($sumatoriaOctubre, 3) . "</small></td>";
-                                    echo "<td><small>" . round($sumatoriaNoviembre, 3) . "</small></td>";
-                                    echo "<td><small>" . round($sumatoriaDiciembre, 3) . "</small></td>";
-                                    echo "<td><small>" . round($sumatoriaTotal, 3) . "</small></td>";
-                                    echo "<td><small>" . $lista["naturaleza_pmr"] . "</small></td>";
-                                    echo "<td><small>" . $lista["periodicidad_pmr"] . "</small></td>";
-                                    echo "<td><small>" . $lista["elemento_pep_pmr"] . "</small></td>";
-                                    echo "<td><small>" . $lista["fk_numero_producto_pmr"] . " " . $lista["producto_pmr"] . "</small></td>";
-                                    echo "<td><small>" . $lista["fk_numero_objetivo_pmr"] . " " . $lista["objetivo_pmr"] . "</small></td>";
-                                    echo "<td><small>" . $lista["fk_numero_proyecto_inversion"] . " " . $lista["nombre_proyecto_inversion"] . "</small></td>";
-                                    echo "</tr>";
+                                $arrParam['numeroTrimestre'] = 1;
+                                $sumaProgramadoTrimestre1 = $this->general_model->sumarProgramado($arrParam);
+                                $sumaEjecutadoTrimestre1 = $this->general_model->sumarEjecutado($arrParam);
+                                $arrParam['numeroTrimestre'] = 2;
+                                $sumaProgramadoTrimestre2 = $this->general_model->sumarProgramado($arrParam);
+                                $sumaEjecutadoTrimestre2 = $this->general_model->sumarEjecutado($arrParam);
+                                $arrParam['numeroTrimestre'] = 3;
+                                $sumaProgramadoTrimestre3 = $this->general_model->sumarProgramado($arrParam);
+                                $sumaEjecutadoTrimestre3 = $this->general_model->sumarEjecutado($arrParam);
+                                $arrParam['numeroTrimestre'] = 4;
+                                $sumaProgramadoTrimestre4 = $this->general_model->sumarProgramado($arrParam);
+                                $sumaEjecutadoTrimestre4 = $this->general_model->sumarEjecutado($arrParam);
+                                
+                                $sumaEjecutado['ejecutado'] = 0;
+                                if ($estadoActividad[0]['estado_trimestre_1'] == 5){
+                                    $sumaEjecutado['ejecutado'] += $sumaEjecutadoTrimestre1['ejecutado'];
                                 }
+                                if ($estadoActividad[0]['estado_trimestre_2'] == 5){
+                                    $sumaEjecutado['ejecutado'] += $sumaEjecutadoTrimestre2['ejecutado'];
+                                }
+                                if ($estadoActividad[0]['estado_trimestre_3'] == 5){
+                                    $sumaEjecutado['ejecutado'] += $sumaEjecutadoTrimestre3['ejecutado'];
+                                }
+                                if ($estadoActividad[0]['estado_trimestre_4'] == 5){
+                                    $sumaEjecutado['ejecutado'] += $sumaEjecutadoTrimestre4['ejecutado'];
+                                }
+
+                                $valorProgramadoTrimestre1 = $sumaProgramadoTrimestre1['programado'];
+                                $valorProgramadoTrimestre2 = $sumaProgramadoTrimestre2['programado'];
+                                $valorProgramadoTrimestre3 = $sumaProgramadoTrimestre3['programado'];
+                                $valorProgramadoTrimestre4 = $sumaProgramadoTrimestre4['programado'];
+                                
+                                if ($estadoActividad[0]['estado_trimestre_1'] != 0){
+                                    if($sumaProgramadoTrimestre1['programado'] > 0) {
+                                        $cumplimiento1 = round($sumaEjecutadoTrimestre1['ejecutado'] / $sumaProgramadoTrimestre1['programado'] * 100,3);
+                                    } else {
+                                        if($sumaEjecutadoTrimestre1['ejecutado'] > 0) {
+                                            $cumplimiento1 = 100;
+                                        } else {
+                                            $cumplimiento1 = 0;
+                                        }
+                                    }
+                                } else {
+                                    $cumplimiento1 = 0;
+                                }
+                                if ($estadoActividad[0]['estado_trimestre_2'] != 0){
+                                    if($sumaProgramadoTrimestre2['programado'] > 0) {
+                                        $cumplimiento2 = round($sumaEjecutadoTrimestre2['ejecutado'] / $sumaProgramadoTrimestre2['programado'] * 100,3);
+                                    } else {
+                                        if($sumaEjecutadoTrimestre2['ejecutado'] > 0) {
+                                            $cumplimiento2 = 100;
+                                        } else {
+                                            $cumplimiento2 = 0;
+                                        }
+                                    }
+                                } else {
+                                    $cumplimiento2 = 0;
+                                }
+                                if ($estadoActividad[0]['estado_trimestre_3'] != 0){
+                                    if($sumaProgramadoTrimestre3['programado'] > 0) {
+                                        $cumplimiento3 = round($sumaEjecutadoTrimestre3['ejecutado'] / $sumaProgramadoTrimestre3['programado'] * 100,3);
+                                    } else {
+                                        if($sumaEjecutadoTrimestre3['ejecutado'] > 0) {
+                                            $cumplimiento3 = 100;
+                                        } else {
+                                            $cumplimiento3 = 0;
+                                        }
+                                    }
+                                } else {
+                                    $cumplimiento3 = 0;
+                                }
+                                if ($estadoActividad[0]['estado_trimestre_4'] != 0){
+                                    if($sumaProgramadoTrimestre4['programado'] > 0) {
+                                        $cumplimiento4 = round($sumaEjecutadoTrimestre4['ejecutado'] / $sumaProgramadoTrimestre4['programado'] * 100,3);
+                                    } else {
+                                        if($sumaEjecutadoTrimestre4['ejecutado'] > 0) {
+                                            $cumplimiento4 = 100;
+                                        } else {
+                                            $cumplimiento4 = 0;
+                                        }
+                                    }
+                                } else {
+                                    $cumplimiento4 = 0;
+                                }
+
+                                echo "<tr>";
+                                echo "<td><small>" . $lista["numero_proposito"] . " " . $lista["proposito"] . "</small></td>";
+                                echo "<td><small>" . $lista["numero_programa"] . " " . $lista["programa"] . "</small></td>";
+                                echo "<td><small>" . $lista["numero_proyecto_inversion"] . " " . $lista["nombre_proyecto_inversion"] . "</small></td>";
+                                echo "<td><small>" . $lista["dependencia"] . "</small></td>";
+                                echo "<td><small>" . $lista["numero_meta_pdd"] . " " . $lista["meta_pdd"] . "</small></td>";
+                                echo "<td><small>" . $lista["numero_indicador"] . " " . $lista["indicador_sp"] . "</small></td>";
+                                echo "<td><small>" . $lista["tipologia"] . "</small></td>";
+                                echo "<td><small>" . round($lista["meta_plan_operativo_anual"], 3) . "</small></td>";
+                                echo "<td><small>" . round($valorProgramadoTrimestre1, 3) . "</small></td>";
+                                echo "<td><small>" . round($sumaEjecutadoTrimestre1['ejecutado'], 3) . "</small></td>";
+                                echo "<td><small>" . round($cumplimiento1, 3) . "</small></td>";
+                                echo "<td><small>" . round($valorProgramadoTrimestre2, 3) . "</small></td>";
+                                echo "<td><small>" . round($sumaEjecutadoTrimestre2['ejecutado'], 3) . "</small></td>";
+                                echo "<td><small>" . round($cumplimiento2, 3) . "</small></td>";
+                                echo "<td><small>" . round($valorProgramadoTrimestre3, 3) . "</small></td>";
+                                echo "<td><small>" . round($sumaEjecutadoTrimestre3['ejecutado'], 3) . "</small></td>";
+                                echo "<td><small>" . round($cumplimiento3, 3) . "</small></td>";
+                                echo "<td><small>" . round($valorProgramadoTrimestre4, 3) . "</small></td>";
+                                echo "<td><small>" . round($sumaEjecutadoTrimestre4['ejecutado'], 3) . "</small></td>";
+                                echo "<td><small>" . round($cumplimiento4, 3) . "</small></td>";
+                                echo "</tr>";
                             endforeach
                             ?>
                         </table>

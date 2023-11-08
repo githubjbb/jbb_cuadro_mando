@@ -1903,6 +1903,9 @@ class General_model extends CI_Model {
 			if (array_key_exists("numeroObjetivoEstrategico", $arrData)) {
 				$this->db->where('numero_objetivo_estrategico', $arrData["numeroObjetivoEstrategico"]);
 			}
+			if (array_key_exists("numeroProyecto", $arrData)) {
+				$this->db->where('C.fk_numero_proyecto_inversion', $arrData["numeroProyecto"]);
+			}
 			if (array_key_exists("vigencia", $arrData)) {
 				$this->db->where('A.vigencia', $arrData["vigencia"]);
 			}
@@ -2572,5 +2575,25 @@ class General_model extends CI_Model {
 				} else {
 					return false;
 				}
+		}
+
+		/**
+		 * Lista de los proyectos de inversion
+		 * @since 07/11/2023
+		 */
+		public function get_proyectos_inversion($arrData) 
+		{		
+			if (array_key_exists("filtro", $arrData)) {
+				$values = array('1','9999');
+				$this->db->where_not_in('numero_proyecto_inversion', $values);
+			}
+			$this->db->order_by('numero_proyecto_inversion', 'asc');
+			$query = $this->db->get('proyecto_inversion');
+
+			if ($query->num_rows() > 0) {
+				return $query->result_array();
+			} else {
+				return false;
+			}
 		}
 }

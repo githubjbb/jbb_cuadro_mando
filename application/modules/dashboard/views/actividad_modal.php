@@ -45,7 +45,7 @@
 		<div class="row">
 			<div class="col-sm-4">
 				<div class="form-group text-left">
-					<label class="control-label" for="meta_plan">Meta Plan Operativo Anual: *</label>
+					<label class="control-label" for="meta_plan">Meta Anual: *</label>
 					<input type="number" id="meta_plan" name="meta_plan" class="form-control" value="<?php echo $information?$information[0]["meta_plan_operativo_anual"]:""; ?>" placeholder="Meta Plan Operativo Anual" required >
 				</div>
 			</div>
@@ -71,9 +71,9 @@
 					<label class="control-label" for="tipo_indicador">Tipo Indicador: *</label>
 					<select name="tipo_indicador" id="tipo_indicador" class="form-control" required>
 						<option value=''>Select...</option>
-						<option value=1 <?php if($information && $information[0]["tipo_indicador"] == 1) { echo "selected"; }  ?>>Eficacia</option>
-						<option value=2 <?php if($information && $information[0]["tipo_indicador"] == 2) { echo "selected"; }  ?>>Eficiencia</option>
-						<option value=3 <?php if($information && $information[0]["tipo_indicador"] == 3) { echo "selected"; }  ?>>Efectividad</option>
+						<option value=1 <?php if($information && $information[0]["tipo_indicador"] == 1) { echo "selected"; }  ?>>Suma</option>
+						<option value=2 <?php if($information && $information[0]["tipo_indicador"] == 2) { echo "selected"; }  ?>>Constante</option>
+						<option value=3 <?php if($information && $information[0]["tipo_indicador"] == 3) { echo "selected"; }  ?>>Creciente</option>
 					</select>
 				</div>
 			</div>
@@ -296,7 +296,7 @@
 					<select name="id_indicador_pmr" id="id_indicador_pmr" class="form-control" required >
 						<option value="">Seleccione...</option>
 						<?php for ($i = 0; $i < count($listaIndicadorPMR); $i++) { ?>
-							<option value="<?php echo $listaIndicadorPMR[$i]["id_indicador_pmr"]; ?>" <?php if($information && $information[0]["fk_numero_indicador_pmr"] == $listaIndicadorPMR[$i]["numero_indicador_pmr"]) { echo "selected"; }  ?>><?php echo $listaIndicadorPMR[$i]["numero_indicador_pmr"] . ' ' . $listaIndicadorPMR[$i]["indicador_pmr"]; ?></option>	
+							<option value="<?php echo $listaIndicadorPMR[$i]["numero_indicador_pmr"]; ?>" <?php if($information && $information[0]["fk_numero_indicador_pmr"] == $listaIndicadorPMR[$i]["numero_indicador_pmr"]) { echo "selected"; }  ?>><?php echo $listaIndicadorPMR[$i]["numero_indicador_pmr"] . ' ' . $listaIndicadorPMR[$i]["indicador_pmr"]; ?></option>	
 						<?php } ?>
 					</select>
 				</div>

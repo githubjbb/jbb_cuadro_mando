@@ -60,7 +60,12 @@ class Dashboard extends CI_Controller {
 			$arrParam = array(
 				"filtro" => true
 			);
-			$data['listaDependencia'] = $this->general_model->get_app_dependencias($arrParam);
+			$data['listaProyectosInversion'] = $this->general_model->get_proyectos_inversion($arrParam);
+
+			/*$arrParam = array(
+				"filtro" => true
+			);
+			$data['listaDependencia'] = $this->general_model->get_app_dependencias($arrParam);*/
 
 			$arrParam = array(
 				"filtro" => true
@@ -736,7 +741,7 @@ class Dashboard extends CI_Controller {
 								"mensaje" => $mensaje,
 								"idUsuario" => $infoUsuario["id_user"]
 							);
-							$this->send_email($arrParam);
+							//$this->send_email($arrParam);
 						endforeach;
 		            }
 
@@ -753,7 +758,7 @@ class Dashboard extends CI_Controller {
 									"mensaje" => $mensaje,
 									"idUsuario" => $infoUsuario["id_user"]
 								);
-								$this->send_email($arrParam);
+								//$this->send_email($arrParam);
 							endforeach;
 			            }
 		        	}

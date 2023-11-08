@@ -1674,23 +1674,22 @@
 		 * @author AOCUBILLOSA
 		 */
 		public function get_metas_sectoriales($arrData) {
-				$this->db->select();
-				$this->db->join('param_objetivos_pmr O', 'O.numero_objetivo_pmr = T.fk_numero_objetivo_pmr', 'INNER');
-				$this->db->join('param_elementos_pep_pmr E', 'E.id_elemento_pep_pmr = T.fk_id_elemento_pep_pmr', 'INNER');
-				$this->db->join('param_productos_pmr P', 'P.numero_producto_pmr = T.fk_numero_producto_pmr', 'INNER');
-				$this->db->join('proyecto_inversion PI', 'PI.numero_proyecto_inversion = T.fk_numero_proyecto_inversion', 'INNER');
-				$this->db->join('indicadores_pmr I', 'I.numero_indicador_pmr = T.fk_numero_indicador_pmr', 'INNER');
-				$this->db->join('param_unidad_medida_pmr U', 'U.id_unidad_medida_pmr = T.fk_id_unidad_medida_pmr', 'INNER');
-				$this->db->join('param_naturaleza_pmr N', 'N.id_naturaleza_pmr = T.fk_id_naturaleza_pmr', 'INNER');
-				$this->db->join('param_periodicidad_pmr PP', 'PP.id_periodicidad_pmr = T.fk_id_periodicidad_pmr', 'INNER');
-				if (array_key_exists("id_pmr", $arrData)) {
-					$this->db->where('T.id_pmr', $arrData['id_pmr']);
-				}
+				$this->db->select('X.numero_proposito, X.proposito, P.numero_programa, P.programa, PI.numero_proyecto_inversion, PI.nombre_proyecto_inversion, D.dependencia, Z.numero_meta_pdd, Z.meta_pdd, I1.numero_indicador, I1.indicador_sp, TA.tipologia,A.*');
+				$this->db->join('cuadro_base C', 'A.fk_id_cuadro_base = C.id_cuadro_base', 'INNER');
+				$this->db->join('propositos X', 'X.numero_proposito = C.fk_numero_proposito', 'INNER');
+				$this->db->join('programa P', 'P.numero_programa = C.fk_numero_programa', 'LEFT');
+				$this->db->join('proyecto_inversion PI', 'PI.numero_proyecto_inversion = C.fk_numero_proyecto_inversion', 'INNER');
+				$this->db->join('param_dependencias D', 'D.id_dependencia = A.fk_id_dependencia', 'INNER');
+				$this->db->join('meta_pdd Z', 'Z.numero_meta_pdd = C.fk_numero_meta_pdd', 'INNER');
+				$this->db->join('indicadores I1', 'C.indicador_1 = I1.numero_indicador', 'LEFT');
+				$this->db->join('indicadores I2', 'C.indicador_2 = I2.numero_indicador', 'LEFT');
+				$this->db->join('param_tipologia_anualidad TA', 'TA.id_tipologia = A.tipo_indicador', 'LEFT');
 				if (array_key_exists("vigencia", $arrData)) {
-					$this->db->where('T.vigencia', $arrData['vigencia']);
+					$this->db->where('A.vigencia', $arrData['vigencia']);
 				}
-				$this->db->order_by('fk_numero_indicador_pmr', 'asc');
-				$query = $this->db->get('tablero_pmr T');
+				$this->db->order_by('C.fk_numero_objetivo_estrategico', 'ASC');
+				$this->db->order_by('C.fk_numero_proyecto_inversion', 'ASC');
+				$query = $this->db->get('actividades A');
 				if ($query->num_rows() > 0) {
 					return $query->result_array();
 				} else {

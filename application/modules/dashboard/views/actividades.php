@@ -154,7 +154,7 @@ $(function(){
 					<table class="table table-hover">
 						<thead>
 							<tr>
-								<th>Meta Plan Operativo Anual</th>
+								<th>Meta Anual</th>
 								<th class="text-center">Unidad Medida</th>
 								<th>Nombre Indicador</th>
 								<th>Tipo Indicador</th>
@@ -171,15 +171,15 @@ $(function(){
 
 								switch ($lista['tipo_indicador']) {
 									case 1:
-										$valor2 = 'Eficacia';
+										$valor2 = 'Suma';
 										$clase2 = "text-success";
 										break;
 									case 2:
-										$valor2 = 'Eficiencia';
+										$valor2 = 'Constante';
 										$clase2 = "text-danger";
 										break;
 									case 3:
-										$valor2 = 'Efectividad';
+										$valor2 = 'Creciente';
 										$clase2 = "text-primary";
 										break;
 								}
@@ -387,7 +387,7 @@ $(function(){
 											<small>(Suma Programado)</small>
 										</td>
 										<td class="text-right">
-											<h2>Avance POA: <?php echo $avancePOA . '%'; ?></h2>
+											<h2>Avance: <?php echo $avancePOA . '%'; ?></h2>
 											<small>(Suma Ejecutado /Suma Programado * Ponderación)</small>
 										</td>
 									</tr>

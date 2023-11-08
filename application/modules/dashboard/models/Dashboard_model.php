@@ -12,6 +12,7 @@
 				$idActividad = $this->input->post('hddId');
 				$idCuadroBase = $this->input->post('hddIdCuadroBase');
 				$idUser = $this->session->userdata("id");
+				$vigencia = $this->general_model->get_vigencia();
 		
 				$data = array(
 					'numero_actividad' => $this->input->post('numero_actividad'),
@@ -26,7 +27,7 @@
 					'fk_id_proceso_calidad' => $this->input->post('proceso_calidad'),
 					'fk_id_area_responsable' => $this->input->post('id_responsable'),
 					'fk_id_dependencia' => $this->input->post('id_dependencia'),
-					'plan_archivos' => $this->input->post('plan_archivos'),
+					/*'plan_archivos' => $this->input->post('plan_archivos'),
 					'plan_adquisiciones' => $this->input->post('plan_adquisiciones'),
 					'plan_vacantes' => $this->input->post('plan_vacantes'),
 					'plan_recursos' => $this->input->post('plan_recursos'),
@@ -37,8 +38,9 @@
 					'plan_anticorrupcion' => $this->input->post('plan_anticorrupcion'),
 					'plan_tecnologia' => $this->input->post('plan_tecnologia'),
 					'plan_riesgos' => $this->input->post('plan_riesgos'),
-					'plan_informacion' => $this->input->post('plan_informacion'),
-					'fk_numero_indicador_pmr' => $this->input->post('id_indicador_pmr')
+					'plan_informacion' => $this->input->post('plan_informacion'),*/
+					'fk_numero_indicador_pmr' => $this->input->post('id_indicador_pmr'),
+					'vigencia' => $vigencia['vigencia']
 				);	
 
 				//revisar si es para adicionar o editar

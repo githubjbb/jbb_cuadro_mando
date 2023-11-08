@@ -138,7 +138,7 @@ $(function(){
                                 <th width="8%" class="text-right"><small>Cump. Trim. II</small></th>
                                 <th width="8%" class="text-right"><small>Cump. Trim. III</small></th>
                                 <th width="8%" class="text-right"><small>Cump. Trim. IV</small></th>
-                                <th width="8%" class="text-right"><small>Avance POA</small></th>
+                                <th width="8%" class="text-right"><small>Avance</small></th>
                                 <th width="10%" class="text-right"><small>Calificación OCI</small></th>
                                 <th width="15%"><small>Observación OCI</small></th>
                             </tr>
