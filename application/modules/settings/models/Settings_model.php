@@ -1092,8 +1092,10 @@
 		 */
 		public function sumatoria_metas($indicador_pmr)
 		{
+				$vigencia = $this->general_model->get_vigencia();
 				$this->db->select_sum('meta_plan_operativo_anual');
 				$this->db->where('fk_numero_indicador_pmr', $indicador_pmr);
+				$this->db->where('vigencia', $vigencia['vigencia']);
 				$this->db->order_by('fk_numero_indicador_pmr', 'asc');
 				$query = $this->db->get('actividades');
 				if ($query->num_rows() > 0) {
@@ -1110,10 +1112,12 @@
 		 */
 		public function sumatoria_mes($indicador_pmr, $mes)
 		{
+				$vigencia = $this->general_model->get_vigencia();
 				$this->db->select_sum('ejecutado');
 				$this->db->join('actividad_ejecucion E', 'A.numero_actividad = E.fk_numero_actividad', 'INNER');
 				$this->db->where('fk_numero_indicador_pmr', $indicador_pmr);
 				$this->db->where('fk_id_mes', $mes);
+				$this->db->where('vigencia', $vigencia['vigencia']);
 				$this->db->order_by('fk_numero_indicador_pmr', 'asc');
 				$query = $this->db->get('actividades A');
 				if ($query->num_rows() > 0) {
@@ -1674,22 +1678,20 @@
 		 * @author AOCUBILLOSA
 		 */
 		public function get_metas_sectoriales($arrData) {
-				$this->db->select('X.numero_proposito, X.proposito, P.numero_programa, P.programa, PI.numero_proyecto_inversion, PI.nombre_proyecto_inversion, D.dependencia, Z.numero_meta_pdd, Z.meta_pdd, I1.numero_indicador, I1.indicador_sp, TA.tipologia,A.*');
-				$this->db->join('cuadro_base C', 'A.fk_id_cuadro_base = C.id_cuadro_base', 'INNER');
+				$this->db->select('DISTINCT(C.indicador_1), X.numero_proposito, X.proposito, P.numero_programa, P.programa, PI.numero_proyecto_inversion, PI.nombre_proyecto_inversion, Z.numero_meta_pdd, Z.meta_pdd, I1.numero_indicador, I1.indicador_sp, TA.tipologia, IT.*');
 				$this->db->join('propositos X', 'X.numero_proposito = C.fk_numero_proposito', 'INNER');
 				$this->db->join('programa P', 'P.numero_programa = C.fk_numero_programa', 'LEFT');
 				$this->db->join('proyecto_inversion PI', 'PI.numero_proyecto_inversion = C.fk_numero_proyecto_inversion', 'INNER');
-				$this->db->join('param_dependencias D', 'D.id_dependencia = A.fk_id_dependencia', 'INNER');
 				$this->db->join('meta_pdd Z', 'Z.numero_meta_pdd = C.fk_numero_meta_pdd', 'INNER');
 				$this->db->join('indicadores I1', 'C.indicador_1 = I1.numero_indicador', 'LEFT');
 				$this->db->join('indicadores I2', 'C.indicador_2 = I2.numero_indicador', 'LEFT');
-				$this->db->join('param_tipologia_anualidad TA', 'TA.id_tipologia = A.tipo_indicador', 'LEFT');
+				$this->db->join('indicadores_x_trimestre IT', 'C.indicador_1 = IT.fk_numero_indicador', 'LEFT');
+				$this->db->join('param_tipologia_anualidad TA', 'TA.id_tipologia = IT.tipo_indicador', 'LEFT');
 				if (array_key_exists("vigencia", $arrData)) {
-					$this->db->where('A.vigencia', $arrData['vigencia']);
+					$this->db->where('C.vigencia', $arrData['vigencia']);
 				}
-				$this->db->order_by('C.fk_numero_objetivo_estrategico', 'ASC');
-				$this->db->order_by('C.fk_numero_proyecto_inversion', 'ASC');
-				$query = $this->db->get('actividades A');
+				$this->db->order_by('I1.numero_indicador', 'ASC');
+				$query = $this->db->get('cuadro_base C');
 				if ($query->num_rows() > 0) {
 					return $query->result_array();
 				} else {

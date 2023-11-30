@@ -133,7 +133,7 @@
 								echo "<td class='text-center'>";
 								echo '<p class="' . $clase2 . '"><strong>' . $valor2 . '</strong></p>';
 								echo "</td>";
-								echo "<td class='text-right'>" . $lista['ponderacion'] . "%</td>";
+								echo "<td class='text-right'>" . round($lista['ponderacion'],2) . "%</td>";
 								echo "<td class='text-center'>";
 								echo $lista['mes_inicial'] . '-' . $lista['mes_final'];
 								echo "</td>";
@@ -186,11 +186,11 @@
 
 								$avancePOA = 0;
 								if($sumaProgramado['programado'] > 0){
-									$avancePOA = round(($sumaEjecutado['ejecutado']/$sumaProgramado['programado']) * $ponderacion,3);
+									$avancePOA = round(($sumaEjecutado['ejecutado']/$sumaProgramado['programado']) * $ponderacion,2);
 								}
 								if ($estadoActividad[0]['estado_trimestre_1'] != 0){
 									if($sumaProgramadoTrimestre1['programado'] > 0) {
-										$cumplimiento1 = round($sumaEjecutadoTrimestre1['ejecutado'] / $sumaProgramadoTrimestre1['programado'] * 100,3);
+										$cumplimiento1 = round($sumaEjecutadoTrimestre1['ejecutado'] / $sumaProgramadoTrimestre1['programado'] * 100,2);
 									} else {
 										if($sumaEjecutadoTrimestre1['ejecutado'] > 0) {
 											$cumplimiento1 = 100;
@@ -203,7 +203,7 @@
 								}
 								if ($estadoActividad[0]['estado_trimestre_2'] != 0){
 									if($sumaProgramadoTrimestre2['programado'] > 0) {
-										$cumplimiento2 = round($sumaEjecutadoTrimestre2['ejecutado'] / $sumaProgramadoTrimestre2['programado'] * 100,3);
+										$cumplimiento2 = round($sumaEjecutadoTrimestre2['ejecutado'] / $sumaProgramadoTrimestre2['programado'] * 100,2);
 									} else {
 										if($sumaEjecutadoTrimestre2['ejecutado'] > 0) {
 											$cumplimiento2 = 100;
@@ -216,7 +216,7 @@
 								}
 								if ($estadoActividad[0]['estado_trimestre_3'] != 0){
 									if($sumaProgramadoTrimestre3['programado'] > 0) {
-										$cumplimiento3 = round($sumaEjecutadoTrimestre3['ejecutado'] / $sumaProgramadoTrimestre3['programado'] * 100,3);
+										$cumplimiento3 = round($sumaEjecutadoTrimestre3['ejecutado'] / $sumaProgramadoTrimestre3['programado'] * 100,2);
 									} else {
 										if($sumaEjecutadoTrimestre3['ejecutado'] > 0) {
 											$cumplimiento3 = 100;
@@ -229,7 +229,7 @@
 								}
 								if ($estadoActividad[0]['estado_trimestre_4'] != 0){
 									if($sumaProgramadoTrimestre4['programado'] > 0) {
-										$cumplimiento4 = round($sumaEjecutadoTrimestre4['ejecutado'] / $sumaProgramadoTrimestre4['programado'] * 100,3);
+										$cumplimiento4 = round($sumaEjecutadoTrimestre4['ejecutado'] / $sumaProgramadoTrimestre4['programado'] * 100,2);
 									} else {
 										if($sumaEjecutadoTrimestre4['ejecutado'] > 0) {
 											$cumplimiento4 = 100;
@@ -294,7 +294,7 @@
 						<thead>
 							<tr class="text-primary">
 								<td>
-									<h2>Programado Año: <?php echo number_format($sumaProgramado['programado'],3); ?></h2>
+									<h2>Programado Año: <?php echo $sumaProgramado['programado']; ?></h2>
 									<small>(Suma Programado)</small>
 								</td>
 								<td class="text-right">
@@ -322,7 +322,7 @@
 
 								<tr class="headings default">
 									<th class="column-title">
-										<p>Programado Trimestre I: <?php echo number_format($sumaProgramadoTrimestre1['programado'],3); ?></p>
+										<p>Programado Trimestre I: <?php echo $sumaProgramadoTrimestre1['programado']; ?></p>
 									</th>
 									<th class="column-title">
 										<p>Cumplimiento Trimestre I: <?php echo $cumplimiento1 . '%'; ?></p>
@@ -361,7 +361,7 @@
 
 								<tr class="headings">
 									<th class="column-title">
-										<p>Programado Trimestre II: <?php echo number_format($sumaProgramadoTrimestre2['programado'],3); ?></p>
+										<p>Programado Trimestre II: <?php echo $sumaProgramadoTrimestre2['programado']; ?></p>
 									</th>
 									<th class="column-title">
 										<p>Cumplimiento Trimestre II: <?php echo $cumplimiento2 . '%'; ?></p>
@@ -400,7 +400,7 @@
 
 								<tr class="headings">
 									<th class="column-title">
-										<p>Programado Trimestre III: <?php echo number_format($sumaProgramadoTrimestre3['programado'],3); ?></p>
+										<p>Programado Trimestre III: <?php echo $sumaProgramadoTrimestre3['programado']; ?></p>
 									</th>
 									<th class="column-title">
 										<p>Cumplimiento Trimestre III: <?php echo $cumplimiento3 . '%'; ?></p>
@@ -439,7 +439,7 @@
 
 								<tr class="headings">
 									<th class="column-title">
-										<p>Programado Trimestre IV: <?php echo number_format($sumaProgramadoTrimestre4['programado'],3); ?></p>
+										<p>Programado Trimestre IV: <?php echo $sumaProgramadoTrimestre4['programado']; ?></p>
 									</th>
 									<th class="column-title">
 										<p>Cumplimiento Trimestre IV: <?php echo $cumplimiento4 . '%'; ?></p>

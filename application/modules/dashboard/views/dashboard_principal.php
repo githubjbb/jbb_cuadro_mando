@@ -514,7 +514,7 @@
                                                 echo "<td class='text-right'><small>" . $lista['meta_plan_operativo_anual'] . "</small></td>";
                                                 echo "<td class='text-center'><small>";
                                                 if($lista["avance_poa"]){
-                                                    echo $lista["avance_poa"] . "%";
+                                                    echo round($lista["avance_poa"],2) . "%";
                                                 }else{
                                                     echo 0;
                                                 }

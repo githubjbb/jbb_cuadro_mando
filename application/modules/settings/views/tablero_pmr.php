@@ -116,7 +116,7 @@ if ($retornoError) {
                                     <th><small>Avance Octubre <?php echo $vigencia['vigencia'] ?></small></th>
                                     <th><small>Avance Noviembre <?php echo $vigencia['vigencia'] ?></small></th>
                                     <th><small>Avance Diciembre <?php echo $vigencia['vigencia'] ?></small></th>
-                                    <th><small>Total Avance <?php echo $vigencia['vigencia'] ?></small></th>
+                                    <th><small>% Avance <?php echo $vigencia['vigencia'] ?></small></th>
                                     <th><small>Naturaleza</small></th>
                                     <th><small>Periodicidad</small></th>
                                     <th><small>Elemento PEP</small></th>
@@ -140,7 +140,6 @@ if ($retornoError) {
                                         }
                                     }
                                     
-
                                     $arraySumatoriaMetas = $this->settings_model->sumatoria_metas($lista['fk_numero_indicador_pmr']);
                                     $sumatoriaMetas = $arraySumatoriaMetas[0]['meta_plan_operativo_anual'];
                                     if (count($arraySumatoriaMetas) > 1) {
@@ -155,10 +154,8 @@ if ($retornoError) {
                                     if (count($arraySumatoriaEnero) > 1) {
                                         for($i=1; $i<count($arraySumatoriaEnero); $i++){
                                             $sumatoriaEnero .= $arraySumatoriaEnero[$i]['ejecutado'];
-                                            
                                         }
                                     }
-                                    $sumatoriaTotal += $sumatoriaEnero;
 
                                     $arraySumatoriaFebrero = $this->settings_model->sumatoria_mes($lista['fk_numero_indicador_pmr'], 2);
                                     $sumatoriaFebrero = $arraySumatoriaFebrero[0]['ejecutado'];
@@ -167,7 +164,6 @@ if ($retornoError) {
                                             $sumatoriaFebrero .= $arraySumatoriaFebrero[$i]['ejecutado'];
                                         }
                                     }
-                                    $sumatoriaTotal += $sumatoriaFebrero;
 
                                     $arraySumatoriaMarzo = $this->settings_model->sumatoria_mes($lista['fk_numero_indicador_pmr'], 3);
                                     $sumatoriaMarzo = $arraySumatoriaMarzo[0]['ejecutado'];
@@ -176,7 +172,6 @@ if ($retornoError) {
                                             $sumatoriaMarzo .= $arraySumatoriaMarzo[$i]['ejecutado'];
                                         }
                                     }
-                                    $sumatoriaTotal += $sumatoriaMarzo;
 
                                     $arraySumatoriaAbril = $this->settings_model->sumatoria_mes($lista['fk_numero_indicador_pmr'], 4);
                                     $sumatoriaAbril = $arraySumatoriaAbril[0]['ejecutado'];
@@ -185,7 +180,6 @@ if ($retornoError) {
                                             $sumatoriaAbril .= $arraySumatoriaAbril[$i]['ejecutado'];
                                         }
                                     }
-                                    $sumatoriaTotal += $sumatoriaAbril;
 
                                     $arraySumatoriaMayo = $this->settings_model->sumatoria_mes($lista['fk_numero_indicador_pmr'], 5);
                                     $sumatoriaMayo = $arraySumatoriaMayo[0]['ejecutado'];
@@ -194,7 +188,6 @@ if ($retornoError) {
                                             $sumatoriaMayo .= $arraySumatoriaMayo[$i]['ejecutado'];
                                         }
                                     }
-                                    $sumatoriaTotal += $sumatoriaMayo;
 
                                     $arraySumatoriaJunio = $this->settings_model->sumatoria_mes($lista['fk_numero_indicador_pmr'], 6);
                                     $sumatoriaJunio = $arraySumatoriaJunio[0]['ejecutado'];
@@ -203,7 +196,6 @@ if ($retornoError) {
                                             $sumatoriaJunio .= $arraySumatoriaJunio[$i]['ejecutado'];
                                         }
                                     }
-                                    $sumatoriaTotal += $sumatoriaJunio;
 
                                     $arraySumatoriaJulio = $this->settings_model->sumatoria_mes($lista['fk_numero_indicador_pmr'], 7);
                                     $sumatoriaJulio = $arraySumatoriaJulio[0]['ejecutado'];
@@ -212,7 +204,6 @@ if ($retornoError) {
                                             $sumatoriaJulio .= $arraySumatoriaJulio[$i]['ejecutado'];
                                         }
                                     }
-                                    $sumatoriaTotal += $sumatoriaJulio;
 
                                     $arraySumatoriaAgosto = $this->settings_model->sumatoria_mes($lista['fk_numero_indicador_pmr'], 8);
                                     $sumatoriaAgosto = $arraySumatoriaAgosto[0]['ejecutado'];
@@ -221,7 +212,6 @@ if ($retornoError) {
                                             $sumatoriaAgosto .= $arraySumatoriaAgosto[$i]['ejecutado'];
                                         }
                                     }
-                                    $sumatoriaTotal += $sumatoriaAgosto;
 
                                     $arraySumatoriaSeptiembre = $this->settings_model->sumatoria_mes($lista['fk_numero_indicador_pmr'], 9);
                                     $sumatoriaSeptiembre = $arraySumatoriaSeptiembre[0]['ejecutado'];
@@ -230,7 +220,6 @@ if ($retornoError) {
                                             $sumatoriaSeptiembre .= $arraySumatoriaSeptiembre[$i]['ejecutado'];
                                         }
                                     }
-                                    $sumatoriaTotal += $sumatoriaSeptiembre;
 
                                     $arraySumatoriaOctubre = $this->settings_model->sumatoria_mes($lista['fk_numero_indicador_pmr'], 10);
                                     $sumatoriaOctubre = $arraySumatoriaOctubre[0]['ejecutado'];
@@ -239,7 +228,6 @@ if ($retornoError) {
                                             $sumatoriaOctubre .= $arraySumatoriaOctubre[$i]['ejecutado'];
                                         }
                                     }
-                                    $sumatoriaTotal += $sumatoriaOctubre;
 
                                     $arraySumatoriaNoviembre = $this->settings_model->sumatoria_mes($lista['fk_numero_indicador_pmr'], 11);
                                     $sumatoriaNoviembre = $arraySumatoriaNoviembre[0]['ejecutado'];
@@ -248,7 +236,6 @@ if ($retornoError) {
                                             $sumatoriaNoviembre .= $arraySumatoriaNoviembre[$i]['ejecutado'];
                                         }
                                     }
-                                    $sumatoriaTotal += $sumatoriaNoviembre;
 
                                     $arraySumatoriaDiciembre = $this->settings_model->sumatoria_mes($lista['fk_numero_indicador_pmr'], 12);
                                     $sumatoriaDiciembre = $arraySumatoriaDiciembre[0]['ejecutado'];
@@ -257,7 +244,57 @@ if ($retornoError) {
                                             $sumatoriaDiciembre .= $arraySumatoriaDiciembre[$i]['ejecutado'];
                                         }
                                     }
-                                    $sumatoriaTotal += $sumatoriaDiciembre;
+
+                                    if($sumatoriaDiciembre > 0){
+                                        $sumatoriaTotal = ($sumatoriaDiciembre / $sumatoriaMetas) * 100;
+                                    } else {
+                                        if($sumatoriaNoviembre > 0){
+                                            $sumatoriaTotal = ($sumatoriaNoviembre / $sumatoriaMetas) * 100;
+                                        } else {
+                                            if($sumatoriaOctubre > 0){
+                                                $sumatoriaTotal = ($sumatoriaOctubre / $sumatoriaMetas) * 100;
+                                            } else {
+                                                if($sumatoriaSeptiembre > 0){
+                                                    $sumatoriaTotal = ($sumatoriaSeptiembre / $sumatoriaMetas) * 100;
+                                                } else {
+                                                    if($sumatoriaAgosto > 0){
+                                                        $sumatoriaTotal = ($sumatoriaAgosto / $sumatoriaMetas) * 100;
+                                                    } else {
+                                                        if($sumatoriaJulio > 0){
+                                                            $sumatoriaTotal = ($sumatoriaJulio / $sumatoriaMetas) * 100;
+                                                        } else {
+                                                            if($sumatoriaJunio > 0){
+                                                                $sumatoriaTotal = ($sumatoriaJunio / $sumatoriaMetas) * 100;
+                                                            } else {
+                                                                if($sumatoriaMayo > 0){
+                                                                    $sumatoriaTotal = ($sumatoriaMayo / $sumatoriaMetas) * 100;
+                                                                } else {
+                                                                    if($sumatoriaAbril > 0){
+                                                                        $sumatoriaTotal = ($sumatoriaAbril / $sumatoriaMetas) * 100;
+                                                                    } else {
+                                                                        if($sumatoriaMarzo > 0){
+                                                                            $sumatoriaTotal = ($sumatoriaMarzo / $sumatoriaMetas) * 100;
+                                                                        } else {
+                                                                            if($sumatoriaFebrero > 0){
+                                                                                $sumatoriaTotal = ($sumatoriaFebrero / $sumatoriaMetas) * 100;
+                                                                            } else {
+                                                                                if($sumatoriaEnero > 0){
+                                                                                    $sumatoriaTotal = ($sumatoriaEnero / $sumatoriaMetas) * 100;
+                                                                                } else {
+                                                                                    $sumatoriaTotal = 0;
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+
                                     echo "<tr>";
                                     echo "<td class='text-center'>";
                                     ?>
@@ -273,19 +310,19 @@ if ($retornoError) {
                                     echo "<td><small>" . $actividades . "</small></td>";
                                     echo "<td><small>" . $sumatoriaMetas . "</small></td>";
                                     echo "<td><small>" . $lista["unidad_medida_pmr"] . "</small></td>";
-                                    echo "<td><small>" . round($sumatoriaEnero, 3) . "</small></td>";
-                                    echo "<td><small>" . round($sumatoriaFebrero, 3) . "</small></td>";
-                                    echo "<td><small>" . round($sumatoriaMarzo, 3) . "</small></td>";
-                                    echo "<td><small>" . round($sumatoriaAbril, 3) . "</small></td>";
-                                    echo "<td><small>" . round($sumatoriaMayo, 3) . "</small></td>";
-                                    echo "<td><small>" . round($sumatoriaJunio, 3) . "</small></td>";
-                                    echo "<td><small>" . round($sumatoriaJulio, 3) . "</small></td>";
-                                    echo "<td><small>" . round($sumatoriaAgosto, 3) . "</small></td>";
-                                    echo "<td><small>" . round($sumatoriaSeptiembre, 3) . "</small></td>";
-                                    echo "<td><small>" . round($sumatoriaOctubre, 3) . "</small></td>";
-                                    echo "<td><small>" . round($sumatoriaNoviembre, 3) . "</small></td>";
-                                    echo "<td><small>" . round($sumatoriaDiciembre, 3) . "</small></td>";
-                                    echo "<td><small>" . round($sumatoriaTotal, 3) . "</small></td>";
+                                    echo "<td><small>" . round($sumatoriaEnero, 2) . "</small></td>";
+                                    echo "<td><small>" . round($sumatoriaFebrero, 2) . "</small></td>";
+                                    echo "<td><small>" . round($sumatoriaMarzo, 2) . "</small></td>";
+                                    echo "<td><small>" . round($sumatoriaAbril, 2) . "</small></td>";
+                                    echo "<td><small>" . round($sumatoriaMayo, 2) . "</small></td>";
+                                    echo "<td><small>" . round($sumatoriaJunio, 2) . "</small></td>";
+                                    echo "<td><small>" . round($sumatoriaJulio, 2) . "</small></td>";
+                                    echo "<td><small>" . round($sumatoriaAgosto, 2) . "</small></td>";
+                                    echo "<td><small>" . round($sumatoriaSeptiembre, 2) . "</small></td>";
+                                    echo "<td><small>" . round($sumatoriaOctubre, 2) . "</small></td>";
+                                    echo "<td><small>" . round($sumatoriaNoviembre, 2) . "</small></td>";
+                                    echo "<td><small>" . round($sumatoriaDiciembre, 2) . "</small></td>";
+                                    echo "<td><small>" . round($sumatoriaTotal, 2) . "%</small></td>";
                                     echo "<td><small>" . $lista["naturaleza_pmr"] . "</small></td>";
                                     echo "<td><small>" . $lista["periodicidad_pmr"] . "</small></td>";
                                     echo "<td><small>" . $lista["elemento_pep_pmr"] . "</small></td>";

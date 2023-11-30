@@ -160,7 +160,7 @@ $(function(){
 								echo "<td class='text-center'>";
 								echo '<p class="' . $clase . '"><strong>' . $unidadMedida . '</strong></p>';
 								echo "</td>";
-								echo "<td class='text-center'>" . $lista['ponderacion_pi'] . "%</td>";
+								echo "<td class='text-center'>" . round($lista['ponderacion_pi'],2) . "%</td>";
 								echo "<td class='text-center'>";
 								echo $lista['mes_inicial'] . '-' . $lista['mes_final'];
 								echo "</td>";

@@ -1924,12 +1924,14 @@ class General_model extends CI_Model {
 		 * @since 27/6/2022
 		 */
 		public function sumCumplimiento($arrData)
-		{		
+		{
+			$vigencia = $this->get_vigencia();
 			$this->db->select_sum('cumplimiento');
 			$this->db->join('actividades A', 'A.numero_actividad = E.fk_numero_actividad', 'INNER');
 			$this->db->join('cuadro_base C', 'C.id_cuadro_base = A.fk_id_cuadro_base', 'INNER');
 			$this->db->join('meta_proyecto_inversion M', 'M.nu_meta_proyecto = C.fk_nu_meta_proyecto_inversion', 'INNER');
 			$this->db->join('objetivos_estrategicos X', 'X.numero_objetivo_estrategico = C.fk_numero_objetivo_estrategico', 'INNER');
+			$this->db->where('A.vigencia', $vigencia['vigencia']);
 
 			if (array_key_exists("idEstrategia", $arrData)) {
 				$this->db->where('X.fk_id_estrategia', $arrData["idEstrategia"]);
