@@ -1,21 +1,3 @@
-<script type="text/javascript" src="<?php echo base_url("assets/js/validate/settings/propositos_x_vigencia.js"); ?>"></script>
-<script>
-$(function(){ 
-	$(".btn-success").click(function () {	
-			var oID = $(this).attr("id");
-            $.ajax ({
-                type: 'POST',
-				url: base_url + 'settings/cargarModalProyectosXVigencia',
-                data: {'idProyectoVigencia': oID},
-                cache: false,
-                success: function (data) {
-                    $('#tablaDatos').html(data);
-                }
-            });
-	});	
-});
-</script>
-
 <div id="page-wrapper">
 	<br>
 	<div class="row">
@@ -27,46 +9,37 @@ $(function(){
 					</h4>
 				</div>
 			</div>
-		</div>
-		<!-- /.col-lg-12 -->				
+		</div>				
 	</div>
-	
-	<!-- /.row -->
+
 	<div class="row">
 		<div class="col-lg-12">
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<i class="fa fa-thumb-tack"></i> LISTA PROYECTOS DE INVERSIÓN POR VIGENCIA
-					<!--<div class="pull-right">
-						<div class="btn-group">																				
-							<button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#modal" id="x">
-									<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Adicionar Proyecto de Inversión
-							</button>
-						</div>
-					</div>-->
 				</div>
 				<div class="panel-body small">
 
-<?php
-	$retornoExito = $this->session->flashdata('retornoExito');
-	if ($retornoExito) {
-?>
-		<div class="alert alert-success ">
-			<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-			<?php echo $retornoExito ?>		
-		</div>
-<?php
-	}
-	$retornoError = $this->session->flashdata('retornoError');
-	if ($retornoError) {
-?>
-		<div class="alert alert-danger ">
-			<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-			<?php echo $retornoError ?>
-		</div>
-<?php
-	}
-?> 
+				<?php
+					$retornoExito = $this->session->flashdata('retornoExito');
+					if ($retornoExito) {
+				?>
+						<div class="alert alert-success ">
+							<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+							<?php echo $retornoExito ?>		
+						</div>
+				<?php
+					}
+					$retornoError = $this->session->flashdata('retornoError');
+					if ($retornoError) {
+				?>
+						<div class="alert alert-danger ">
+							<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+							<?php echo $retornoError ?>
+						</div>
+				<?php
+					}
+				?> 
 				<ul class="nav nav-tabs">
 					<li <?php if($vigencia == 2020){ echo "class='active'";} ?>><a href="<?php echo base_url("settings/proyectos_x_vigencia/2020"); ?>"><b>2020</b></a>
 					</li>
@@ -92,7 +65,6 @@ $(function(){
 								<th width="20%" class="text-center">Recurso programado</th>
 								<th width="20%" class="text-center">Recurso ejecutado</th>
 								<th width="20%" class="text-center">Porcentaje cumplimiento</th>
-								<!--<th width="10%" class="text-center">Editar</th>-->
 							</tr>
 						</thead>
 						<tbody>							
@@ -105,17 +77,6 @@ $(function(){
 									echo "<td class='text-right'>$ " . number_format($lista['recurso_programado_proyecto']) . "</td>";
 									echo "<td class='text-right'>$ " . number_format($lista['recurso_ejecutado_proyecto']) . "</td>";
 									echo "<td class='text-right'>" . round($lista['porcentaje_cumplimiento_proyecto'],2) . " %</td>";
-									//echo "<td class='text-center'>";
-						?>
-									<!--<button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#modal" id="<?php //echo $lista['id_proyecto_vigencia']; ?>" >
-										Editar <span class="glyphicon glyphicon-edit" aria-hidden="true">
-									</button>
-
-									<button type="button" id="<?php //echo $lista['id_proyecto_vigencia']; ?>" class='btn btn-danger btn-xs' title="Eliminar">
-											<i class="fa fa-trash-o"></i>
-									</button>-->
-						<?php
-									//echo "</td>";
 							endforeach;
 						?>
 						</tbody>
@@ -126,16 +87,6 @@ $(function(){
 		</div>
 	</div>
 </div>
-	
-<!--INICIO Modal -->
-<div class="modal fade text-center" id="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">    
-	<div class="modal-dialog" role="document">
-		<div class="modal-content" id="tablaDatos">
-
-		</div>
-	</div>
-</div>                       
-<!--FIN Modal  -->
 
 <!-- Tables -->
 <script>

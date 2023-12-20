@@ -166,17 +166,37 @@
 								$sumaEjecutadoTrimestre4 = $this->general_model->sumarEjecutado($arrParam);
 								
 								$sumaEjecutado['ejecutado'] = 0;
-								if ($estadoActividad[0]['estado_trimestre_1'] == 5){
-									$sumaEjecutado['ejecutado'] += $sumaEjecutadoTrimestre1['ejecutado'];
-								}
-								if ($estadoActividad[0]['estado_trimestre_2'] == 5){
-									$sumaEjecutado['ejecutado'] += $sumaEjecutadoTrimestre2['ejecutado'];
-								}
-								if ($estadoActividad[0]['estado_trimestre_3'] == 5){
-									$sumaEjecutado['ejecutado'] += $sumaEjecutadoTrimestre3['ejecutado'];
-								}
-								if ($estadoActividad[0]['estado_trimestre_4'] == 5){
-									$sumaEjecutado['ejecutado'] += $sumaEjecutadoTrimestre4['ejecutado'];
+								if ($lista["tipo_indicador"] == 3) {
+									if ($estadoActividad[0]['estado_trimestre_4'] == 5){
+										$sumaEjecutado['ejecutado'] += $sumaEjecutadoTrimestre4['ejecutado'];
+									} else {
+										if ($estadoActividad[0]['estado_trimestre_3'] == 5){
+											$sumaEjecutado['ejecutado'] += $sumaEjecutadoTrimestre3['ejecutado'];
+										} else {
+											if ($estadoActividad[0]['estado_trimestre_2'] == 5){
+												$sumaEjecutado['ejecutado'] += $sumaEjecutadoTrimestre2['ejecutado'];
+											} else {
+												if ($estadoActividad[0]['estado_trimestre_1'] == 5){
+													$sumaEjecutado['ejecutado'] += $sumaEjecutadoTrimestre1['ejecutado'];
+												} else {
+													$sumaEjecutado['ejecutado'] = 0;
+												}
+											}
+										}
+									}
+								} else {
+									if ($estadoActividad[0]['estado_trimestre_1'] == 5){
+										$sumaEjecutado['ejecutado'] += $sumaEjecutadoTrimestre1['ejecutado'];
+									}
+									if ($estadoActividad[0]['estado_trimestre_2'] == 5){
+										$sumaEjecutado['ejecutado'] += $sumaEjecutadoTrimestre2['ejecutado'];
+									}
+									if ($estadoActividad[0]['estado_trimestre_3'] == 5){
+										$sumaEjecutado['ejecutado'] += $sumaEjecutadoTrimestre3['ejecutado'];
+									}
+									if ($estadoActividad[0]['estado_trimestre_4'] == 5){
+										$sumaEjecutado['ejecutado'] += $sumaEjecutadoTrimestre4['ejecutado'];
+									}
 								}
 
 								$cumplimiento1 = 0;

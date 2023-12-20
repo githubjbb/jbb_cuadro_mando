@@ -248,24 +248,44 @@ $(function(){
 								$sumaEjecutadoTrimestre4 = $this->general_model->sumarEjecutado($arrParam);
 								
 								$sumaEjecutado['ejecutado'] = 0;
-								if ($estadoActividad[0]['estado_trimestre_1'] == 5){
-									$sumaEjecutado['ejecutado'] += $sumaEjecutadoTrimestre1['ejecutado'];
-								}
-								if ($estadoActividad[0]['estado_trimestre_2'] == 5){
-									$sumaEjecutado['ejecutado'] += $sumaEjecutadoTrimestre2['ejecutado'];
-								}
-								if ($estadoActividad[0]['estado_trimestre_3'] == 5){
-									$sumaEjecutado['ejecutado'] += $sumaEjecutadoTrimestre3['ejecutado'];
-								}
-								if ($estadoActividad[0]['estado_trimestre_4'] == 5){
-									$sumaEjecutado['ejecutado'] += $sumaEjecutadoTrimestre4['ejecutado'];
+								if ($lista["tipo_indicador"] == 3) {
+									if ($estadoActividad[0]['estado_trimestre_4'] == 5){
+										$sumaEjecutado['ejecutado'] += $sumaEjecutadoTrimestre4['ejecutado'];
+									} else {
+										if ($estadoActividad[0]['estado_trimestre_3'] == 5){
+											$sumaEjecutado['ejecutado'] += $sumaEjecutadoTrimestre3['ejecutado'];
+										} else {
+											if ($estadoActividad[0]['estado_trimestre_2'] == 5){
+												$sumaEjecutado['ejecutado'] += $sumaEjecutadoTrimestre2['ejecutado'];
+											} else {
+												if ($estadoActividad[0]['estado_trimestre_1'] == 5){
+													$sumaEjecutado['ejecutado'] += $sumaEjecutadoTrimestre1['ejecutado'];
+												} else {
+													$sumaEjecutado['ejecutado'] = 0;
+												}
+											}
+										}
+									}
+								} else {
+									if ($estadoActividad[0]['estado_trimestre_1'] == 5){
+										$sumaEjecutado['ejecutado'] += $sumaEjecutadoTrimestre1['ejecutado'];
+									}
+									if ($estadoActividad[0]['estado_trimestre_2'] == 5){
+										$sumaEjecutado['ejecutado'] += $sumaEjecutadoTrimestre2['ejecutado'];
+									}
+									if ($estadoActividad[0]['estado_trimestre_3'] == 5){
+										$sumaEjecutado['ejecutado'] += $sumaEjecutadoTrimestre3['ejecutado'];
+									}
+									if ($estadoActividad[0]['estado_trimestre_4'] == 5){
+										$sumaEjecutado['ejecutado'] += $sumaEjecutadoTrimestre4['ejecutado'];
+									}
 								}
 
-								$valorProgramadoTotal = $sumaProgramado['programado'];
-								$valorProgramadoTrimestre1 = $sumaProgramadoTrimestre1['programado'];
-								$valorProgramadoTrimestre2 = $sumaProgramadoTrimestre2['programado'];
-								$valorProgramadoTrimestre3 = $sumaProgramadoTrimestre3['programado'];
-								$valorProgramadoTrimestre4 = $sumaProgramadoTrimestre4['programado'];
+								$valorProgramadoTotal = round($sumaProgramado['programado'],2);
+								$valorProgramadoTrimestre1 = round($sumaProgramadoTrimestre1['programado'],2);
+								$valorProgramadoTrimestre2 = round($sumaProgramadoTrimestre2['programado'],2);
+								$valorProgramadoTrimestre3 = round($sumaProgramadoTrimestre3['programado'],2);
+								$valorProgramadoTrimestre4 = round($sumaProgramadoTrimestre4['programado'],2);
 								
 								$cumplimiento1 = 0;
 								$cumplimiento2 = 0;

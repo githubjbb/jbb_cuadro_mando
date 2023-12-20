@@ -45,13 +45,13 @@
         <div class="col-lg-6">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <i class="fa fa-bell fa-fw"></i> Avance Propósitos <b><?php echo $vigencia['vigencia']; ?></b>
+                    <i class="fa fa-bell fa-fw"></i> Avance Logros <b><?php echo $vigencia['vigencia']; ?></b>
                 </div>
                 <div class="panel-body small">
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th width="45%">Propósito</th>
+                                <th width="45%">Logro</th>
                                 <th width="10%" class="text-center">No. Actividades</th>
                                 <th width="45%" class="text-center">Avance Gestión</th>
                             </tr>
@@ -97,13 +97,13 @@
         <div class="col-lg-6">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <i class="fa fa-bell fa-fw"></i> Avance Propósitos <b><?php echo $vigencia['vigencia']; ?></b>
+                    <i class="fa fa-bell fa-fw"></i> Avance Logros <b><?php echo $vigencia['vigencia']; ?></b>
                 </div>
                 <div class="panel-body small">
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th width="45%">Propósito</th>
+                                <th width="45%">Logro</th>
                                 <th width="10%" class="text-center">No. Actividades</th>
                                 <th width="45%" class="text-center">Avance Presupuesto</th>
                             </tr>

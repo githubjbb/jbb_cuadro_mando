@@ -22,7 +22,7 @@
         <?php if($vigencia['vigencia'] >= 2023) { ?>
 
         <div class="col-lg-12">
-            <ul class="nav nav-tabs ">
+            <ul class="nav nav-tabs">
                 <li><a href="<?php echo base_url("dashboard/admin"); ?>"><b>Propositos</b></a>
                 </li>
                 <li><a href="<?php echo base_url("dashboard/tabs_logros"); ?>"><b>Logros</b></a>
@@ -42,110 +42,81 @@
             </ul>
         </div>
 
-        <div class="col-lg-6">
+        <div class="col-lg-12">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <i class="fa fa-bell fa-fw"></i> Avance Propósitos <b><?php echo $vigencia['vigencia']; ?></b>
+                    <i class="fa fa-bell fa-fw"></i> Avance Estrategias <b><?php echo $vigencia['vigencia']; ?></b>
                 </div>
                 <div class="panel-body small">
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th width="45%">Propósito</th>
+                                <th width="45%">Estrategia</th>
                                 <th width="10%" class="text-center">No. Actividades</th>
                                 <th width="45%" class="text-center">Avance Gestión</th>
                             </tr>
                         </thead>
                         <?php
-                        foreach ($listaPropositos as $lista):
+                        $i=0;
+                        foreach ($listaEstrategias as $lista):
                             $arrParam = array(
-                                "numeroProposito" => $lista["numero_proposito"],
-                                "vigencia" => $vigencia['vigencia']
+                                "idEstrategia" => $lista["id_estrategia"]
                             );
-                            $nroActividades = $this->general_model->countActividades($arrParam);
-                            $avance = $this->general_model->sumAvance($arrParam);
-                            $avancePOA = number_format($avance["avance_poa"],2);
-                            if(!$avancePOA){
-                                $avancePOA = 0;
+                            $objetivosEstrategicos = $this->general_model->get_objetivos_estrategicos_by_estrategia($arrParam);
+                            for ($i=0; $i<count($objetivosEstrategicos); $i++) {
+                                $arrParam = array(
+                                    "numeroObjetivoEstrategico" => $objetivosEstrategicos[$i]["numero_objetivo_estrategico"],
+                                    "vigencia" => $vigencia['vigencia']
+                                );
+                                $actividades = $this->general_model->countActividades($arrParam);
+                                $cumplimientos = $this->general_model->sumCumplimiento($arrParam);
+                                $calificacion = $this->general_model->get_evaluacion_calificacion($arrParam);
+                                $calificacion_0 = isset($calificacion[0]['calificacion']);
+                                $calificacion_1 = isset($calificacion[1]['calificacion']);
+                                if ($calificacion_0){
+                                    if ($calificacion[0]['estado'] == 2) {
+                                        $cumplimientos['cumplimiento'] = $calificacion[0]['calificacion'] * $actividades;
+                                    }
+                                    if ($calificacion[0]['estado'] == 1 || $calificacion[0]['estado'] == 3) {
+                                        if ($calificacion_1) {
+                                            if ($calificacion[1]['estado'] == 2) {
+                                                $cumplimientos['cumplimiento'] = $calificacion[1]['calificacion'] * $actividades;
+                                            }
+                                        }
+                                    }
+                                }
+                                $objetivosEstrategicos[$i]['actividades'] = $actividades;
+                                $objetivosEstrategicos[$i]['cumplimiento'] = $cumplimientos['cumplimiento'];
+                            }
+                            $nroActividades = 0;
+                            $cumplimiento = 0;
+                            $promedioCumplimiento = 0;
+                            for ($i=0; $i<count($objetivosEstrategicos); $i++) {
+                                $nroActividades += $objetivosEstrategicos[$i]['actividades'];
+                                $cumplimiento += $objetivosEstrategicos[$i]['cumplimiento'];
+                            }
+                            if($nroActividades){
+                                $promedioCumplimiento = number_format($cumplimiento/$nroActividades,2);
+                            }
+                            if(!$promedioCumplimiento){
+                                $promedioCumplimiento = 0;
                                 $estilos = "bg-warning";
                             }else{
-                                if($avancePOA > 70){
+                                if($promedioCumplimiento > 70){
                                     $estilos = "progress-bar-success";
-                                }elseif($avancePOA > 40 && $avancePOA <= 70){
+                                }elseif($promedioCumplimiento > 40 && $promedioCumplimiento <= 70){
                                     $estilos = "progress-bar-warning";
                                 }else{
                                     $estilos = "progress-bar-danger";
                                 }
                             }
                             echo "<tr>";
-                            echo "<td><small>" . $lista["numero_proposito"] .' ' . $lista["proposito"] . "</small></td>";
+                            echo "<td><small>" . $lista["estrategia"] . "</small></td>";
                             echo "<td class='text-center'><small>" . $nroActividades . "</small></td>";
                             echo "<td class='text-center'>";
-                            echo "<b>" . $avancePOA ."%</b>";
+                            echo "<b>" . $promedioCumplimiento ."%</b>";
                             echo '<div class="progress progress-striped">
-                                      <div class="progress-bar ' . $estilos . '" role="progressbar" style="width: '. $avancePOA .'%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">' . $avancePOA . '%</div>
-                                    </div>';
-                            echo "</td>";
-                            echo "</tr>";
-                        endforeach
-                        ?>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-6">
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <i class="fa fa-bell fa-fw"></i> Avance Propósitos <b><?php echo $vigencia['vigencia']; ?></b>
-                </div>
-                <div class="panel-body small">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th width="45%">Propósito</th>
-                                <th width="10%" class="text-center">No. Actividades</th>
-                                <th width="45%" class="text-center">Avance Presupuesto</th>
-                            </tr>
-                        </thead>
-                        <?php
-                        foreach ($listaPropositos as $lista):
-                            $arrParam = array('vigencia'=>$vigencia['vigencia']);
-                            $avance = $this->general_model->get_propositos_x_vigencia($arrParam);
-                            $arrParam = array(
-                                'numeroProposito' => $lista['numero_proposito'],
-                                'vigencia' => $vigencia['vigencia']
-                            );
-                            $nroActividades = $this->general_model->countActividades($arrParam);
-                            $programado = $this->general_model->get_sumPresupuestoProgramado($arrParam);
-                            $ejecutado = $this->general_model->get_sumRecursoEjecutado($arrParam);
-                            $avance['recurso_programado_proyecto'] = $programado['presupuesto_meta'];
-                            $avance['recurso_ejecutado_proyecto'] = $ejecutado['recurso_ejecutado_meta'];
-                            if ($programado['presupuesto_meta'] != 0) {
-                                $avance['porcentaje_cumplimiento_proyecto'] = ($ejecutado['recurso_ejecutado_meta']*100)/$programado['presupuesto_meta'];
-                            } else {
-                                $avance['porcentaje_cumplimiento_proyecto'] = 0;
-                            }
-                            $avancePOA = number_format($avance['porcentaje_cumplimiento_proyecto'],2);
-                            if(!$avancePOA){
-                                $avancePOA = 0;
-                                $estilos = "bg-warning";
-                            }else{
-                                if($avancePOA > 70){
-                                    $estilos = "progress-bar-success";
-                                }elseif($avancePOA > 40 && $avancePOA <= 70){
-                                    $estilos = "progress-bar-warning";
-                                }else{
-                                    $estilos = "progress-bar-danger";
-                                }
-                            }
-                            echo "<tr>";
-                            echo "<td><small>" . $lista["numero_proposito"] .' ' . $lista["proposito"] . "</small></td>";
-                            echo "<td class='text-center'><small>" . $nroActividades . "</small></td>";
-                            echo "<td class='text-center'>";
-                            echo "<b>" . $avancePOA ."%</b>";
-                            echo '<div class="progress progress-striped">
-                                      <div class="progress-bar ' . $estilos . '" role="progressbar" style="width: '. $avancePOA .'%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">' . $avancePOA . '%</div>
+                                      <div class="progress-bar ' . $estilos . '" role="progressbar" style="width: '. $promedioCumplimiento .'%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">' . $promedioCumplimiento . '%</div>
                                     </div>';
                             echo "</td>";
                             echo "</tr>";

@@ -1687,6 +1687,7 @@
 				$this->db->join('indicadores I2', 'C.indicador_2 = I2.numero_indicador', 'LEFT');
 				$this->db->join('indicadores_x_trimestre IT', 'C.indicador_1 = IT.fk_numero_indicador', 'LEFT');
 				$this->db->join('param_tipologia_anualidad TA', 'TA.id_tipologia = IT.tipo_indicador', 'LEFT');
+				$this->db->where('PI.numero_proyecto_inversion NOT IN (1, 9999)');
 				if (array_key_exists("vigencia", $arrData)) {
 					$this->db->where('C.vigencia', $arrData['vigencia']);
 				}
@@ -1762,6 +1763,357 @@
 				if ($query->num_rows() > 0) {
 					return $query->row_array();
 				} else { 
+					return false;
+				}
+		}
+
+		/**
+		 * Sumatoria programado apropiacion
+		 * @since 04/12/2023
+		 * @author AOCUBILLOSA
+		 */
+		public function get_sumPresupuestoProgramado($arrData)
+		{
+				$this->db->select_sum('apropiacion');
+				if (array_key_exists("numeroProposito", $arrData)) {
+					$this->db->where('fk_numero_proposito', $arrData["numeroProposito"]);
+				}
+				if (array_key_exists("numeroProgramaSG", $arrData)) {
+					$this->db->where('fk_numero_programa', $arrData["numeroProgramaSG"]);
+				}
+				if (array_key_exists("numeroMetaPDD", $arrData)) {
+					$this->db->where('fk_numero_meta_pdd', $arrData["numeroMetaPDD"]);
+				}
+				if (array_key_exists("numeroProyecto", $arrData)) {
+					$this->db->where('fk_numero_proyecto', $arrData["numeroProyecto"]);
+				}
+				if (array_key_exists("vigencia", $arrData)) {
+					$this->db->where('vigencia_meta_proyecto', $arrData["vigencia"]);
+				}
+				$query = $this->db->get('meta_proyecto_inversion_x_trimestre');
+				if ($query->num_rows() > 0) {
+					return $query->row_array();
+				} else {
+					return false;
+				}
+		}
+
+		/**
+		 * Sumatoria ejecutado trimestre 1
+		 * @since 04/12/2023
+		 * @author AOCUBILLOSA
+		 */
+		public function get_sumRecursoEjecutadoTrim1($arrData)
+		{
+				$this->db->select_sum('comp_acum_trim_1');
+				if (array_key_exists("numeroProposito", $arrData)) {
+					$this->db->where('fk_numero_proposito', $arrData["numeroProposito"]);
+				}
+				if (array_key_exists("numeroProgramaSG", $arrData)) {
+					$this->db->where('fk_numero_programa', $arrData["numeroProgramaSG"]);
+				}
+				if (array_key_exists("numeroMetaPDD", $arrData)) {
+					$this->db->where('fk_numero_meta_pdd', $arrData["numeroMetaPDD"]);
+				}
+				if (array_key_exists("numeroProyecto", $arrData)) {
+					$this->db->where('fk_numero_proyecto', $arrData["numeroProyecto"]);
+				}
+				if (array_key_exists("vigencia", $arrData)) {
+					$this->db->where('vigencia_meta_proyecto', $arrData["vigencia"]);
+				}
+				$query = $this->db->get('meta_proyecto_inversion_x_trimestre');
+				if ($query->num_rows() > 0) {
+					return $query->row_array();
+				} else {
+					return false;
+				}
+		}
+
+		/**
+		 * Sumatoria ejecutado trimestre 2
+		 * @since 04/12/2023
+		 * @author AOCUBILLOSA
+		 */
+		public function get_sumRecursoEjecutadoTrim2($arrData)
+		{
+				$this->db->select_sum('comp_acum_trim_2');
+				if (array_key_exists("numeroProposito", $arrData)) {
+					$this->db->where('fk_numero_proposito', $arrData["numeroProposito"]);
+				}
+				if (array_key_exists("numeroProgramaSG", $arrData)) {
+					$this->db->where('fk_numero_programa', $arrData["numeroProgramaSG"]);
+				}
+				if (array_key_exists("numeroMetaPDD", $arrData)) {
+					$this->db->where('fk_numero_meta_pdd', $arrData["numeroMetaPDD"]);
+				}
+				if (array_key_exists("numeroProyecto", $arrData)) {
+					$this->db->where('fk_numero_proyecto', $arrData["numeroProyecto"]);
+				}
+				if (array_key_exists("vigencia", $arrData)) {
+					$this->db->where('vigencia_meta_proyecto', $arrData["vigencia"]);
+				}
+				$query = $this->db->get('meta_proyecto_inversion_x_trimestre');
+				if ($query->num_rows() > 0) {
+					return $query->row_array();
+				} else {
+					return false;
+				}
+		}
+
+		/**
+		 * Sumatoria ejecutado trimestre 3
+		 * @since 04/12/2023
+		 * @author AOCUBILLOSA
+		 */
+		public function get_sumRecursoEjecutadoTrim3($arrData)
+		{
+				$this->db->select_sum('comp_acum_trim_3');
+				if (array_key_exists("numeroProposito", $arrData)) {
+					$this->db->where('fk_numero_proposito', $arrData["numeroProposito"]);
+				}
+				if (array_key_exists("numeroProgramaSG", $arrData)) {
+					$this->db->where('fk_numero_programa', $arrData["numeroProgramaSG"]);
+				}
+				if (array_key_exists("numeroMetaPDD", $arrData)) {
+					$this->db->where('fk_numero_meta_pdd', $arrData["numeroMetaPDD"]);
+				}
+				if (array_key_exists("numeroProyecto", $arrData)) {
+					$this->db->where('fk_numero_proyecto', $arrData["numeroProyecto"]);
+				}
+				if (array_key_exists("vigencia", $arrData)) {
+					$this->db->where('vigencia_meta_proyecto', $arrData["vigencia"]);
+				}
+				$query = $this->db->get('meta_proyecto_inversion_x_trimestre');
+				if ($query->num_rows() > 0) {
+					return $query->row_array();
+				} else {
+					return false;
+				}
+		}
+
+		/**
+		 * Sumatoria ejecutado trimestre 4
+		 * @since 04/12/2023
+		 * @author AOCUBILLOSA
+		 */
+		public function get_sumRecursoEjecutadoTrim4($arrData)
+		{
+				$this->db->select_sum('comp_acum_trim_4');
+				if (array_key_exists("numeroProposito", $arrData)) {
+					$this->db->where('fk_numero_proposito', $arrData["numeroProposito"]);
+				}
+				if (array_key_exists("numeroProgramaSG", $arrData)) {
+					$this->db->where('fk_numero_programa', $arrData["numeroProgramaSG"]);
+				}
+				if (array_key_exists("numeroMetaPDD", $arrData)) {
+					$this->db->where('fk_numero_meta_pdd', $arrData["numeroMetaPDD"]);
+				}
+				if (array_key_exists("numeroProyecto", $arrData)) {
+					$this->db->where('fk_numero_proyecto', $arrData["numeroProyecto"]);
+				}
+				if (array_key_exists("vigencia", $arrData)) {
+					$this->db->where('vigencia_meta_proyecto', $arrData["vigencia"]);
+				}
+				$query = $this->db->get('meta_proyecto_inversion_x_trimestre');
+				if ($query->num_rows() > 0) {
+					return $query->row_array();
+				} else {
+					return false;
+				}
+		}
+
+		/**
+		 * Sumatoria ejecutado giros trimestre 1
+		 * @since 04/12/2023
+		 * @author AOCUBILLOSA
+		 */
+		public function get_sumGirosEjecutadoTrim1($arrData)
+		{
+				$this->db->select_sum('giros_acum_trim_1');
+				if (array_key_exists("numeroProposito", $arrData)) {
+					$this->db->where('fk_numero_proposito', $arrData["numeroProposito"]);
+				}
+				if (array_key_exists("numeroProgramaSG", $arrData)) {
+					$this->db->where('fk_numero_programa', $arrData["numeroProgramaSG"]);
+				}
+				if (array_key_exists("numeroMetaPDD", $arrData)) {
+					$this->db->where('fk_numero_meta_pdd', $arrData["numeroMetaPDD"]);
+				}
+				if (array_key_exists("numeroProyecto", $arrData)) {
+					$this->db->where('fk_numero_proyecto', $arrData["numeroProyecto"]);
+				}
+				if (array_key_exists("vigencia", $arrData)) {
+					$this->db->where('vigencia_meta_proyecto', $arrData["vigencia"]);
+				}
+				$query = $this->db->get('meta_proyecto_inversion_x_trimestre');
+				if ($query->num_rows() > 0) {
+					return $query->row_array();
+				} else {
+					return false;
+				}
+		}
+
+		/**
+		 * Sumatoria ejecutado giros trimestre 2
+		 * @since 04/12/2023
+		 * @author AOCUBILLOSA
+		 */
+		public function get_sumGirosEjecutadoTrim2($arrData)
+		{
+				$this->db->select_sum('giros_acum_trim_2');
+				if (array_key_exists("numeroProposito", $arrData)) {
+					$this->db->where('fk_numero_proposito', $arrData["numeroProposito"]);
+				}
+				if (array_key_exists("numeroProgramaSG", $arrData)) {
+					$this->db->where('fk_numero_programa', $arrData["numeroProgramaSG"]);
+				}
+				if (array_key_exists("numeroMetaPDD", $arrData)) {
+					$this->db->where('fk_numero_meta_pdd', $arrData["numeroMetaPDD"]);
+				}
+				if (array_key_exists("numeroProyecto", $arrData)) {
+					$this->db->where('fk_numero_proyecto', $arrData["numeroProyecto"]);
+				}
+				if (array_key_exists("vigencia", $arrData)) {
+					$this->db->where('vigencia_meta_proyecto', $arrData["vigencia"]);
+				}
+				$query = $this->db->get('meta_proyecto_inversion_x_trimestre');
+				if ($query->num_rows() > 0) {
+					return $query->row_array();
+				} else {
+					return false;
+				}
+		}
+
+		/**
+		 * Sumatoria ejecutado giros trimestre 3
+		 * @since 04/12/2023
+		 * @author AOCUBILLOSA
+		 */
+		public function get_sumGirosEjecutadoTrim3($arrData)
+		{
+				$this->db->select_sum('giros_acum_trim_3');
+				if (array_key_exists("numeroProposito", $arrData)) {
+					$this->db->where('fk_numero_proposito', $arrData["numeroProposito"]);
+				}
+				if (array_key_exists("numeroProgramaSG", $arrData)) {
+					$this->db->where('fk_numero_programa', $arrData["numeroProgramaSG"]);
+				}
+				if (array_key_exists("numeroMetaPDD", $arrData)) {
+					$this->db->where('fk_numero_meta_pdd', $arrData["numeroMetaPDD"]);
+				}
+				if (array_key_exists("numeroProyecto", $arrData)) {
+					$this->db->where('fk_numero_proyecto', $arrData["numeroProyecto"]);
+				}
+				if (array_key_exists("vigencia", $arrData)) {
+					$this->db->where('vigencia_meta_proyecto', $arrData["vigencia"]);
+				}
+				$query = $this->db->get('meta_proyecto_inversion_x_trimestre');
+				if ($query->num_rows() > 0) {
+					return $query->row_array();
+				} else {
+					return false;
+				}
+		}
+
+		/**
+		 * Sumatoria ejecutado giros trimestre 4
+		 * @since 04/12/2023
+		 * @author AOCUBILLOSA
+		 */
+		public function get_sumGirosEjecutadoTrim4($arrData)
+		{
+				$this->db->select_sum('giros_acum_trim_4');
+				if (array_key_exists("numeroProposito", $arrData)) {
+					$this->db->where('fk_numero_proposito', $arrData["numeroProposito"]);
+				}
+				if (array_key_exists("numeroProgramaSG", $arrData)) {
+					$this->db->where('fk_numero_programa', $arrData["numeroProgramaSG"]);
+				}
+				if (array_key_exists("numeroMetaPDD", $arrData)) {
+					$this->db->where('fk_numero_meta_pdd', $arrData["numeroMetaPDD"]);
+				}
+				if (array_key_exists("numeroProyecto", $arrData)) {
+					$this->db->where('fk_numero_proyecto', $arrData["numeroProyecto"]);
+				}
+				if (array_key_exists("vigencia", $arrData)) {
+					$this->db->where('vigencia_meta_proyecto', $arrData["vigencia"]);
+				}
+				$query = $this->db->get('meta_proyecto_inversion_x_trimestre');
+				if ($query->num_rows() > 0) {
+					return $query->row_array();
+				} else {
+					return false;
+				}
+		}
+
+		/**
+		 * Consulta lista de cuadro de mando
+		 * @since 15/04/2022
+		 */
+		public function get_objetivos_y_metas($arrData) 
+		{		
+				$this->db->select("A.*, C.*, PD.dependencia, nombre_proyecto_inversion, id_meta_proyecto_inversion, numero_meta_proyecto, meta_proyecto, presupuesto_meta, proposito, logro, programa, programa_estrategico, meta_pdd, I1.indicador_sp, I2.indicador_sp, OG.objetivo_general, OE.objetivo_especifico, ods, nombre_dimension, TA.tipologia,");
+				$this->db->join('cuadro_base C', 'A.fk_id_cuadro_base = C.id_cuadro_base', 'INNER');
+				$this->db->join('param_dependencias PD', 'A.fk_id_dependencia = PD.id_dependencia', 'LEFT');
+				$this->db->join('proyecto_inversion PI', 'PI.numero_proyecto_inversion = C.fk_numero_proyecto_inversion', 'INNER');
+				$this->db->join('meta_proyecto_inversion M', 'M.nu_meta_proyecto = C.fk_nu_meta_proyecto_inversion', 'INNER');
+				$this->db->join('propositos X', 'X.numero_proposito = C.fk_numero_proposito', 'INNER');
+				$this->db->join('logros L', 'L.numero_logro  = C.fk_numero_logro', 'INNER');
+				$this->db->join('programa P', 'P.numero_programa = C.fk_numero_programa', 'LEFT');
+				$this->db->join('programa_estrategico Y', 'Y.numero_programa_estrategico = C.fk_numero_programa_estrategico', 'INNER');
+				$this->db->join('meta_pdd Z', 'Z.numero_meta_pdd = C.fk_numero_meta_pdd', 'INNER');
+				$this->db->join('ods O', 'O.numero_ods = C.fk_numero_ods', 'INNER');
+				$this->db->join('param_dimensiones_mipg D', 'D.id_dimension = C.fk_id_dimension', 'LEFT');
+				$this->db->join('indicadores I1', 'C.indicador_1 = I1.numero_indicador', 'LEFT');
+				$this->db->join('indicadores I2', 'C.indicador_2 = I2.numero_indicador', 'LEFT');
+				$this->db->join('objetivos_generales OG', 'C.fk_objetivo_general = OG.numero_objetivo_general', 'LEFT');
+				$this->db->join('objetivos_especificos OE', 'C.fk_objetivo_especifico = OE.numero_objetivo_especifico', 'LEFT');
+				$this->db->join('param_tipologia_anualidad TA', 'TA.id_tipologia = A.tipo_indicador', 'LEFT');
+				if (array_key_exists("idCuadroBase", $arrData)) {
+					$this->db->where('C.id_cuadro_base', $arrData["idCuadroBase"]);
+				}
+				if (array_key_exists("vigencia", $arrData)) {
+					$this->db->where('C.vigencia', $arrData["vigencia"]);
+				}
+				if (array_key_exists("filtroCuadroBase", $arrData)) {
+					$where = "C.id_cuadro_base IN (" . $arrData["filtroCuadroBase"] . ")";
+					$this->db->where($where);
+				}
+				if (array_key_exists("numeroObjetivoEstrategico", $arrData)) {
+					$this->db->where('C.fk_numero_objetivo_estrategico like', $arrData["numeroObjetivoEstrategico"]);
+				}
+				if (array_key_exists("idEstrategia", $arrData)) {
+					$this->db->where('C.fk_id_objetivo_estrategico', $arrData["idEstrategia"]);
+				}
+				if (array_key_exists("idMetaProyecto", $arrData)) {
+					$this->db->where('M.id_meta_proyecto_inversion', $arrData["idMetaProyecto"]);
+				}
+				if (array_key_exists("idProposito", $arrData)) {
+					$this->db->where('X.id_proposito', $arrData["idProposito"]);
+				}
+				if (array_key_exists("idLogro", $arrData)) {
+					$this->db->where('L.id_logros', $arrData["idLogro"]);
+				}
+				if (array_key_exists("idPrograma", $arrData)) {
+					$this->db->where('Y.id_programa_estrategico', $arrData["idPrograma"]);
+				}
+				if (array_key_exists("idMetaPDD", $arrData)) {
+					$this->db->where('Z.id_meta_pdd', $arrData["idMetaPDD"]);
+				}
+				if (array_key_exists("idODS", $arrData)) {
+					$this->db->where('O.id_ods', $arrData["idODS"]);
+				}
+				if (array_key_exists("idGeneral", $arrData)) {
+					$this->db->where('OG.id_objetivo_general', $arrData["idGeneral"]);
+				}
+				if (array_key_exists("idEspecifico", $arrData)) {
+					$this->db->where('OE.id_objetivo_especifico', $arrData["idEspecifico"]);
+				}
+				$this->db->order_by('numero_actividad', 'ASC');
+				$query = $this->db->get('actividades A');
+				if ($query->num_rows() > 0) {
+					return $query->result_array();
+				} else {
 					return false;
 				}
 		}

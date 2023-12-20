@@ -45,21 +45,21 @@
         <div class="col-lg-6">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <i class="fa fa-bell fa-fw"></i> Avance Propósitos <b><?php echo $vigencia['vigencia']; ?></b>
+                    <i class="fa fa-bell fa-fw"></i> Avance Indicadores <b><?php echo $vigencia['vigencia']; ?></b>
                 </div>
                 <div class="panel-body small">
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th width="45%">Propósito</th>
+                                <th width="45%">Indicadores</th>
                                 <th width="10%" class="text-center">No. Actividades</th>
                                 <th width="45%" class="text-center">Avance Gestión</th>
                             </tr>
                         </thead>
                         <?php
-                        foreach ($listaPropositos as $lista):
+                        foreach ($listaIndicadores as $lista):
                             $arrParam = array(
-                                "numeroProposito" => $lista["numero_proposito"],
+                                "numeroIndicadorSG" => $lista["numero_indicador"],
                                 "vigencia" => $vigencia['vigencia']
                             );
                             $nroActividades = $this->general_model->countActividades($arrParam);
@@ -78,7 +78,7 @@
                                 }
                             }
                             echo "<tr>";
-                            echo "<td><small>" . $lista["numero_proposito"] .' ' . $lista["proposito"] . "</small></td>";
+                            echo "<td><small>" . $lista["numero_indicador"] .' ' . $lista["indicador_sp"] . "</small></td>";
                             echo "<td class='text-center'><small>" . $nroActividades . "</small></td>";
                             echo "<td class='text-center'>";
                             echo "<b>" . $avancePOA ."%</b>";
@@ -97,36 +97,31 @@
         <div class="col-lg-6">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <i class="fa fa-bell fa-fw"></i> Avance Propósitos <b><?php echo $vigencia['vigencia']; ?></b>
+                    <i class="fa fa-bell fa-fw"></i> Avance Indicadores <b><?php echo $vigencia['vigencia']; ?></b>
                 </div>
                 <div class="panel-body small">
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th width="45%">Propósito</th>
+                                <th width="45%">Indicadores</th>
                                 <th width="10%" class="text-center">No. Actividades</th>
                                 <th width="45%" class="text-center">Avance Presupuesto</th>
                             </tr>
                         </thead>
                         <?php
-                        foreach ($listaPropositos as $lista):
-                            $arrParam = array('vigencia'=>$vigencia['vigencia']);
-                            $avance = $this->general_model->get_propositos_x_vigencia($arrParam);
+                        $avancePOA = 0;
+                        foreach ($listaIndicadores as $lista):
                             $arrParam = array(
-                                'numeroProposito' => $lista['numero_proposito'],
+                                'numeroIndicadorSG' => $lista['numero_indicador'],
                                 'vigencia' => $vigencia['vigencia']
                             );
                             $nroActividades = $this->general_model->countActividades($arrParam);
-                            $programado = $this->general_model->get_sumPresupuestoProgramado($arrParam);
-                            $ejecutado = $this->general_model->get_sumRecursoEjecutado($arrParam);
-                            $avance['recurso_programado_proyecto'] = $programado['presupuesto_meta'];
-                            $avance['recurso_ejecutado_proyecto'] = $ejecutado['recurso_ejecutado_meta'];
-                            if ($programado['presupuesto_meta'] != 0) {
-                                $avance['porcentaje_cumplimiento_proyecto'] = ($ejecutado['recurso_ejecutado_meta']*100)/$programado['presupuesto_meta'];
+
+                            if ($lista['programado_indicador_real'] == 0) {
+                                $avancePOA = 0;
                             } else {
-                                $avance['porcentaje_cumplimiento_proyecto'] = 0;
+                                $avancePOA = round(($lista['ejecutado_indicador'] / $lista['programado_indicador_real']) * 100, 2);
                             }
-                            $avancePOA = number_format($avance['porcentaje_cumplimiento_proyecto'],2);
                             if(!$avancePOA){
                                 $avancePOA = 0;
                                 $estilos = "bg-warning";
@@ -140,7 +135,7 @@
                                 }
                             }
                             echo "<tr>";
-                            echo "<td><small>" . $lista["numero_proposito"] .' ' . $lista["proposito"] . "</small></td>";
+                            echo "<td><small>" . $lista["numero_indicador"] .' ' . $lista["indicador_sp"] . "</small></td>";
                             echo "<td class='text-center'><small>" . $nroActividades . "</small></td>";
                             echo "<td class='text-center'>";
                             echo "<b>" . $avancePOA ."%</b>";

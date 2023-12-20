@@ -565,7 +565,7 @@ class General_model extends CI_Model {
 		 */
 		public function get_lista_cuadro_mando($arrData) 
 		{		
-				$this->db->select("C.*, CONCAT(numero_proyecto_inversion, ' ', nombre_proyecto_inversion) proyecto_inversion, id_meta_proyecto_inversion, numero_meta_proyecto, CONCAT(numero_meta_proyecto, ' ', meta_proyecto) meta_proyecto, presupuesto_meta, CONCAT(numero_proposito, ' ', proposito) proposito, CONCAT(numero_logro, ' ', logro) logro, CONCAT(numero_programa, ' ', programa) programa, CONCAT(numero_programa_estrategico, ' ', programa_estrategico) programa_estrategico, CONCAT(numero_meta_pdd, ' ', meta_pdd) meta_pdd, CONCAT(I1.numero_indicador, ' ', I1.indicador_sp) indicador_sp1, CONCAT(I2.numero_indicador, ' ', I2.indicador_sp) indicador_sp2, CONCAT(OG.numero_objetivo_general, ' ', OG.objetivo_general) objetivo_general, CONCAT(OE.numero_objetivo_especifico, ' ', OE.objetivo_especifico) objetivo_especifico, CONCAT(numero_ods, ' ', ods) ods, CONCAT(id_dimension, ' ', nombre_dimension) dimension, ");
+				$this->db->select("C.*, CONCAT(numero_proyecto_inversion, ' ', nombre_proyecto_inversion) proyecto_inversion, id_meta_proyecto_inversion, numero_meta_proyecto, CONCAT(numero_meta_proyecto, ' ', meta_proyecto) meta_proyecto, presupuesto_meta, CONCAT(numero_proposito, ' ', proposito) proposito, CONCAT(numero_logro, ' ', logro) logro, CONCAT(numero_programa, ' ', programa) programa, CONCAT(numero_programa_estrategico, ' ', programa_estrategico) programa_estrategico, CONCAT(numero_meta_pdd, ' ', meta_pdd) meta_pdd, CONCAT(I1.numero_indicador, ' ', I1.indicador_sp) indicador_sp1, CONCAT(I2.numero_indicador, ' ', I2.indicador_sp) indicador_sp2, CONCAT(OG.numero_objetivo_general, ' ', OG.objetivo_general) objetivo_general, CONCAT(OE.numero_objetivo_especifico, ' ', OE.objetivo_especifico) objetivo_especifico, CONCAT(numero_ods, ' ', ods) ods, CONCAT(id_dimension, ' ', nombre_dimension) dimension");
 				$this->db->join('proyecto_inversion PI', 'PI.numero_proyecto_inversion = C.fk_numero_proyecto_inversion', 'INNER');
 				$this->db->join('meta_proyecto_inversion M', 'M.nu_meta_proyecto = C.fk_nu_meta_proyecto_inversion', 'INNER');
 				$this->db->join('propositos X', 'X.numero_proposito = C.fk_numero_proposito', 'INNER');
@@ -1523,13 +1523,25 @@ class General_model extends CI_Model {
 				if (array_key_exists("numeroProyecto", $arrData)) {
 					$sql.= " AND C.fk_numero_proyecto_inversion = '". $arrData["numeroProyecto"]. "'";
 				}
+				if (array_key_exists("numeroProposito", $arrData)) {
+					$sql.= " AND C.fk_numero_proposito = '". $arrData["numeroProposito"]. "'";
+				}
+				if (array_key_exists("numeroMetaPDD", $arrData)) {
+					$sql.= " AND C.fk_numero_meta_pdd = '". $arrData["numeroMetaPDD"]. "'";
+				}
+				if (array_key_exists("numeroProgramaSG", $arrData)) {
+					$sql.= " AND C.fk_numero_programa = '". $arrData["numeroProgramaSG"]. "'";
+				}
+				if (array_key_exists("numeroIndicadorSG", $arrData)) {
+					$sql.= " AND (C.indicador_1 = ". $arrData["numeroIndicadorSG"] ." OR C.indicador_2 = " . $arrData["numeroIndicadorSG"] .")";
+				}
 				if(array_key_exists("numeroActividad", $arrData)) {
 					$sql.= " AND A.numero_actividad = '". $arrData["numeroActividad"]. "'";
 				}
 				if(array_key_exists("vigencia", $arrData)) {
 					$sql.= " AND A.vigencia = '". $arrData["vigencia"]. "'";
 				}
-				if (array_key_exists("planArchivos", $arrData)) {
+				/*if (array_key_exists("planArchivos", $arrData)) {
 					$sql.= " AND A.plan_archivos = 1";
 				}
 				if (array_key_exists("planAdquisiciones", $arrData)) {
@@ -1564,7 +1576,7 @@ class General_model extends CI_Model {
 				}
 				if (array_key_exists("planInformacion", $arrData)) {
 					$sql.= " AND A.plan_informacion = 1";
-				}
+				}*/
 
 				$query = $this->db->query($sql);
 				$row = $query->row();
@@ -1886,7 +1898,7 @@ class General_model extends CI_Model {
 		 * Sumatoria avance POA
 		 * @since 17/5/2022
 		 */
-		public function sumAvance($arrData) 
+		public function sumAvance($arrData)
 		{		
 			$this->db->select_sum('avance_poa');
 			$this->db->join('actividades A', 'A.numero_actividad = E.fk_numero_actividad', 'INNER');
@@ -1905,6 +1917,19 @@ class General_model extends CI_Model {
 			}
 			if (array_key_exists("numeroProyecto", $arrData)) {
 				$this->db->where('C.fk_numero_proyecto_inversion', $arrData["numeroProyecto"]);
+			}
+			if (array_key_exists("numeroProposito", $arrData)) {
+				$this->db->where('C.fk_numero_proposito', $arrData["numeroProposito"]);
+			}
+			if (array_key_exists("numeroMetaPDD", $arrData)) {
+				$this->db->where('C.fk_numero_meta_pdd', $arrData["numeroMetaPDD"]);
+			}
+			if (array_key_exists("numeroProgramaSG", $arrData)) {
+				$this->db->where('C.fk_numero_programa', $arrData["numeroProgramaSG"]);
+			}
+			if (array_key_exists("numeroIndicadorSG", $arrData)) {
+				$this->db->where('C.indicador_1', $arrData["numeroIndicadorSG"]);
+				$this->db->or_where('C.indicador_2', $arrData["numeroIndicadorSG"]);
 			}
 			if (array_key_exists("vigencia", $arrData)) {
 				$this->db->where('A.vigencia', $arrData["vigencia"]);
@@ -1986,32 +2011,6 @@ class General_model extends CI_Model {
 			} else {
 				return false;
 			}
-		}
-
-		/**
-		 * Consulta lista de propositos por vigencia
-		 * @since 9/07/2022
-		 */
-		public function get_propositos_x_vigencia($arrData) 
-		{		
-				$this->db->select();
-				$this->db->join('propositos P', 'P.numero_proposito = PV.fk_numero_proposito', 'INNER');
-				if (array_key_exists("idPropositoVigencia", $arrData)) {
-					$this->db->where('PV.id_proposito_vigencia', $arrData["idPropositoVigencia"]);
-				}
-				if (array_key_exists("numeroProposito", $arrData)) {
-					$this->db->where('P.fk_numero_proposito', $arrData["numeroProposito"]);
-				}
-				if (array_key_exists("vigencia", $arrData)) {
-					$this->db->where('PV.vigencia_proposito', $arrData["vigencia"]);
-				}
-				$this->db->order_by('proposito', 'asc');
-				$query = $this->db->get('proposito_x_vigencia PV');
-				if ($query->num_rows() > 0) {
-					return $query->result_array();
-				} else {
-					return false;
-				}
 		}
 
 		/**
@@ -2127,24 +2126,25 @@ class General_model extends CI_Model {
 		}
 
 		/**
-		 * Consulta lista de proyectos por vigencia
-		 * @since 24/07/2022
+		 * Consulta lista de propositos por vigencia
+		 * @since 9/07/2022
 		 */
-		public function get_proyectos_x_vigencia($arrData) 
+		public function get_propositos_x_vigencia($arrData)
 		{		
 				$this->db->select();
-				$this->db->join('proyecto_inversion P', 'P.numero_proyecto_inversion = PV.fk_numero_proyecto_inversion', 'INNER');
-				if (array_key_exists("idProyectoVigencia", $arrData)) {
-					$this->db->where('PV.id_proyecto_vigencia', $arrData["idProyectoVigencia"]);
+				$this->db->join('propositos P', 'P.numero_proposito = PV.fk_numero_proposito', 'INNER');
+				$this->db->where('fk_numero_proposito NOT IN (98, 99)');
+				if (array_key_exists("idPropositoVigencia", $arrData)) {
+					$this->db->where('PV.id_proposito_vigencia', $arrData["idPropositoVigencia"]);
 				}
-				if (array_key_exists("numeroProyecto", $arrData)) {
-					$this->db->where('P.fk_numero_proyecto_inversion', $arrData["numeroProyecto"]);
+				if (array_key_exists("numeroProposito", $arrData)) {
+					$this->db->where('P.fk_numero_proposito', $arrData["numeroProposito"]);
 				}
 				if (array_key_exists("vigencia", $arrData)) {
-					$this->db->where('PV.vigencia_proyecto', $arrData["vigencia"]);
+					$this->db->where('PV.vigencia_proposito', $arrData["vigencia"]);
 				}
-				$this->db->order_by('numero_proyecto_inversion', 'asc');
-				$query = $this->db->get('proyecto_inversion_x_vigencia PV');
+				$this->db->order_by('fk_numero_proposito', 'asc');
+				$query = $this->db->get('proposito_x_vigencia PV');
 				if ($query->num_rows() > 0) {
 					return $query->result_array();
 				} else {
@@ -2153,30 +2153,9 @@ class General_model extends CI_Model {
 		}
 
 		/**
-		 * Consulta lista de metas pdd por vigencia
-		 * @since 24/07/2022
+		 * Consulta lista de logros por vigencia
+		 * @since 19/12/2023
 		 */
-		public function get_metas_pdd_x_vigencia($arrData) 
-		{		
-				$this->db->select();
-				$this->db->join('meta_pdd P', 'P.numero_meta_pdd = PV.fk_numero_meta_pdd', 'INNER');
-				if (array_key_exists("idMetaPDDVigencia", $arrData)) {
-					$this->db->where('PV.id_meta_pdd_vigencia', $arrData["idMetaPDDVigencia"]);
-				}
-				if (array_key_exists("numeroMetaPDD", $arrData)) {
-					$this->db->where('P.fk_numero_meta_pdd', $arrData["numeroMetaPDD"]);
-				}
-				if (array_key_exists("vigencia", $arrData)) {
-					$this->db->where('PV.vigencia_meta_pdd', $arrData["vigencia"]);
-				}
-				$this->db->order_by('numero_meta_pdd', 'asc');
-				$query = $this->db->get('meta_pdd_x_vigencia PV');
-				if ($query->num_rows() > 0) {
-					return $query->result_array();
-				} else {
-					return false;
-				}
-		}
 
 		/**
 		 * Consulta lista de programas SEGPLAN por vigencia
@@ -2186,6 +2165,7 @@ class General_model extends CI_Model {
 		{		
 				$this->db->select();
 				$this->db->join('programa P', 'P.numero_programa = PV.fk_numero_programa', 'INNER');
+				$this->db->where('numero_programa NOT IN (99)');
 				if (array_key_exists("idProgramaSPVigencia", $arrData)) {
 					$this->db->where('PV.id_programa_vigencia', $arrData["idProgramaSPVigencia"]);
 				}
@@ -2205,6 +2185,65 @@ class General_model extends CI_Model {
 		}
 
 		/**
+		 * Consulta lista de metas pdd por vigencia
+		 * @since 24/07/2022
+		 */
+		public function get_metas_pdd_x_vigencia($arrData) 
+		{		
+				$this->db->select();
+				$this->db->join('meta_pdd P', 'P.numero_meta_pdd = PV.fk_numero_meta_pdd', 'INNER');
+				$this->db->where('numero_meta_pdd NOT IN (998, 999)');
+				if (array_key_exists("idMetaPDDVigencia", $arrData)) {
+					$this->db->where('PV.id_meta_pdd_vigencia', $arrData["idMetaPDDVigencia"]);
+				}
+				if (array_key_exists("numeroMetaPDD", $arrData)) {
+					$this->db->where('P.fk_numero_meta_pdd', $arrData["numeroMetaPDD"]);
+				}
+				if (array_key_exists("vigencia", $arrData)) {
+					$this->db->where('PV.vigencia_meta_pdd', $arrData["vigencia"]);
+				}
+				$this->db->order_by('numero_meta_pdd', 'asc');
+				$query = $this->db->get('meta_pdd_x_vigencia PV');
+				if ($query->num_rows() > 0) {
+					return $query->result_array();
+				} else {
+					return false;
+				}
+		}
+
+		/**
+		 * Consulta lista de ODS por vigencia
+		 * @since 19/12/2023
+		 */
+
+		/**
+		 * Consulta lista de proyectos por vigencia
+		 * @since 24/07/2022
+		 */
+		public function get_proyectos_x_vigencia($arrData) 
+		{		
+				$this->db->select();
+				$this->db->join('proyecto_inversion P', 'P.numero_proyecto_inversion = PV.fk_numero_proyecto_inversion', 'INNER');
+				$this->db->where('fk_numero_proyecto_inversion NOT IN (1, 9999)');
+				if (array_key_exists("idProyectoVigencia", $arrData)) {
+					$this->db->where('PV.id_proyecto_vigencia', $arrData["idProyectoVigencia"]);
+				}
+				if (array_key_exists("numeroProyecto", $arrData)) {
+					$this->db->where('P.fk_numero_proyecto_inversion', $arrData["numeroProyecto"]);
+				}
+				if (array_key_exists("vigencia", $arrData)) {
+					$this->db->where('PV.vigencia_proyecto', $arrData["vigencia"]);
+				}
+				$this->db->order_by('numero_proyecto_inversion', 'asc');
+				$query = $this->db->get('proyecto_inversion_x_vigencia PV');
+				if ($query->num_rows() > 0) {
+					return $query->result_array();
+				} else {
+					return false;
+				}
+		}
+
+		/**
 		 * Consulta lista de INDICADORES SEGPLAN por vigencia
 		 * @since 26/07/2022
 		 */
@@ -2212,6 +2251,7 @@ class General_model extends CI_Model {
 		{		
 				$this->db->select();
 				$this->db->join('indicadores P', 'P.numero_indicador = PV.fk_numero_indicador', 'INNER');
+				$this->db->where('numero_indicador NOT IN (999)');
 				if (array_key_exists("idIndicadorSPVigencia", $arrData)) {
 					$this->db->where('PV.id_indicador_vigencia', $arrData["idIndicadorSPVigencia"]);
 				}
@@ -2229,8 +2269,6 @@ class General_model extends CI_Model {
 					return false;
 				}
 		}
-
-		
 
 		/**
 		 * Guardar evaluacion objetivos estrategicos
@@ -2454,23 +2492,28 @@ class General_model extends CI_Model {
 		 */
 		public function get_sumPresupuestoProgramado($arrData)
 		{
-				$this->db->select_sum('presupuesto_meta');
+				$this->db->select_sum('M.presupuesto_meta');
+				$this->db->join('cuadro_base C', 'C.fk_numero_proyecto_inversion = M.fk_numero_proyecto', 'INNER');
 				if (array_key_exists("numeroProposito", $arrData)) {
-					$this->db->where('fk_numero_proposito', $arrData["numeroProposito"]);
+					$this->db->where('M.fk_numero_proposito', $arrData["numeroProposito"]);
 				}
 				if (array_key_exists("numeroProgramaSG", $arrData)) {
-					$this->db->where('fk_numero_programa', $arrData["numeroProgramaSG"]);
+					$this->db->where('M.fk_numero_programa', $arrData["numeroProgramaSG"]);
 				}
 				if (array_key_exists("numeroMetaPDD", $arrData)) {
-					$this->db->where('fk_numero_meta_pdd', $arrData["numeroMetaPDD"]);
+					$this->db->where('M.fk_numero_meta_pdd', $arrData["numeroMetaPDD"]);
 				}
 				if (array_key_exists("numeroProyecto", $arrData)) {
-					$this->db->where('fk_numero_proyecto', $arrData["numeroProyecto"]);
+					$this->db->where('M.fk_numero_proyecto', $arrData["numeroProyecto"]);
+				}
+				if (array_key_exists("numeroIndicadorSG", $arrData)) {
+					$this->db->where('C.indicador_1', $arrData["numeroIndicadorSG"]);
+					$this->db->or_where('C.indicador_2', $arrData["numeroIndicadorSG"]);
 				}
 				if (array_key_exists("vigencia", $arrData)) {
-					$this->db->where('vigencia_meta_proyecto', $arrData["vigencia"]);
+					$this->db->where('M.vigencia_meta_proyecto', $arrData["vigencia"]);
 				}
-				$query = $this->db->get('meta_proyecto_inversion');
+				$query = $this->db->get('meta_proyecto_inversion M');
 				if ($query->num_rows() > 0) {
 					return $query->row_array();
 				} else {
@@ -2485,23 +2528,28 @@ class General_model extends CI_Model {
 		 */
 		public function get_sumRecursoEjecutado($arrData)
 		{
-				$this->db->select_sum('recurso_ejecutado_meta');
+				$this->db->select_sum('M.recurso_ejecutado_meta');
+				$this->db->join('cuadro_base C', 'C.fk_numero_proyecto_inversion = M.fk_numero_proyecto', 'INNER');
 				if (array_key_exists("numeroProposito", $arrData)) {
-					$this->db->where('fk_numero_proposito', $arrData["numeroProposito"]);
+					$this->db->where('M.fk_numero_proposito', $arrData["numeroProposito"]);
 				}
 				if (array_key_exists("numeroProgramaSG", $arrData)) {
-					$this->db->where('fk_numero_programa', $arrData["numeroProgramaSG"]);
+					$this->db->where('M.fk_numero_programa', $arrData["numeroProgramaSG"]);
 				}
 				if (array_key_exists("numeroMetaPDD", $arrData)) {
-					$this->db->where('fk_numero_meta_pdd', $arrData["numeroMetaPDD"]);
+					$this->db->where('M.fk_numero_meta_pdd', $arrData["numeroMetaPDD"]);
 				}
 				if (array_key_exists("numeroProyecto", $arrData)) {
-					$this->db->where('fk_numero_proyecto', $arrData["numeroProyecto"]);
+					$this->db->where('M.fk_numero_proyecto', $arrData["numeroProyecto"]);
+				}
+				if (array_key_exists("numeroIndicadorSG", $arrData)) {
+					$this->db->where('C.indicador_1', $arrData["numeroIndicadorSG"]);
+					$this->db->or_where('C.indicador_2', $arrData["numeroIndicadorSG"]);
 				}
 				if (array_key_exists("vigencia", $arrData)) {
-					$this->db->where('vigencia_meta_proyecto', $arrData["vigencia"]);
+					$this->db->where('M.vigencia_meta_proyecto', $arrData["vigencia"]);
 				}
-				$query = $this->db->get('meta_proyecto_inversion');
+				$query = $this->db->get('meta_proyecto_inversion M');
 				if ($query->num_rows() > 0) {
 					return $query->row_array();
 				} else {

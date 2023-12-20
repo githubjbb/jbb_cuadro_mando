@@ -22,7 +22,7 @@
         <?php if($vigencia['vigencia'] >= 2023) { ?>
 
         <div class="col-lg-12">
-            <ul class="nav nav-tabs ">
+            <ul class="nav nav-tabs">
                 <li><a href="<?php echo base_url("dashboard/admin"); ?>"><b>Propositos</b></a>
                 </li>
                 <li><a href="<?php echo base_url("dashboard/tabs_logros"); ?>"><b>Logros</b></a>
@@ -45,21 +45,21 @@
         <div class="col-lg-6">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <i class="fa fa-bell fa-fw"></i> Avance Propósitos <b><?php echo $vigencia['vigencia']; ?></b>
+                    <i class="fa fa-bell fa-fw"></i> Avance Proyectos de Inversión <b><?php echo $vigencia['vigencia']; ?></b>
                 </div>
                 <div class="panel-body small">
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th width="45%">Propósito</th>
+                                <th width="45%">Proyecto de Inversión</th>
                                 <th width="10%" class="text-center">No. Actividades</th>
                                 <th width="45%" class="text-center">Avance Gestión</th>
                             </tr>
                         </thead>
                         <?php
-                        foreach ($listaPropositos as $lista):
+                        foreach ($listaProyectosInversion as $lista):
                             $arrParam = array(
-                                "numeroProposito" => $lista["numero_proposito"],
+                                "numeroProyecto" => $lista["numero_proyecto_inversion"],
                                 "vigencia" => $vigencia['vigencia']
                             );
                             $nroActividades = $this->general_model->countActividades($arrParam);
@@ -78,7 +78,7 @@
                                 }
                             }
                             echo "<tr>";
-                            echo "<td><small>" . $lista["numero_proposito"] .' ' . $lista["proposito"] . "</small></td>";
+                            echo "<td><small>" . $lista["numero_proyecto_inversion"] .' ' . $lista["nombre_proyecto_inversion"] . "</small></td>";
                             echo "<td class='text-center'><small>" . $nroActividades . "</small></td>";
                             echo "<td class='text-center'>";
                             echo "<b>" . $avancePOA ."%</b>";
@@ -97,23 +97,24 @@
         <div class="col-lg-6">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <i class="fa fa-bell fa-fw"></i> Avance Propósitos <b><?php echo $vigencia['vigencia']; ?></b>
+                    <i class="fa fa-bell fa-fw"></i> Avance Proyectos de Inversión <b><?php echo $vigencia['vigencia']; ?></b>
                 </div>
                 <div class="panel-body small">
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th width="45%">Propósito</th>
+                                <th width="45%">Proyecto de Inversión</th>
                                 <th width="10%" class="text-center">No. Actividades</th>
                                 <th width="45%" class="text-center">Avance Presupuesto</th>
                             </tr>
                         </thead>
                         <?php
-                        foreach ($listaPropositos as $lista):
+                        $avancePOA = 0;
+                        foreach ($listaProyectosInversion as $lista):
                             $arrParam = array('vigencia'=>$vigencia['vigencia']);
-                            $avance = $this->general_model->get_propositos_x_vigencia($arrParam);
+                            $avance = $this->general_model->get_proyectos_x_vigencia($arrParam);
                             $arrParam = array(
-                                'numeroProposito' => $lista['numero_proposito'],
+                                'numeroProyecto' => $lista['numero_proyecto_inversion'],
                                 'vigencia' => $vigencia['vigencia']
                             );
                             $nroActividades = $this->general_model->countActividades($arrParam);
@@ -140,7 +141,7 @@
                                 }
                             }
                             echo "<tr>";
-                            echo "<td><small>" . $lista["numero_proposito"] .' ' . $lista["proposito"] . "</small></td>";
+                            echo "<td><small>" . $lista["numero_proyecto_inversion"] .' ' . $lista["nombre_proyecto_inversion"] . "</small></td>";
                             echo "<td class='text-center'><small>" . $nroActividades . "</small></td>";
                             echo "<td class='text-center'>";
                             echo "<b>" . $avancePOA ."%</b>";

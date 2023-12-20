@@ -57,15 +57,16 @@ class Dashboard extends CI_Controller {
 	        }
 	        $data['listaProyectos'] = $this->general_model->get_numero_proyectos_full_by_dependencia($arrParam);
 
+	        $vigencia = $this->general_model->get_vigencia();
+			$arrParam = array(
+				"vigencia" => $vigencia['vigencia']
+			);
+			$data['listaPropositos'] = $this->general_model->get_propositos_x_vigencia($arrParam);
+
 			$arrParam = array(
 				"filtro" => true
 			);
-			$data['listaProyectosInversion'] = $this->general_model->get_proyectos_inversion($arrParam);
-
-			/*$arrParam = array(
-				"filtro" => true
-			);
-			$data['listaDependencia'] = $this->general_model->get_app_dependencias($arrParam);*/
+			$data['listaDependencia'] = $this->general_model->get_app_dependencias($arrParam);
 
 			$arrParam = array(
 				"filtro" => true
@@ -87,6 +88,501 @@ class Dashboard extends CI_Controller {
 			$data['vigencia'] = $this->general_model->get_vigencia();
 
 			$data["view"] = "dashboard_principal";
+			$this->load->view("layout_calendar", $data);
+	}
+
+	/**
+	 * TABS LOGROS
+	 * @since 18/12/2023
+	 */
+	public function tabs_logros()
+	{	
+			if($_GET)
+			{								
+				$arrParam = array(
+					"numero_objetivo" => $_GET["numero_objetivo"],
+					"numero_proyecto" => $_GET["numero_proyecto"],
+					"id_dependencia" => $_GET["id_dependencia"],
+					"numero_actividad" => $_GET["numero_actividad"]
+				);
+				$this->general_model->saveInfoGoBack($arrParam);
+			}
+
+			$arrParam = array();
+            if($_GET && $_GET["numero_objetivo"] != ""){
+                $arrParam["numeroObjetivoEstrategico"] = $_GET["numero_objetivo"] ;
+            }
+			$data['listaObjetivosEstrategicos'] = $this->general_model->get_objetivos_estrategicos($arrParam);
+
+			$arrParam = array();
+			$data['listaEstrategias'] = $this->general_model->get_estrategias($arrParam);
+			$data['listaEstrategiasFiltro'] = $this->general_model->get_estrategias($arrParam);
+
+			$arrParam = array();
+	        if($_GET && isset($_GET["id_estrategia"]) && $_GET["id_estrategia"] != ""){
+	            $arrParam = array(
+	                "idEstrategia" => $_GET["id_estrategia"]
+	            );  
+	        }
+			$data['listaNumeroObjetivoEstrategicos'] = $this->general_model->get_objetivos_estrategicos($arrParam);
+
+	        $arrParam = array();
+	        if($_GET && isset($_GET["id_estrategia"]) && $_GET["id_estrategia"] != ""){
+	            $arrParam = array(
+	                "idEstrategia" => $_GET["id_estrategia"]
+	            );  
+	        }
+	        if($_GET && $_GET["numero_objetivo"] != ""){
+	            $arrParam = array(
+	                "numeroObjetivoEstrategico" => $_GET["numero_objetivo"]
+	            );  
+	        }
+	        $data['listaProyectos'] = $this->general_model->get_numero_proyectos_full_by_dependencia($arrParam);
+
+			$vigencia = $this->general_model->get_vigencia();
+			$arrParam = array(
+				"vigencia" => $vigencia['vigencia']
+			);
+			$data['listaLogros'] = $this->general_model->get_logros_x_vigencia($arrParam);
+
+			$arrParam = array(
+				"filtro" => true
+			);
+			$data['listaDependencia'] = $this->general_model->get_app_dependencias($arrParam);
+
+			$arrParam = array(
+				"filtro" => true
+			);
+	        if($_GET && isset($_GET["id_estrategia"]) && $_GET["id_estrategia"] != ""){
+	            $arrParam = array(
+	                "idEstrategia" => $_GET["id_estrategia"]
+	            );  
+	        }
+	        if($_GET && $_GET["numero_objetivo"] != ""){
+	            $arrParam = array(
+	                "numeroObjetivoEstrategico" => $_GET["numero_objetivo"]
+	            );  
+	        }
+            if($_GET && $_GET["numero_proyecto"] != ""){
+                $arrParam["numeroProyecto"] = $_GET["numero_proyecto"];
+            }
+			$data['listaNumeroDependencia'] = $this->general_model->get_dependencia_full_by_filtro($arrParam);
+			$data['vigencia'] = $this->general_model->get_vigencia();
+
+			$data["view"] = "tabs_logros";
+			$this->load->view("layout_calendar", $data);
+	}
+
+	/**
+	 * TABS PROGRAMAS
+	 * @since 18/12/2023
+	 */
+	public function tabs_programas()
+	{	
+			if($_GET)
+			{								
+				$arrParam = array(
+					"numero_objetivo" => $_GET["numero_objetivo"],
+					"numero_proyecto" => $_GET["numero_proyecto"],
+					"id_dependencia" => $_GET["id_dependencia"],
+					"numero_actividad" => $_GET["numero_actividad"]
+				);
+				$this->general_model->saveInfoGoBack($arrParam);
+			}
+
+			$arrParam = array();
+            if($_GET && $_GET["numero_objetivo"] != ""){
+                $arrParam["numeroObjetivoEstrategico"] = $_GET["numero_objetivo"] ;
+            }
+			$data['listaObjetivosEstrategicos'] = $this->general_model->get_objetivos_estrategicos($arrParam);
+
+			$arrParam = array();
+			$data['listaEstrategias'] = $this->general_model->get_estrategias($arrParam);
+			$data['listaEstrategiasFiltro'] = $this->general_model->get_estrategias($arrParam);
+
+			$arrParam = array();
+	        if($_GET && isset($_GET["id_estrategia"]) && $_GET["id_estrategia"] != ""){
+	            $arrParam = array(
+	                "idEstrategia" => $_GET["id_estrategia"]
+	            );  
+	        }
+			$data['listaNumeroObjetivoEstrategicos'] = $this->general_model->get_objetivos_estrategicos($arrParam);
+
+	        $arrParam = array();
+	        if($_GET && isset($_GET["id_estrategia"]) && $_GET["id_estrategia"] != ""){
+	            $arrParam = array(
+	                "idEstrategia" => $_GET["id_estrategia"]
+	            );  
+	        }
+	        if($_GET && $_GET["numero_objetivo"] != ""){
+	            $arrParam = array(
+	                "numeroObjetivoEstrategico" => $_GET["numero_objetivo"]
+	            );  
+	        }
+	        $data['listaProyectos'] = $this->general_model->get_numero_proyectos_full_by_dependencia($arrParam);
+
+			$vigencia = $this->general_model->get_vigencia();
+			$arrParam = array(
+				"vigencia" => $vigencia['vigencia']
+			);
+			$data['listaProgramaSEGPLAN'] = $this->general_model->get_programa_sp_x_vigencia($arrParam);
+
+			$arrParam = array(
+				"filtro" => true
+			);
+			$data['listaDependencia'] = $this->general_model->get_app_dependencias($arrParam);
+
+			$arrParam = array(
+				"filtro" => true
+			);
+	        if($_GET && isset($_GET["id_estrategia"]) && $_GET["id_estrategia"] != ""){
+	            $arrParam = array(
+	                "idEstrategia" => $_GET["id_estrategia"]
+	            );  
+	        }
+	        if($_GET && $_GET["numero_objetivo"] != ""){
+	            $arrParam = array(
+	                "numeroObjetivoEstrategico" => $_GET["numero_objetivo"]
+	            );  
+	        }
+            if($_GET && $_GET["numero_proyecto"] != ""){
+                $arrParam["numeroProyecto"] = $_GET["numero_proyecto"];
+            }
+			$data['listaNumeroDependencia'] = $this->general_model->get_dependencia_full_by_filtro($arrParam);
+			$data['vigencia'] = $this->general_model->get_vigencia();
+
+			$data["view"] = "tabs_programas";
+			$this->load->view("layout_calendar", $data);
+	}
+
+	/**
+	 * TABS METAS PDD
+	 * @since 18/12/2023
+	 */
+	public function tabs_metas()
+	{	
+			if($_GET)
+			{								
+				$arrParam = array(
+					"numero_objetivo" => $_GET["numero_objetivo"],
+					"numero_proyecto" => $_GET["numero_proyecto"],
+					"id_dependencia" => $_GET["id_dependencia"],
+					"numero_actividad" => $_GET["numero_actividad"]
+				);
+				$this->general_model->saveInfoGoBack($arrParam);
+			}
+
+			$arrParam = array();
+            if($_GET && $_GET["numero_objetivo"] != ""){
+                $arrParam["numeroObjetivoEstrategico"] = $_GET["numero_objetivo"] ;
+            }
+			$data['listaObjetivosEstrategicos'] = $this->general_model->get_objetivos_estrategicos($arrParam);
+
+			$arrParam = array();
+			$data['listaEstrategias'] = $this->general_model->get_estrategias($arrParam);
+			$data['listaEstrategiasFiltro'] = $this->general_model->get_estrategias($arrParam);
+
+			$arrParam = array();
+	        if($_GET && isset($_GET["id_estrategia"]) && $_GET["id_estrategia"] != ""){
+	            $arrParam = array(
+	                "idEstrategia" => $_GET["id_estrategia"]
+	            );  
+	        }
+			$data['listaNumeroObjetivoEstrategicos'] = $this->general_model->get_objetivos_estrategicos($arrParam);
+
+	        $arrParam = array();
+	        if($_GET && isset($_GET["id_estrategia"]) && $_GET["id_estrategia"] != ""){
+	            $arrParam = array(
+	                "idEstrategia" => $_GET["id_estrategia"]
+	            );  
+	        }
+	        if($_GET && $_GET["numero_objetivo"] != ""){
+	            $arrParam = array(
+	                "numeroObjetivoEstrategico" => $_GET["numero_objetivo"]
+	            );  
+	        }
+	        $data['listaProyectos'] = $this->general_model->get_numero_proyectos_full_by_dependencia($arrParam);
+
+			$vigencia = $this->general_model->get_vigencia();
+			$arrParam = array(
+				"vigencia" => $vigencia['vigencia']
+			);
+			$data['listaMetaPDD'] = $this->general_model->get_metas_pdd_x_vigencia($arrParam);
+
+			$arrParam = array(
+				"filtro" => true
+			);
+			$data['listaDependencia'] = $this->general_model->get_app_dependencias($arrParam);
+
+			$arrParam = array(
+				"filtro" => true
+			);
+	        if($_GET && isset($_GET["id_estrategia"]) && $_GET["id_estrategia"] != ""){
+	            $arrParam = array(
+	                "idEstrategia" => $_GET["id_estrategia"]
+	            );  
+	        }
+	        if($_GET && $_GET["numero_objetivo"] != ""){
+	            $arrParam = array(
+	                "numeroObjetivoEstrategico" => $_GET["numero_objetivo"]
+	            );  
+	        }
+            if($_GET && $_GET["numero_proyecto"] != ""){
+                $arrParam["numeroProyecto"] = $_GET["numero_proyecto"];
+            }
+			$data['listaNumeroDependencia'] = $this->general_model->get_dependencia_full_by_filtro($arrParam);
+			$data['vigencia'] = $this->general_model->get_vigencia();
+
+			$data["view"] = "tabs_metas";
+			$this->load->view("layout_calendar", $data);
+	}
+
+	/**
+	 * TABS ODS
+	 * @since 18/12/2023
+	 */
+
+	/**
+	 * TABS PROYECTOS
+	 * @since 18/12/2023
+	 */
+	public function tabs_proyectos()
+	{	
+			if($_GET)
+			{								
+				$arrParam = array(
+					"numero_objetivo" => $_GET["numero_objetivo"],
+					"numero_proyecto" => $_GET["numero_proyecto"],
+					"id_dependencia" => $_GET["id_dependencia"],
+					"numero_actividad" => $_GET["numero_actividad"]
+				);
+				$this->general_model->saveInfoGoBack($arrParam);
+			}
+
+			$arrParam = array();
+            if($_GET && $_GET["numero_objetivo"] != ""){
+                $arrParam["numeroObjetivoEstrategico"] = $_GET["numero_objetivo"] ;
+            }
+			$data['listaObjetivosEstrategicos'] = $this->general_model->get_objetivos_estrategicos($arrParam);
+
+			$arrParam = array();
+			$data['listaEstrategias'] = $this->general_model->get_estrategias($arrParam);
+			$data['listaEstrategiasFiltro'] = $this->general_model->get_estrategias($arrParam);
+
+			$arrParam = array();
+	        if($_GET && isset($_GET["id_estrategia"]) && $_GET["id_estrategia"] != ""){
+	            $arrParam = array(
+	                "idEstrategia" => $_GET["id_estrategia"]
+	            );  
+	        }
+			$data['listaNumeroObjetivoEstrategicos'] = $this->general_model->get_objetivos_estrategicos($arrParam);
+
+	        $arrParam = array();
+	        if($_GET && isset($_GET["id_estrategia"]) && $_GET["id_estrategia"] != ""){
+	            $arrParam = array(
+	                "idEstrategia" => $_GET["id_estrategia"]
+	            );  
+	        }
+	        if($_GET && $_GET["numero_objetivo"] != ""){
+	            $arrParam = array(
+	                "numeroObjetivoEstrategico" => $_GET["numero_objetivo"]
+	            );  
+	        }
+	        $data['listaProyectos'] = $this->general_model->get_numero_proyectos_full_by_dependencia($arrParam);
+
+	        $arrParam = array(
+				"filtro" => true
+			);
+			$data['listaProyectosInversion'] = $this->general_model->get_proyectos_inversion($arrParam);
+
+			$arrParam = array(
+				"filtro" => true
+			);
+			$data['listaDependencia'] = $this->general_model->get_app_dependencias($arrParam);
+
+			$arrParam = array(
+				"filtro" => true
+			);
+	        if($_GET && isset($_GET["id_estrategia"]) && $_GET["id_estrategia"] != ""){
+	            $arrParam = array(
+	                "idEstrategia" => $_GET["id_estrategia"]
+	            );  
+	        }
+	        if($_GET && $_GET["numero_objetivo"] != ""){
+	            $arrParam = array(
+	                "numeroObjetivoEstrategico" => $_GET["numero_objetivo"]
+	            );  
+	        }
+            if($_GET && $_GET["numero_proyecto"] != ""){
+                $arrParam["numeroProyecto"] = $_GET["numero_proyecto"];
+            }
+			$data['listaNumeroDependencia'] = $this->general_model->get_dependencia_full_by_filtro($arrParam);
+			$data['vigencia'] = $this->general_model->get_vigencia();
+
+			$data["view"] = "tabs_proyectos";
+			$this->load->view("layout_calendar", $data);
+	}
+
+	/**
+	 * TABS INDICADORES
+	 * @since 18/12/2023
+	 */
+	public function tabs_indicadores()
+	{
+			if($_GET)
+			{								
+				$arrParam = array(
+					"numero_objetivo" => $_GET["numero_objetivo"],
+					"numero_proyecto" => $_GET["numero_proyecto"],
+					"id_dependencia" => $_GET["id_dependencia"],
+					"numero_actividad" => $_GET["numero_actividad"]
+				);
+				$this->general_model->saveInfoGoBack($arrParam);
+			}
+
+			$arrParam = array();
+            if($_GET && $_GET["numero_objetivo"] != ""){
+                $arrParam["numeroObjetivoEstrategico"] = $_GET["numero_objetivo"] ;
+            }
+			$data['listaObjetivosEstrategicos'] = $this->general_model->get_objetivos_estrategicos($arrParam);
+
+			$arrParam = array();
+			$data['listaEstrategias'] = $this->general_model->get_estrategias($arrParam);
+			$data['listaEstrategiasFiltro'] = $this->general_model->get_estrategias($arrParam);
+
+			$arrParam = array();
+	        if($_GET && isset($_GET["id_estrategia"]) && $_GET["id_estrategia"] != ""){
+	            $arrParam = array(
+	                "idEstrategia" => $_GET["id_estrategia"]
+	            );  
+	        }
+			$data['listaNumeroObjetivoEstrategicos'] = $this->general_model->get_objetivos_estrategicos($arrParam);
+
+	        $arrParam = array();
+	        if($_GET && isset($_GET["id_estrategia"]) && $_GET["id_estrategia"] != ""){
+	            $arrParam = array(
+	                "idEstrategia" => $_GET["id_estrategia"]
+	            );  
+	        }
+	        if($_GET && $_GET["numero_objetivo"] != ""){
+	            $arrParam = array(
+	                "numeroObjetivoEstrategico" => $_GET["numero_objetivo"]
+	            );  
+	        }
+	        $data['listaProyectos'] = $this->general_model->get_numero_proyectos_full_by_dependencia($arrParam);
+
+			$vigencia = $this->general_model->get_vigencia();
+			$arrParam = array(
+				"vigencia" => $vigencia['vigencia']
+			);
+			$data['listaIndicadores'] = $this->general_model->get_indicador_sp_x_vigencia($arrParam);
+
+			$arrParam = array(
+				"filtro" => true
+			);
+			$data['listaDependencia'] = $this->general_model->get_app_dependencias($arrParam);
+
+			$arrParam = array(
+				"filtro" => true
+			);
+	        if($_GET && isset($_GET["id_estrategia"]) && $_GET["id_estrategia"] != ""){
+	            $arrParam = array(
+	                "idEstrategia" => $_GET["id_estrategia"]
+	            );  
+	        }
+	        if($_GET && $_GET["numero_objetivo"] != ""){
+	            $arrParam = array(
+	                "numeroObjetivoEstrategico" => $_GET["numero_objetivo"]
+	            );  
+	        }
+            if($_GET && $_GET["numero_proyecto"] != ""){
+                $arrParam["numeroProyecto"] = $_GET["numero_proyecto"];
+            }
+			$data['listaNumeroDependencia'] = $this->general_model->get_dependencia_full_by_filtro($arrParam);
+			$data['vigencia'] = $this->general_model->get_vigencia();
+
+			$data["view"] = "tabs_indicadores";
+			$this->load->view("layout_calendar", $data);
+	}
+
+	/**
+	 * TABS ESTRATEGIAS
+	 * @since 18/12/2023
+	 */
+	public function tabs_estrategias()
+	{	
+			if($_GET)
+			{								
+				$arrParam = array(
+					"numero_objetivo" => $_GET["numero_objetivo"],
+					"numero_proyecto" => $_GET["numero_proyecto"],
+					"id_dependencia" => $_GET["id_dependencia"],
+					"numero_actividad" => $_GET["numero_actividad"]
+				);
+				$this->general_model->saveInfoGoBack($arrParam);
+			}
+
+			$arrParam = array();
+            if($_GET && $_GET["numero_objetivo"] != ""){
+                $arrParam["numeroObjetivoEstrategico"] = $_GET["numero_objetivo"] ;
+            }
+			$data['listaObjetivosEstrategicos'] = $this->general_model->get_objetivos_estrategicos($arrParam);
+
+			$arrParam = array();
+			$data['listaEstrategias'] = $this->general_model->get_estrategias($arrParam);
+			$data['listaEstrategiasFiltro'] = $this->general_model->get_estrategias($arrParam);
+
+			$arrParam = array();
+	        if($_GET && isset($_GET["id_estrategia"]) && $_GET["id_estrategia"] != ""){
+	            $arrParam = array(
+	                "idEstrategia" => $_GET["id_estrategia"]
+	            );  
+	        }
+			$data['listaNumeroObjetivoEstrategicos'] = $this->general_model->get_objetivos_estrategicos($arrParam);
+
+	        $arrParam = array();
+	        if($_GET && isset($_GET["id_estrategia"]) && $_GET["id_estrategia"] != ""){
+	            $arrParam = array(
+	                "idEstrategia" => $_GET["id_estrategia"]
+	            );  
+	        }
+	        if($_GET && $_GET["numero_objetivo"] != ""){
+	            $arrParam = array(
+	                "numeroObjetivoEstrategico" => $_GET["numero_objetivo"]
+	            );  
+	        }
+	        $data['listaProyectos'] = $this->general_model->get_numero_proyectos_full_by_dependencia($arrParam);
+
+			$arrParam = array(
+				"filtro" => true
+			);
+			$data['listaProyectosInversion'] = $this->general_model->get_proyectos_inversion($arrParam);
+
+			$arrParam = array(
+				"filtro" => true
+			);
+			$data['listaDependencia'] = $this->general_model->get_app_dependencias($arrParam);
+
+			$arrParam = array(
+				"filtro" => true
+			);
+	        if($_GET && isset($_GET["id_estrategia"]) && $_GET["id_estrategia"] != ""){
+	            $arrParam = array(
+	                "idEstrategia" => $_GET["id_estrategia"]
+	            );  
+	        }
+	        if($_GET && $_GET["numero_objetivo"] != ""){
+	            $arrParam = array(
+	                "numeroObjetivoEstrategico" => $_GET["numero_objetivo"]
+	            );  
+	        }
+            if($_GET && $_GET["numero_proyecto"] != ""){
+                $arrParam["numeroProyecto"] = $_GET["numero_proyecto"];
+            }
+			$data['listaNumeroDependencia'] = $this->general_model->get_dependencia_full_by_filtro($arrParam);
+			$data['vigencia'] = $this->general_model->get_vigencia();
+
+			$data["view"] = "tabs_estrategias";
 			$this->load->view("layout_calendar", $data);
 	}
 
@@ -551,6 +1047,11 @@ class Dashboard extends CI_Controller {
 
 			$arrParam = array();
 			$data['listaEstrategias'] = $this->general_model->get_estrategias($arrParam);
+
+			$arrParam = array(
+				"filtro" => true
+			);
+			$data['listaProyectosInversion'] = $this->general_model->get_proyectos_inversion($arrParam);
 
 			$arrParam = array(
 				"filtro" => true
@@ -1027,6 +1528,11 @@ class Dashboard extends CI_Controller {
 			$arrParam = array(
 				"filtro" => true
 			);
+			$data['listaProyectosInversion'] = $this->general_model->get_proyectos_inversion($arrParam);
+
+			$arrParam = array(
+				"filtro" => true
+			);
 			$data['listaDependencia'] = $this->general_model->get_app_dependencias($arrParam);
 		
 			$vigencia = $this->general_model->get_vigencia();
@@ -1112,6 +1618,11 @@ class Dashboard extends CI_Controller {
 			$arrParam = array();
 			$data['listaEstrategias'] = $this->general_model->get_estrategias($arrParam);
 			$data['listaEstrategiasFiltro'] = $this->general_model->get_estrategias($arrParam);
+
+			$arrParam = array(
+				"filtro" => true
+			);
+			$data['listaProyectosInversion'] = $this->general_model->get_proyectos_inversion($arrParam);
 
 			$arrParam = array(
 				"filtro" => true
@@ -1404,6 +1915,11 @@ class Dashboard extends CI_Controller {
 			$arrParam = array();
 			$data['listaEstrategias'] = $this->general_model->get_estrategias($arrParam);
 			$data['listaEstrategiasFiltro'] = $this->general_model->get_estrategias($arrParam);
+
+			$arrParam = array(
+				"filtro" => true
+			);
+			$data['listaProyectosInversion'] = $this->general_model->get_proyectos_inversion($arrParam);
 
 			$arrParam = array(
 				"filtro" => true
