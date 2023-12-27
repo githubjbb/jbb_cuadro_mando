@@ -3824,9 +3824,10 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
 		$arrParam = array(
 			'vigencia' => $vigencia['vigencia']
 		);
-		$indicadoresGestion = $this->settings_model->get_indicadores_gestion($arrParam);
 		$metasSectoriales = $this->settings_model->get_metas_sectoriales($arrParam);
 		$objetivosMetas = $this->settings_model->get_objetivos_y_metas($arrParam);
+		$presupuesto = $this->general_model->get_proyectos_x_vigencia($arrParam);
+		$indicadoresGestion = $this->settings_model->get_indicadores_gestion($arrParam);
 		
 		/**
 			METAS SECTORIALES
@@ -3878,7 +3879,6 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
 							->setCellValue('S5', '1 de 5')
 							->setCellValue('A6', 'Vigencia: ' . $vigencia['vigencia']);
 
-
 		$spreadsheet->getActiveSheet(0)
 							->setCellValue('A7', 'Propósito PDD')
 							->setCellValue('B7', 'Programa General PDD')
@@ -3903,7 +3903,6 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
 							->setCellValue('U7', 'Programación Indicador Sectorial Trimestre IV')
 							->setCellValue('V7', 'Magnitud Ejecutada Trimestre IV')
 							->setCellValue('W7', '% de Avance Trimestre IV');
-
 		$j=8;
 		if($metasSectoriales){
 			foreach ($metasSectoriales as $lista):
@@ -3919,6 +3918,7 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
 					$porc_trim_3 = 0;
 					$porc_trim_4 = 0;
 				}
+
 				$spreadsheet->getActiveSheet()
 							->setCellValue('A'.$j, $lista['proposito'])
 							->setCellValue('B'.$j, $lista['programa'])
@@ -4062,7 +4062,6 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
 		$spreadsheet->getActiveSheet()->mergeCells('B1:W1');
 		$spreadsheet->getActiveSheet()->mergeCells('B2:W2');
 		$spreadsheet->getActiveSheet()->mergeCells('B3:W3');
-
 		$spreadsheet->getActiveSheet()->mergeCells('B4:J4');
 		$spreadsheet->getActiveSheet()->mergeCells('K4:N4');
 		$spreadsheet->getActiveSheet()->mergeCells('O4:R4');
@@ -4071,7 +4070,6 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
 		$spreadsheet->getActiveSheet()->mergeCells('K5:N5');
 		$spreadsheet->getActiveSheet()->mergeCells('O5:R5');
 		$spreadsheet->getActiveSheet()->mergeCells('S5:W5');
-
 		$spreadsheet->getActiveSheet()->mergeCells('A6:X6');
 
 		$spreadsheet->getActiveSheet(0)
@@ -4119,7 +4117,6 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
 				$arrParam = array("numeroActividad" => $lista["numero_actividad"]);
 				$estadoActividad = $this->general_model->get_estados_actividades($arrParam);
 				$sumaProgramado = $this->general_model->sumarProgramado($arrParam);
-
 				$arrParam['numeroTrimestre'] = 1;
 				$sumaProgramadoTrimestre1 = $this->general_model->sumarProgramado($arrParam);
 				$sumaEjecutadoTrimestre1 = $this->general_model->sumarEjecutado($arrParam);
@@ -4132,7 +4129,6 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
 				$arrParam['numeroTrimestre'] = 4;
 				$sumaProgramadoTrimestre4 = $this->general_model->sumarProgramado($arrParam);
 				$sumaEjecutadoTrimestre4 = $this->general_model->sumarEjecutado($arrParam);
-				
 				$sumaEjecutado['ejecutado'] = 0;
 				if ($lista["tipo_indicador"] == 3) {
 					if ($estadoActividad[0]['estado_trimestre_4'] == 5){
@@ -4166,14 +4162,11 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
 						$sumaEjecutado['ejecutado'] += $sumaEjecutadoTrimestre4['ejecutado'];
 					}
 				}
-
 				$valorProgramadoTotal = round($sumaProgramadoTrimestre1['programado'] + $sumaProgramadoTrimestre2['programado'] + $sumaProgramadoTrimestre3['programado'] + $sumaProgramadoTrimestre4['programado'],2);
-				
 				$cumplimiento1 = 0;
 				$cumplimiento2 = 0;
 				$cumplimiento3 = 0;
 				$cumplimiento4 = 0;
-
 				if ($estadoActividad[0]['estado_trimestre_1'] != 0){
 					$cumplimiento1 = round($sumaEjecutadoTrimestre1['ejecutado'] / $valorProgramadoTotal * 100,2);
 				} else {
@@ -4321,6 +4314,235 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
 		$spreadsheet->setActiveSheetIndex(2);
 		$spreadsheet->getActiveSheet()->setTitle('Presupuesto');
 
+		$img1 = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
+		$img1->setPath('images/logo_alcaldia.png');
+		$img1->setCoordinates('A1');
+		$img1->setOffsetX(100);
+		$img1->setOffsetY(10);
+		$img1->setWorksheet($spreadsheet->getActiveSheet());
+
+		$img2 = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
+		$img2->setPath('images/logo_bogota.png');
+		$img2->setCoordinates('S1');
+		$img2->setOffsetX(10);
+		$img2->setOffsetY(10);
+		$img2->setWorksheet($spreadsheet->getActiveSheet());
+
+		$spreadsheet->getActiveSheet()->mergeCells('A1:A5');
+		$spreadsheet->getActiveSheet()->mergeCells('S1:S5');
+		$spreadsheet->getActiveSheet()->mergeCells('B1:R1');
+		$spreadsheet->getActiveSheet()->mergeCells('B2:R2');
+		$spreadsheet->getActiveSheet()->mergeCells('B3:R3');
+		$spreadsheet->getActiveSheet()->mergeCells('B4:G4');
+		$spreadsheet->getActiveSheet()->mergeCells('H4:L4');
+		$spreadsheet->getActiveSheet()->mergeCells('M4:O4');
+		$spreadsheet->getActiveSheet()->mergeCells('P4:R4');
+		$spreadsheet->getActiveSheet()->mergeCells('B5:G5');
+		$spreadsheet->getActiveSheet()->mergeCells('H5:L5');
+		$spreadsheet->getActiveSheet()->mergeCells('M5:O5');
+		$spreadsheet->getActiveSheet()->mergeCells('P5:R5');
+		$spreadsheet->getActiveSheet()->mergeCells('A6:S6');
+		$spreadsheet->getActiveSheet()->mergeCells('A7:A8');
+		$spreadsheet->getActiveSheet()->mergeCells('B7:B8');
+		$spreadsheet->getActiveSheet()->mergeCells('C7:C8');
+
+		$spreadsheet->getActiveSheet(0)->setCellValue('D7', 'Corte 31 de Marzo de ' . $vigencia['vigencia']);
+		$spreadsheet->getActiveSheet()->mergeCells('D7:G7');
+		$spreadsheet->getActiveSheet(0)->setCellValue('H7', 'Corte 30 de Junio de ' . $vigencia['vigencia']);
+		$spreadsheet->getActiveSheet()->mergeCells('H7:K7');
+		$spreadsheet->getActiveSheet(0)->setCellValue('L7', 'Corte 30 de Septiembre de ' . $vigencia['vigencia']);
+		$spreadsheet->getActiveSheet()->mergeCells('L7:O7');
+		$spreadsheet->getActiveSheet(0)->setCellValue('P7', 'Corte 30 de Diciembre de ' . $vigencia['vigencia']);
+		$spreadsheet->getActiveSheet()->mergeCells('P7:S7');
+
+		$spreadsheet->getActiveSheet(0)
+							->setCellValue('B1', 'MANUAL DE PROCESOS Y PROCEDIMIENTOS')
+							->setCellValue('B2', 'DYP - DIRECCIONAMIENTO Y PLANEACIÓN')
+							->setCellValue('B3', 'MATRIZ PLAN DE ACCIÓN INSTITUCIONAL')
+							->setCellValue('B4', 'Código:')
+							->setCellValue('H4', 'Versión:')
+							->setCellValue('M4', 'Fecha:')
+							->setCellValue('P4', 'Página:')
+							->setCellValue('B5', 'DYP.PR.17.F.01')
+							->setCellValue('H5', '3')
+							->setCellValue('M5', '05/07/2023')
+							->setCellValue('P5', '3 de 5')
+							->setCellValue('A6', 'Vigencia: ' . $vigencia['vigencia']);
+
+		$spreadsheet->getActiveSheet(0)
+							->setCellValue('A7', 'No.')
+							->setCellValue('B7', 'Proyecto')
+							->setCellValue('C7', 'Apropiación ' . $vigencia['vigencia'])
+							->setCellValue('D8', 'Compromisos Acumulados')
+							->setCellValue('E8', 'Porcentaje de Ejecución Presupuestal')
+							->setCellValue('F8', 'Giros Acumulados')
+							->setCellValue('G8', 'Porcentaje de Ejecución Giro')
+							->setCellValue('H8', 'Compromisos Acumulados')
+							->setCellValue('I8', 'Porcentaje de Ejecución Presupuestal')
+							->setCellValue('J8', 'Giros Acumulados')
+							->setCellValue('K8', 'Porcentaje de Ejecución Giro')
+							->setCellValue('L8', 'Compromisos Acumulados')
+							->setCellValue('M8', 'Porcentaje de Ejecución Presupuestal')
+							->setCellValue('N8', 'Giros Acumulados')
+							->setCellValue('O8', 'Porcentaje de Ejecución Giro')
+							->setCellValue('P8', 'Compromisos Acumulados')
+							->setCellValue('Q8', 'Porcentaje de Ejecución Presupuestal')
+							->setCellValue('R8', 'Giros Acumulados')
+							->setCellValue('S8', 'Porcentaje de Ejecución Giro');
+		$j=9;
+		if($presupuesto){
+			foreach ($presupuesto as $lista):
+				$arrParam = array(
+					'numeroProyecto' => $lista['numero_proyecto_inversion'],
+					'vigencia' => $vigencia['vigencia']
+				);
+				$programado = $this->settings_model->get_sumPresupuestoProgramado($arrParam);
+				$ejecutado_trim1 = $this->settings_model->get_sumRecursoEjecutadoTrim1($arrParam);
+				$ejecutado_trim2 = $this->settings_model->get_sumRecursoEjecutadoTrim2($arrParam);
+				$ejecutado_trim3 = $this->settings_model->get_sumRecursoEjecutadoTrim3($arrParam);
+				$ejecutado_trim4 = $this->settings_model->get_sumRecursoEjecutadoTrim4($arrParam);
+				$giros_trim1 = $this->settings_model->get_sumGirosEjecutadoTrim1($arrParam);
+				$giros_trim2 = $this->settings_model->get_sumGirosEjecutadoTrim2($arrParam);
+				$giros_trim3 = $this->settings_model->get_sumGirosEjecutadoTrim3($arrParam);
+				$giros_trim4 = $this->settings_model->get_sumGirosEjecutadoTrim4($arrParam);
+				$lista['apropiacion'] = $programado['apropiacion'];
+				$lista['comp_acum_trim_1'] = $ejecutado_trim1['comp_acum_trim_1'];
+				$lista['comp_acum_trim_2'] = $ejecutado_trim2['comp_acum_trim_2'];
+				$lista['comp_acum_trim_3'] = $ejecutado_trim3['comp_acum_trim_3'];
+				$lista['comp_acum_trim_4'] = $ejecutado_trim4['comp_acum_trim_4'];
+				$lista['giros_acum_trim_1'] = $giros_trim1['giros_acum_trim_1'];
+				$lista['giros_acum_trim_2'] = $giros_trim2['giros_acum_trim_2'];
+				$lista['giros_acum_trim_3'] = $giros_trim3['giros_acum_trim_3'];
+				$lista['giros_acum_trim_4'] = $giros_trim4['giros_acum_trim_4'];
+				if ($programado['apropiacion'] != 0) {
+					$lista['porc_ejec_trim_1'] = ($ejecutado_trim1['comp_acum_trim_1']*100)/$programado['apropiacion'];
+					$lista['porc_ejec_trim_2'] = ($ejecutado_trim2['comp_acum_trim_2']*100)/$programado['apropiacion'];
+					$lista['porc_ejec_trim_3'] = ($ejecutado_trim3['comp_acum_trim_3']*100)/$programado['apropiacion'];
+					$lista['porc_ejec_trim_4'] = ($ejecutado_trim4['comp_acum_trim_4']*100)/$programado['apropiacion'];
+					$lista['porc_giro_trim_1'] = ($giros_trim1['giros_acum_trim_1']*100)/$programado['apropiacion'];
+					$lista['porc_giro_trim_2'] = ($giros_trim2['giros_acum_trim_2']*100)/$programado['apropiacion'];
+					$lista['porc_giro_trim_3'] = ($giros_trim3['giros_acum_trim_3']*100)/$programado['apropiacion'];
+					$lista['porc_giro_trim_4'] = ($giros_trim4['giros_acum_trim_4']*100)/$programado['apropiacion'];
+				} else {
+					$lista['porc_ejec_trim_1'] = 0;
+					$lista['porc_ejec_trim_2'] = 0;
+					$lista['porc_ejec_trim_3'] = 0;
+					$lista['porc_ejec_trim_4'] = 0;
+					$lista['porc_giro_trim_1'] = 0;
+					$lista['porc_giro_trim_2'] = 0;
+					$lista['porc_giro_trim_3'] = 0;
+					$lista['porc_giro_trim_4'] = 0;
+				}
+				
+				$spreadsheet->getActiveSheet()
+							->setCellValue('A'.$j, $lista['numero_proyecto_inversion'])
+							->setCellValue('B'.$j, $lista['nombre_proyecto_inversion'])
+							->setCellValue('C'.$j, number_format($lista['apropiacion']))
+							->setCellValue('D'.$j, number_format($lista['comp_acum_trim_1']))
+							->setCellValue('E'.$j, round($lista['porc_ejec_trim_1'],2) . "%")
+							->setCellValue('F'.$j, number_format($lista['giros_acum_trim_1']))
+							->setCellValue('G'.$j, round($lista['porc_giro_trim_1'],2) . "%")
+							->setCellValue('H'.$j, number_format($lista['comp_acum_trim_2']))
+							->setCellValue('I'.$j, round($lista['porc_ejec_trim_2'],2) . "%")
+							->setCellValue('J'.$j, number_format($lista['giros_acum_trim_2']))
+							->setCellValue('K'.$j, round($lista['porc_giro_trim_2'],2) . "%")
+							->setCellValue('L'.$j, number_format($lista['comp_acum_trim_3']))
+							->setCellValue('M'.$j, round($lista['porc_ejec_trim_3'],2) . "%")
+							->setCellValue('N'.$j, number_format($lista['giros_acum_trim_3']))
+							->setCellValue('O'.$j, round($lista['porc_giro_trim_3'],2) . "%")
+							->setCellValue('P'.$j, number_format($lista['comp_acum_trim_4']))
+							->setCellValue('Q'.$j, round($lista['porc_ejec_trim_4'],2) . "%")
+							->setCellValue('R'.$j, number_format($lista['giros_acum_trim_4']))
+							->setCellValue('S'.$j, round($lista['porc_giro_trim_4'],2) . "%");
+				$j++;
+			endforeach;
+		}
+
+		// Set column widths
+		$spreadsheet->getActiveSheet()->getColumnDimension('A')->setWidth(45);
+		$spreadsheet->getActiveSheet()->getColumnDimension('B')->setWidth(50);
+		$spreadsheet->getActiveSheet()->getColumnDimension('C')->setWidth(30);
+		$spreadsheet->getActiveSheet()->getColumnDimension('D')->setWidth(30);
+		$spreadsheet->getActiveSheet()->getColumnDimension('E')->setWidth(40);
+		$spreadsheet->getActiveSheet()->getColumnDimension('F')->setWidth(30);
+		$spreadsheet->getActiveSheet()->getColumnDimension('G')->setWidth(40);
+		$spreadsheet->getActiveSheet()->getColumnDimension('H')->setWidth(30);
+		$spreadsheet->getActiveSheet()->getColumnDimension('I')->setWidth(40);
+		$spreadsheet->getActiveSheet()->getColumnDimension('J')->setWidth(30);
+		$spreadsheet->getActiveSheet()->getColumnDimension('K')->setWidth(40);
+		$spreadsheet->getActiveSheet()->getColumnDimension('L')->setWidth(30);
+		$spreadsheet->getActiveSheet()->getColumnDimension('M')->setWidth(40);
+		$spreadsheet->getActiveSheet()->getColumnDimension('N')->setWidth(30);
+		$spreadsheet->getActiveSheet()->getColumnDimension('O')->setWidth(40);
+		$spreadsheet->getActiveSheet()->getColumnDimension('P')->setWidth(30);
+		$spreadsheet->getActiveSheet()->getColumnDimension('Q')->setWidth(40);
+		$spreadsheet->getActiveSheet()->getColumnDimension('R')->setWidth(30);
+		$spreadsheet->getActiveSheet()->getColumnDimension('S')->setWidth(40);
+
+		// Set fonts
+		$spreadsheet->getActiveSheet()->getStyle('B1:R3')->getFont()->setSize(14);
+		$spreadsheet->getActiveSheet()->getStyle('B1:R3')->getFont()->setBold(true);
+ 		$spreadsheet->getActiveSheet()->getStyle('B1:R3')->getFill()->setFillType(Fill::FILL_SOLID);
+ 		$spreadsheet->getActiveSheet()->getStyle('B1:R3')->getFill()->getStartColor()->setARGB('236e09');
+ 		$spreadsheet->getActiveSheet()->getStyle('B1:R3')->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
+		$spreadsheet->getActiveSheet()->getStyle('B1:R3')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+		$spreadsheet->getActiveSheet()->getStyle('B1:R3')->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+
+		$spreadsheet->getActiveSheet()->getStyle('B4:R5')->getFont()->setSize(11);
+		$spreadsheet->getActiveSheet()->getStyle('B4:R5')->getFont()->setBold(true);
+ 		$spreadsheet->getActiveSheet()->getStyle('B4:R5')->getFill()->setFillType(Fill::FILL_SOLID);
+ 		$spreadsheet->getActiveSheet()->getStyle('B4:R5')->getFill()->getStartColor()->setARGB('236e09');
+ 		$spreadsheet->getActiveSheet()->getStyle('B4:R5')->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
+		$spreadsheet->getActiveSheet()->getStyle('B4:R5')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+		$spreadsheet->getActiveSheet()->getStyle('B4:R5')->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+
+		$spreadsheet->getActiveSheet()->getStyle('A6')->getFont()->setSize(11);
+		$spreadsheet->getActiveSheet()->getStyle('A6')->getFont()->setBold(true);
+ 		$spreadsheet->getActiveSheet()->getStyle('A6')->getFill()->setFillType(Fill::FILL_SOLID);
+		$spreadsheet->getActiveSheet()->getStyle('A6')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+		$spreadsheet->getActiveSheet()->getStyle('A6')->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+
+		$spreadsheet->getActiveSheet()->getStyle('A7:S8')->getFont()->setSize(11);
+		$spreadsheet->getActiveSheet()->getStyle('A7:S8')->getFont()->setBold(true);
+		$spreadsheet->getActiveSheet()->getStyle('A7:S8')->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
+ 		$spreadsheet->getActiveSheet()->getStyle('A7:S8')->getFill()->setFillType(Fill::FILL_SOLID);
+		$spreadsheet->getActiveSheet()->getStyle('A7:S8')->getFill()->getStartColor()->setARGB('808080');
+		$spreadsheet->getActiveSheet()->getStyle('A7:S8')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+		$spreadsheet->getActiveSheet()->getStyle('A7:S8')->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+
+		$spreadsheet->getActiveSheet()->getRowDimension('1')->setRowHeight(20);
+		$spreadsheet->getActiveSheet()->getRowDimension('2')->setRowHeight(20);
+		$spreadsheet->getActiveSheet()->getRowDimension('3')->setRowHeight(20);
+		$spreadsheet->getActiveSheet()->getRowDimension('4')->setRowHeight(20);
+		$spreadsheet->getActiveSheet()->getRowDimension('5')->setRowHeight(20);
+		$spreadsheet->getActiveSheet()->getRowDimension('6')->setRowHeight(20);
+		$spreadsheet->getActiveSheet()->getRowDimension('7')->setRowHeight(30);
+		$spreadsheet->getActiveSheet()->getRowDimension('8')->setRowHeight(30);
+
+		$spreadsheet->getActiveSheet()->getStyle('A1:S5')->applyFromArray(
+		    [
+		        'borders' => [
+		            'allBorders' => ['borderStyle' => Border::BORDER_THIN],
+		        ],
+		    ]
+		);
+
+		$spreadsheet->getActiveSheet()->getStyle('A7:S8')->applyFromArray(
+		    [
+		        'borders' => [
+		            'allBorders' => ['borderStyle' => Border::BORDER_THIN],
+		        ],
+		    ]
+		);
+
+		$spreadsheet->getActiveSheet()->getStyle('A1:A5')->applyFromArray(
+		    [
+			    'alignment' => [
+			        'wrapText' => TRUE
+			    ]
+		    ]
+		);
+
 		/**
 			INDICADORES DE GESTION
 		**/
@@ -4371,7 +4593,6 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
 							->setCellValue('AK5', '05/07/2023')
 							->setCellValue('AU5', '4 de 5')
 							->setCellValue('A6', 'Vigencia: ' . $vigencia['vigencia']);
-
 
 		$spreadsheet->getActiveSheet(0)
 							->setCellValue('A7', 'Código')
@@ -4427,7 +4648,6 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
 							->setCellValue('AY7', 'Seguimiento')
 							->setCellValue('AZ7', 'Seguimiento OAP')
 							->setCellValue('BA7', 'Ejecución Acumulada');
-
 		$j=8;
 		if($indicadoresGestion){
 			foreach ($indicadoresGestion as $lista):
@@ -4651,7 +4871,6 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
 
 		$spreadsheet->getActiveSheet(0)->setCellValue('F7', 'Programación');
 		$spreadsheet->getActiveSheet()->mergeCells('F7:Q7');
-
 		$spreadsheet->getActiveSheet(0)->setCellValue('R7', 'Ejecución');
 		$spreadsheet->getActiveSheet()->mergeCells('R7:AC7');
 
@@ -4682,7 +4901,6 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
 							->setCellValue('AI5', '05/07/2023')
 							->setCellValue('AM5', '5 de 5')
 							->setCellValue('A6', 'Vigencia: ' . $vigencia['vigencia']);
-
 
 		$spreadsheet->getActiveSheet(0)
 							->setCellValue('A7', 'Nombre del Plan Institucional y Estratégico')
@@ -4727,58 +4945,48 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
 							->setCellValue('AN7', 'Observacion OAP Trimestre II')
 							->setCellValue('AO7', 'Observacion OAP Trimestre III')
 							->setCellValue('AP7', 'Observacion OAP Trimestre IV');
-
 		$j=9;
 		if($listaActividades){
 			foreach ($listaActividades as $lista):
 				$arrParam = array("numeroActividadPI" => $lista['numero_actividad_pi']);
 				$infoEjecucion = $this->general_model->get_ejecucion_actividadesPI($arrParam);
-
 				$arrParam = array("numeroActividadPI" => $lista['numero_actividad_pi']);
 				$ejecucionActividadesPI = $this->general_model->get_ejecucion_actividadesPI($arrParam);
-
 				if (!empty($ejecucionActividadesPI[0]['descripcion_actividades']) && !empty($ejecucionActividadesPI[1]['descripcion_actividades']) && !empty($ejecucionActividadesPI[2]['descripcion_actividades'])) {
 					$descTrim1 = $ejecucionActividadesPI[0]['mes'] . ': ' . $ejecucionActividadesPI[0]['descripcion_actividades'] . "\n" . $ejecucionActividadesPI[1]['mes'] . ': ' . $ejecucionActividadesPI[1]['descripcion_actividades'] . "\n" . $ejecucionActividadesPI[2]['mes'] . ': ' . $ejecucionActividadesPI[2]['descripcion_actividades'];
 				} else {
 					$descTrim1 = '';
 				}
-
 				if (!empty($ejecucionActividadesPI[3]['descripcion_actividades']) && !empty($ejecucionActividadesPI[4]['descripcion_actividades']) && !empty($ejecucionActividadesPI[5]['descripcion_actividades'])) {
 					$descTrim2 = $ejecucionActividadesPI[3]['mes'] . ': ' . $ejecucionActividadesPI[3]['descripcion_actividades'] . "\n" . $ejecucionActividadesPI[4]['mes'] . ': ' . $ejecucionActividadesPI[4]['descripcion_actividades'] . "\n" . $ejecucionActividadesPI[5]['mes'] . ': ' . $ejecucionActividadesPI[5]['descripcion_actividades'];
 				} else {
 					$descTrim2 = '';
 				}
-
 				if (!empty($ejecucionActividadesPI[6]['descripcion_actividades']) && !empty($ejecucionActividadesPI[7]['descripcion_actividades']) && !empty($ejecucionActividadesPI[8]['descripcion_actividades'])) {
 					$descTrim3 = $ejecucionActividadesPI[6]['mes'] . ': ' . $ejecucionActividadesPI[6]['descripcion_actividades'] . "\n" . $ejecucionActividadesPI[7]['mes'] . ': ' . $ejecucionActividadesPI[7]['descripcion_actividades'] . "\n" . $ejecucionActividadesPI[8]['mes'] . ': ' . $ejecucionActividadesPI[8]['descripcion_actividades'];
 				} else {
 					$descTrim3 = '';
 				}
-
 				if (!empty($ejecucionActividadesPI[9]['descripcion_actividades']) && !empty($ejecucionActividadesPI[10]['descripcion_actividades']) && !empty($ejecucionActividadesPI[11]['descripcion_actividades'])) {
 					$descTrim4 = $ejecucionActividadesPI[9]['mes'] . ': ' . $ejecucionActividadesPI[9]['descripcion_actividades'] . "\n" . $ejecucionActividadesPI[10]['mes'] . ': ' . $ejecucionActividadesPI[10]['descripcion_actividades'] ."\n" . $ejecucionActividadesPI[11]['mes'] . ': ' . $ejecucionActividadesPI[11]['descripcion_actividades'];
 				} else {
 					$descTrim4 = '';
 				}
-
 				if (!empty($ejecucionActividadesPI[0]['evidencias']) && !empty($ejecucionActividadesPI[1]['evidencias']) && !empty($ejecucionActividadesPI[2]['evidencias'])) {
 					$evidTrim1 = $ejecucionActividadesPI[0]['mes'] . ': ' . $ejecucionActividadesPI[0]['evidencias'] . "\n" . $ejecucionActividadesPI[1]['mes'] . ': ' . $ejecucionActividadesPI[1]['evidencias'] . "\n" . $ejecucionActividadesPI[2]['mes'] . ': ' . $ejecucionActividadesPI[2]['evidencias'];
 				} else {
 					$evidTrim1 = '';
 				}
-
 				if (!empty($ejecucionActividadesPI[3]['evidencias']) && !empty($ejecucionActividadesPI[4]['evidencias']) && !empty($ejecucionActividadesPI[5]['evidencias'])) {
 					$evidTrim2 = $ejecucionActividadesPI[3]['mes'] . ': ' . $ejecucionActividadesPI[3]['evidencias'] . "\n" . $ejecucionActividadesPI[4]['mes'] . ': ' . $ejecucionActividadesPI[4]['evidencias'] . "\n" . $ejecucionActividadesPI[5]['mes'] . ': ' . $ejecucionActividadesPI[5]['evidencias'];
 				} else {
 					$evidTrim2 = '';
 				}
-
 				if (!empty($ejecucionActividadesPI[6]['evidencias']) && !empty($ejecucionActividadesPI[7]['evidencias']) && !empty($ejecucionActividadesPI[8]['evidencias'])) {
 					$evidTrim3 = $ejecucionActividadesPI[6]['mes'] . ': ' . $ejecucionActividadesPI[6]['evidencias'] . "\n" . $ejecucionActividadesPI[7]['mes'] . ': ' . $ejecucionActividadesPI[7]['evidencias'] . "\n" . $ejecucionActividadesPI[8]['mes'] . ': ' . $ejecucionActividadesPI[8]['evidencias'];
 				} else {
 					$evidTrim3 = '';
 				}
-
 				if (!empty($ejecucionActividadesPI[9]['evidencias']) && !empty($ejecucionActividadesPI[10]['evidencias']) && !empty($ejecucionActividadesPI[11]['evidencias'])) {
 					$evidTrim4 = $ejecucionActividadesPI[9]['mes'] . ': ' . $ejecucionActividadesPI[9]['evidencias'] . "\n" . $ejecucionActividadesPI[10]['mes'] . ': ' . $ejecucionActividadesPI[10]['evidencias'] ."\n" . $ejecucionActividadesPI[11]['mes'] . ': ' . $ejecucionActividadesPI[11]['evidencias'];
 				} else {
@@ -4799,7 +5007,6 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
 						break;
 					}
 				endforeach;
-
 				foreach ($infoEjecucion as $ejecucion):
 					if($ejecucion['fk_id_mes'] == 2){
 						$spreadsheet->getActiveSheet()->setCellValue('G'.$j, $ejecucion['programado']);
@@ -4807,7 +5014,6 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
 						break;
 					}
 				endforeach;
-
 				foreach ($infoEjecucion as $ejecucion):
 					if($ejecucion['fk_id_mes'] == 3){
 						$spreadsheet->getActiveSheet()->setCellValue('H'.$j, $ejecucion['programado']);
@@ -4815,7 +5021,6 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
 						break;
 					}
 				endforeach;
-
 				foreach ($infoEjecucion as $ejecucion):
 					if($ejecucion['fk_id_mes'] == 4){
 						$spreadsheet->getActiveSheet()->setCellValue('I'.$j, $ejecucion['programado']);
@@ -4823,7 +5028,6 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
 						break;
 					}
 				endforeach;
-
 				foreach ($infoEjecucion as $ejecucion):
 					if($ejecucion['fk_id_mes'] == 5){
 						$spreadsheet->getActiveSheet()->setCellValue('J'.$j, $ejecucion['programado']);
@@ -4831,7 +5035,6 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
 						break;
 					}
 				endforeach;
-
 				foreach ($infoEjecucion as $ejecucion):
 					if($ejecucion['fk_id_mes'] == 6){
 						$spreadsheet->getActiveSheet()->setCellValue('K'.$j, $ejecucion['programado']);
@@ -4839,7 +5042,6 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
 						break;
 					}
 				endforeach;
-
 				foreach ($infoEjecucion as $ejecucion):
 					if($ejecucion['fk_id_mes'] == 7){
 						$spreadsheet->getActiveSheet()->setCellValue('L'.$j, $ejecucion['programado']);
@@ -4847,7 +5049,6 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
 						break;
 					}
 				endforeach;
-
 				foreach ($infoEjecucion as $ejecucion):
 					if($ejecucion['fk_id_mes'] == 8){
 						$spreadsheet->getActiveSheet()->setCellValue('M'.$j, $ejecucion['programado']);
@@ -4855,7 +5056,6 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
 						break;
 					}
 				endforeach;
-
 				foreach ($infoEjecucion as $ejecucion):
 					if($ejecucion['fk_id_mes'] == 9){
 						$spreadsheet->getActiveSheet()->setCellValue('N'.$j, $ejecucion['programado']);
@@ -4863,7 +5063,6 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
 						break;
 					}
 				endforeach;
-
 				foreach ($infoEjecucion as $ejecucion):
 					if($ejecucion['fk_id_mes'] == 10){
 						$spreadsheet->getActiveSheet()->setCellValue('O'.$j, $ejecucion['programado']);
@@ -4871,7 +5070,6 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
 						break;
 					}
 				endforeach;
-
 				foreach ($infoEjecucion as $ejecucion):
 					if($ejecucion['fk_id_mes'] == 11){
 						$spreadsheet->getActiveSheet()->setCellValue('P'.$j, $ejecucion['programado']);
@@ -4879,7 +5077,6 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
 						break;
 					}
 				endforeach;
-
 				foreach ($infoEjecucion as $ejecucion):
 					if($ejecucion['fk_id_mes'] == 12){
 						$spreadsheet->getActiveSheet()->setCellValue('Q'.$j, $ejecucion['programado']);
@@ -4887,6 +5084,7 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
 						break;
 					}
 				endforeach;
+
 				$spreadsheet->getActiveSheet()->setCellValue('AD'.$j, $lista['ponderacion_pi']);
 				$spreadsheet->getActiveSheet()->setCellValue('AE'.$j, $descTrim1);
 				$spreadsheet->getActiveSheet()->getStyle('AE'.$j)->getAlignment()->setWrapText(true);
