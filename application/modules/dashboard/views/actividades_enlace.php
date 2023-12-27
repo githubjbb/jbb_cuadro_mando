@@ -317,8 +317,12 @@
 									<h2>Programado Año: <?php echo $sumaProgramado['programado']; ?></h2>
 									<small>(Suma Programado)</small>
 								</td>
+								<td class="text-center">
+									<h2>Avance Actividad: <?php echo round(($avancePOA/$ponderacion)*100,2) . '%'; ?></h2>
+									<small></small>
+								</td>
 								<td class="text-right">
-									<h2>Avance: <?php echo $avancePOA . '%'; ?></h2>
+									<h2>Avance Poderación: <?php echo $avancePOA . '%'; ?></h2>
 									<small>(Suma Ejecutado /Suma Programado * Ponderación)</small>
 								</td>
 							</tr>

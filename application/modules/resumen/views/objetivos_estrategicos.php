@@ -161,12 +161,14 @@ $(function(){
 		                            );
 									$supervisores = $this->general_model->get_objetivos_estrategicos_supervisores($arrParam);
 									$comentario = $this->general_model->get_comentario_supervisor($arrParam);
-									for ($i=0; $i<count($supervisores); $i++) {
-										if ($idUser == $supervisores[$i]['id_user']) {
-											$habilitar = '';
-										}
+									if (is_array($supervisores) || is_object($supervisores)) {
+										foreach ($supervisores as $lista):
+											if ($idUser == $lista['id_user']) {
+												$habilitar = '';
+											}
+										endforeach;
 									}
-									if ($calificacion_0 == 1 && $comentario[0]['comentario_supervisor'] == NULL) {
+									if ($calificacion_0 == 1 && empty($comentario[0]['comentario_supervisor'])) {
 										$warning = '<span class="fa fa-exclamation-triangle fa-lg" style="color: orange"; aria-hidden="true"></span>';
 									}
 								}

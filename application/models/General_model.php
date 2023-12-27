@@ -1532,6 +1532,12 @@ class General_model extends CI_Model {
 				if (array_key_exists("numeroProgramaSG", $arrData)) {
 					$sql.= " AND C.fk_numero_programa = '". $arrData["numeroProgramaSG"]. "'";
 				}
+				if (array_key_exists("numeroLogro", $arrData)) {
+					$sql.= " AND C.fk_numero_logro = '". $arrData["numeroLogro"]. "'";
+				}
+				if (array_key_exists("numeroODS", $arrData)) {
+					$sql.= " AND C.fk_numero_ods = '". $arrData["numeroODS"]. "'";
+				}
 				if (array_key_exists("numeroIndicadorSG", $arrData)) {
 					$sql.= " AND (C.indicador_1 = ". $arrData["numeroIndicadorSG"] ." OR C.indicador_2 = " . $arrData["numeroIndicadorSG"] .")";
 				}
@@ -1927,6 +1933,12 @@ class General_model extends CI_Model {
 			if (array_key_exists("numeroProgramaSG", $arrData)) {
 				$this->db->where('C.fk_numero_programa', $arrData["numeroProgramaSG"]);
 			}
+			if (array_key_exists("numeroLogro", $arrData)) {
+				$this->db->where('C.fk_numero_logro', $arrData["numeroLogro"]);
+			}
+			if (array_key_exists("numeroODS", $arrData)) {
+				$this->db->where('C.fk_numero_ods', $arrData["numeroODS"]);
+			}
 			if (array_key_exists("numeroIndicadorSG", $arrData)) {
 				$this->db->where('C.indicador_1', $arrData["numeroIndicadorSG"]);
 				$this->db->or_where('C.indicador_2', $arrData["numeroIndicadorSG"]);
@@ -2156,6 +2168,21 @@ class General_model extends CI_Model {
 		 * Consulta lista de logros por vigencia
 		 * @since 19/12/2023
 		 */
+		public function get_logros($arrData) 
+		{		
+				$this->db->select();
+				$this->db->where('numero_logro NOT IN (98, 99)');
+				if (array_key_exists("numeroLogro", $arrData)) {
+					$this->db->where('numero_logro', $arrData["numeroLogro"]);
+				}
+				$this->db->order_by('numero_logro', 'asc');
+				$query = $this->db->get('logros');
+				if ($query->num_rows() > 0) {
+					return $query->result_array();
+				} else {
+					return false;
+				}
+		}
 
 		/**
 		 * Consulta lista de programas SEGPLAN por vigencia
@@ -2215,6 +2242,20 @@ class General_model extends CI_Model {
 		 * Consulta lista de ODS por vigencia
 		 * @since 19/12/2023
 		 */
+		public function get_ods($arrData) 
+		{		
+				$this->db->select();
+				if (array_key_exists("numeroODS", $arrData)) {
+					$this->db->where('numero_ods', $arrData["numeroODS"]);
+				}
+				$this->db->order_by('numero_ods', 'asc');
+				$query = $this->db->get('ods');
+				if ($query->num_rows() > 0) {
+					return $query->result_array();
+				} else {
+					return false;
+				}
+		}
 
 		/**
 		 * Consulta lista de proyectos por vigencia
@@ -2506,6 +2547,12 @@ class General_model extends CI_Model {
 				if (array_key_exists("numeroProyecto", $arrData)) {
 					$this->db->where('M.fk_numero_proyecto', $arrData["numeroProyecto"]);
 				}
+				if (array_key_exists("numeroLogro", $arrData)) {
+					$this->db->where('C.fk_numero_logro', $arrData["numeroLogro"]);
+				}
+				if (array_key_exists("numeroODS", $arrData)) {
+					$this->db->where('C.fk_numero_ods', $arrData["numeroODS"]);
+				}
 				if (array_key_exists("numeroIndicadorSG", $arrData)) {
 					$this->db->where('C.indicador_1', $arrData["numeroIndicadorSG"]);
 					$this->db->or_where('C.indicador_2', $arrData["numeroIndicadorSG"]);
@@ -2541,6 +2588,12 @@ class General_model extends CI_Model {
 				}
 				if (array_key_exists("numeroProyecto", $arrData)) {
 					$this->db->where('M.fk_numero_proyecto', $arrData["numeroProyecto"]);
+				}
+				if (array_key_exists("numeroLogro", $arrData)) {
+					$this->db->where('C.fk_numero_logro', $arrData["numeroLogro"]);
+				}
+				if (array_key_exists("numeroODS", $arrData)) {
+					$this->db->where('C.fk_numero_ods', $arrData["numeroODS"]);
 				}
 				if (array_key_exists("numeroIndicadorSG", $arrData)) {
 					$this->db->where('C.indicador_1', $arrData["numeroIndicadorSG"]);
@@ -2639,6 +2692,103 @@ class General_model extends CI_Model {
 			}
 			$this->db->order_by('numero_proyecto_inversion', 'asc');
 			$query = $this->db->get('proyecto_inversion');
+
+			if ($query->num_rows() > 0) {
+				return $query->result_array();
+			} else {
+				return false;
+			}
+		}
+
+		/**
+		 * Sumatoria Item
+		 * @since 26/12/2023
+		 */
+		public function sumatoriaItem($arrData)
+		{		
+			$this->db->select_sum('presupuesto_meta');
+			if (array_key_exists("numeroProyecto", $arrData)) {
+				$this->db->where('fk_numero_proyecto', $arrData["numeroProyecto"]);
+			}
+			if (array_key_exists("numeroProposito", $arrData)) {
+				$this->db->where('fk_numero_proposito', $arrData["numeroProposito"]);
+			}
+			if (array_key_exists("numeroMetaPDD", $arrData)) {
+				$this->db->where('fk_numero_meta_pdd', $arrData["numeroMetaPDD"]);
+			}
+			if (array_key_exists("numeroProgramaSG", $arrData)) {
+				$this->db->where('fk_numero_programa', $arrData["numeroProgramaSG"]);
+			}
+			if (array_key_exists("numeroLogro", $arrData)) {
+				$this->db->where('fk_numero_logro', $arrData["numeroLogro"]);
+			}
+			if (array_key_exists("numeroODS", $arrData)) {
+				$this->db->where('fk_numero_ods', $arrData["numeroODS"]);
+			}
+			if (array_key_exists("vigencia", $arrData)) {
+				$this->db->where('vigencia_meta_proyecto', $arrData["vigencia"]);
+			}
+			$query = $this->db->get('meta_proyecto_inversion');
+
+			if ($query->num_rows() > 0) {
+				return $query->row_array();
+			} else {
+				return false;
+			}
+		}
+
+		/**
+		 * Información Item
+		 * @since 26/12/2023
+		 */
+		public function informacionItem($arrData)
+		{		
+			$this->db->select();
+			if (array_key_exists("numeroProposito", $arrData)) {
+				$this->db->where('fk_numero_proposito', $arrData["numeroProposito"]);
+			}
+			if (array_key_exists("numeroMetaPDD", $arrData)) {
+				$this->db->where('fk_numero_meta_pdd', $arrData["numeroMetaPDD"]);
+			}
+			if (array_key_exists("numeroProgramaSG", $arrData)) {
+				$this->db->where('fk_numero_programa', $arrData["numeroProgramaSG"]);
+			}
+			if (array_key_exists("numeroLogro", $arrData)) {
+				$this->db->where('fk_numero_logro', $arrData["numeroLogro"]);
+			}
+			if (array_key_exists("numeroODS", $arrData)) {
+				$this->db->where('fk_numero_ods', $arrData["numeroODS"]);
+			}
+			if (array_key_exists("vigencia", $arrData)) {
+				$this->db->where('vigencia_meta_proyecto', $arrData["vigencia"]);
+			}
+			$query = $this->db->get('meta_proyecto_inversion');
+
+			if ($query->num_rows() > 0) {
+				return $query->result_array();
+			} else {
+				return false;
+			}
+		}
+
+		/**
+		 * Información Propositos
+		 * @since 26/12/2023
+		 */
+		public function infoPropositos($arrData)
+		{		
+			$this->db->select();
+			$this->db->join('propositos P', 'P.numero_proposito = M.fk_numero_proposito', 'INNER');
+			if (array_key_exists("numeroProyecto", $arrData)) {
+				$this->db->where('M.fk_numero_proyecto', $arrData["numeroProyecto"]);
+			}
+			if (array_key_exists("numeroProposito", $arrData)) {
+				$this->db->where('M.fk_numero_proposito', $arrData["numeroProposito"]);
+			}
+			if (array_key_exists("vigencia", $arrData)) {
+				$this->db->where('M.vigencia_meta_proyecto', $arrData["vigencia"]);
+			}
+			$query = $this->db->get('meta_proyecto_inversion M');
 
 			if ($query->num_rows() > 0) {
 				return $query->result_array();

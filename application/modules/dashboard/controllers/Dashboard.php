@@ -57,6 +57,11 @@ class Dashboard extends CI_Controller {
 	        }
 	        $data['listaProyectos'] = $this->general_model->get_numero_proyectos_full_by_dependencia($arrParam);
 
+	        $arrParam = array(
+				"filtro" => true
+			);
+			$data['listaProyectosInversion'] = $this->general_model->get_proyectos_inversion($arrParam);
+
 	        $vigencia = $this->general_model->get_vigencia();
 			$arrParam = array(
 				"vigencia" => $vigencia['vigencia']
@@ -143,7 +148,7 @@ class Dashboard extends CI_Controller {
 			$arrParam = array(
 				"vigencia" => $vigencia['vigencia']
 			);
-			$data['listaLogros'] = $this->general_model->get_logros_x_vigencia($arrParam);
+			$data['listaLogros'] = $this->general_model->get_logros($arrParam);
 
 			$arrParam = array(
 				"filtro" => true
@@ -167,6 +172,24 @@ class Dashboard extends CI_Controller {
                 $arrParam["numeroProyecto"] = $_GET["numero_proyecto"];
             }
 			$data['listaNumeroDependencia'] = $this->general_model->get_dependencia_full_by_filtro($arrParam);
+			//FIN LISTAS PARA FILTROS
+
+			$idDependencia = $this->session->userdata("dependencia");
+			$vigencia = $this->general_model->get_vigencia();
+			$arrParam = array(
+				"idDependencia" => $idDependencia,
+				"vigencia" => $vigencia['vigencia']
+			);
+			$data['nroActividadesDependencia'] = $this->general_model->countActividades($arrParam);
+			$data['avanceEspecifico'] = $this->general_model->sumAvance($arrParam);
+			$arrParam = array(
+				"table" => "param_dependencias",
+				"order" => "dependencia",
+				"column" => "id_dependencia",
+				"id" => $idDependencia
+			);
+			$data['infoDependencia'] = $this->general_model->get_basic_search($arrParam);
+
 			$data['vigencia'] = $this->general_model->get_vigencia();
 
 			$data["view"] = "tabs_logros";
@@ -249,6 +272,23 @@ class Dashboard extends CI_Controller {
                 $arrParam["numeroProyecto"] = $_GET["numero_proyecto"];
             }
 			$data['listaNumeroDependencia'] = $this->general_model->get_dependencia_full_by_filtro($arrParam);
+			//FIN LISTAS PARA FILTROS
+
+			$idDependencia = $this->session->userdata("dependencia");
+			$vigencia = $this->general_model->get_vigencia();
+			$arrParam = array(
+				"idDependencia" => $idDependencia,
+				"vigencia" => $vigencia['vigencia']
+			);
+			$data['nroActividadesDependencia'] = $this->general_model->countActividades($arrParam);
+			$data['avanceEspecifico'] = $this->general_model->sumAvance($arrParam);
+			$arrParam = array(
+				"table" => "param_dependencias",
+				"order" => "dependencia",
+				"column" => "id_dependencia",
+				"id" => $idDependencia
+			);
+			$data['infoDependencia'] = $this->general_model->get_basic_search($arrParam);
 			$data['vigencia'] = $this->general_model->get_vigencia();
 
 			$data["view"] = "tabs_programas";
@@ -331,6 +371,23 @@ class Dashboard extends CI_Controller {
                 $arrParam["numeroProyecto"] = $_GET["numero_proyecto"];
             }
 			$data['listaNumeroDependencia'] = $this->general_model->get_dependencia_full_by_filtro($arrParam);
+			//FIN LISTAS PARA FILTROS
+
+			$idDependencia = $this->session->userdata("dependencia");
+			$vigencia = $this->general_model->get_vigencia();
+			$arrParam = array(
+				"idDependencia" => $idDependencia,
+				"vigencia" => $vigencia['vigencia']
+			);
+			$data['nroActividadesDependencia'] = $this->general_model->countActividades($arrParam);
+			$data['avanceEspecifico'] = $this->general_model->sumAvance($arrParam);
+			$arrParam = array(
+				"table" => "param_dependencias",
+				"order" => "dependencia",
+				"column" => "id_dependencia",
+				"id" => $idDependencia
+			);
+			$data['infoDependencia'] = $this->general_model->get_basic_search($arrParam);
 			$data['vigencia'] = $this->general_model->get_vigencia();
 
 			$data["view"] = "tabs_metas";
@@ -341,6 +398,100 @@ class Dashboard extends CI_Controller {
 	 * TABS ODS
 	 * @since 18/12/2023
 	 */
+	public function tabs_ods()
+	{	
+			if($_GET)
+			{								
+				$arrParam = array(
+					"numero_objetivo" => $_GET["numero_objetivo"],
+					"numero_proyecto" => $_GET["numero_proyecto"],
+					"id_dependencia" => $_GET["id_dependencia"],
+					"numero_actividad" => $_GET["numero_actividad"]
+				);
+				$this->general_model->saveInfoGoBack($arrParam);
+			}
+
+			$arrParam = array();
+            if($_GET && $_GET["numero_objetivo"] != ""){
+                $arrParam["numeroObjetivoEstrategico"] = $_GET["numero_objetivo"] ;
+            }
+			$data['listaObjetivosEstrategicos'] = $this->general_model->get_objetivos_estrategicos($arrParam);
+
+			$arrParam = array();
+			$data['listaEstrategias'] = $this->general_model->get_estrategias($arrParam);
+			$data['listaEstrategiasFiltro'] = $this->general_model->get_estrategias($arrParam);
+
+			$arrParam = array();
+	        if($_GET && isset($_GET["id_estrategia"]) && $_GET["id_estrategia"] != ""){
+	            $arrParam = array(
+	                "idEstrategia" => $_GET["id_estrategia"]
+	            );  
+	        }
+			$data['listaNumeroObjetivoEstrategicos'] = $this->general_model->get_objetivos_estrategicos($arrParam);
+
+	        $arrParam = array();
+	        if($_GET && isset($_GET["id_estrategia"]) && $_GET["id_estrategia"] != ""){
+	            $arrParam = array(
+	                "idEstrategia" => $_GET["id_estrategia"]
+	            );  
+	        }
+	        if($_GET && $_GET["numero_objetivo"] != ""){
+	            $arrParam = array(
+	                "numeroObjetivoEstrategico" => $_GET["numero_objetivo"]
+	            );  
+	        }
+	        $data['listaProyectos'] = $this->general_model->get_numero_proyectos_full_by_dependencia($arrParam);
+
+			$vigencia = $this->general_model->get_vigencia();
+			$arrParam = array(
+				"vigencia" => $vigencia['vigencia']
+			);
+			$data['listaODS'] = $this->general_model->get_ods($arrParam);
+			
+			$arrParam = array(
+				"filtro" => true
+			);
+			$data['listaDependencia'] = $this->general_model->get_app_dependencias($arrParam);
+
+			$arrParam = array(
+				"filtro" => true
+			);
+	        if($_GET && isset($_GET["id_estrategia"]) && $_GET["id_estrategia"] != ""){
+	            $arrParam = array(
+	                "idEstrategia" => $_GET["id_estrategia"]
+	            );  
+	        }
+	        if($_GET && $_GET["numero_objetivo"] != ""){
+	            $arrParam = array(
+	                "numeroObjetivoEstrategico" => $_GET["numero_objetivo"]
+	            );  
+	        }
+            if($_GET && $_GET["numero_proyecto"] != ""){
+                $arrParam["numeroProyecto"] = $_GET["numero_proyecto"];
+            }
+			$data['listaNumeroDependencia'] = $this->general_model->get_dependencia_full_by_filtro($arrParam);
+			//FIN LISTAS PARA FILTROS
+
+			$idDependencia = $this->session->userdata("dependencia");
+			$vigencia = $this->general_model->get_vigencia();
+			$arrParam = array(
+				"idDependencia" => $idDependencia,
+				"vigencia" => $vigencia['vigencia']
+			);
+			$data['nroActividadesDependencia'] = $this->general_model->countActividades($arrParam);
+			$data['avanceEspecifico'] = $this->general_model->sumAvance($arrParam);
+			$arrParam = array(
+				"table" => "param_dependencias",
+				"order" => "dependencia",
+				"column" => "id_dependencia",
+				"id" => $idDependencia
+			);
+			$data['infoDependencia'] = $this->general_model->get_basic_search($arrParam);
+			$data['vigencia'] = $this->general_model->get_vigencia();
+
+			$data["view"] = "tabs_ods";
+			$this->load->view("layout_calendar", $data);
+	}
 
 	/**
 	 * TABS PROYECTOS
@@ -417,6 +568,23 @@ class Dashboard extends CI_Controller {
                 $arrParam["numeroProyecto"] = $_GET["numero_proyecto"];
             }
 			$data['listaNumeroDependencia'] = $this->general_model->get_dependencia_full_by_filtro($arrParam);
+			//FIN LISTAS PARA FILTROS
+
+			$idDependencia = $this->session->userdata("dependencia");
+			$vigencia = $this->general_model->get_vigencia();
+			$arrParam = array(
+				"idDependencia" => $idDependencia,
+				"vigencia" => $vigencia['vigencia']
+			);
+			$data['nroActividadesDependencia'] = $this->general_model->countActividades($arrParam);
+			$data['avanceEspecifico'] = $this->general_model->sumAvance($arrParam);
+			$arrParam = array(
+				"table" => "param_dependencias",
+				"order" => "dependencia",
+				"column" => "id_dependencia",
+				"id" => $idDependencia
+			);
+			$data['infoDependencia'] = $this->general_model->get_basic_search($arrParam);
 			$data['vigencia'] = $this->general_model->get_vigencia();
 
 			$data["view"] = "tabs_proyectos";
@@ -499,6 +667,23 @@ class Dashboard extends CI_Controller {
                 $arrParam["numeroProyecto"] = $_GET["numero_proyecto"];
             }
 			$data['listaNumeroDependencia'] = $this->general_model->get_dependencia_full_by_filtro($arrParam);
+			//FIN LISTAS PARA FILTROS
+
+			$idDependencia = $this->session->userdata("dependencia");
+			$vigencia = $this->general_model->get_vigencia();
+			$arrParam = array(
+				"idDependencia" => $idDependencia,
+				"vigencia" => $vigencia['vigencia']
+			);
+			$data['nroActividadesDependencia'] = $this->general_model->countActividades($arrParam);
+			$data['avanceEspecifico'] = $this->general_model->sumAvance($arrParam);
+			$arrParam = array(
+				"table" => "param_dependencias",
+				"order" => "dependencia",
+				"column" => "id_dependencia",
+				"id" => $idDependencia
+			);
+			$data['infoDependencia'] = $this->general_model->get_basic_search($arrParam);
 			$data['vigencia'] = $this->general_model->get_vigencia();
 
 			$data["view"] = "tabs_indicadores";
@@ -580,6 +765,23 @@ class Dashboard extends CI_Controller {
                 $arrParam["numeroProyecto"] = $_GET["numero_proyecto"];
             }
 			$data['listaNumeroDependencia'] = $this->general_model->get_dependencia_full_by_filtro($arrParam);
+			//FIN LISTAS PARA FILTROS
+
+			$idDependencia = $this->session->userdata("dependencia");
+			$vigencia = $this->general_model->get_vigencia();
+			$arrParam = array(
+				"idDependencia" => $idDependencia,
+				"vigencia" => $vigencia['vigencia']
+			);
+			$data['nroActividadesDependencia'] = $this->general_model->countActividades($arrParam);
+			$data['avanceEspecifico'] = $this->general_model->sumAvance($arrParam);
+			$arrParam = array(
+				"table" => "param_dependencias",
+				"order" => "dependencia",
+				"column" => "id_dependencia",
+				"id" => $idDependencia
+			);
+			$data['infoDependencia'] = $this->general_model->get_basic_search($arrParam);
 			$data['vigencia'] = $this->general_model->get_vigencia();
 
 			$data["view"] = "tabs_estrategias";
@@ -1052,6 +1254,12 @@ class Dashboard extends CI_Controller {
 				"filtro" => true
 			);
 			$data['listaProyectosInversion'] = $this->general_model->get_proyectos_inversion($arrParam);
+
+			$vigencia = $this->general_model->get_vigencia();
+			$arrParam = array(
+				"vigencia" => $vigencia['vigencia']
+			);
+			$data['listaPropositos'] = $this->general_model->get_propositos_x_vigencia($arrParam);
 
 			$arrParam = array(
 				"filtro" => true
@@ -1530,6 +1738,12 @@ class Dashboard extends CI_Controller {
 			);
 			$data['listaProyectosInversion'] = $this->general_model->get_proyectos_inversion($arrParam);
 
+			$vigencia = $this->general_model->get_vigencia();
+			$arrParam = array(
+				"vigencia" => $vigencia['vigencia']
+			);
+			$data['listaPropositos'] = $this->general_model->get_propositos_x_vigencia($arrParam);
+
 			$arrParam = array(
 				"filtro" => true
 			);
@@ -1623,6 +1837,12 @@ class Dashboard extends CI_Controller {
 				"filtro" => true
 			);
 			$data['listaProyectosInversion'] = $this->general_model->get_proyectos_inversion($arrParam);
+
+			$vigencia = $this->general_model->get_vigencia();
+			$arrParam = array(
+				"vigencia" => $vigencia['vigencia']
+			);
+			$data['listaPropositos'] = $this->general_model->get_propositos_x_vigencia($arrParam);
 
 			$arrParam = array(
 				"filtro" => true
@@ -1920,6 +2140,12 @@ class Dashboard extends CI_Controller {
 				"filtro" => true
 			);
 			$data['listaProyectosInversion'] = $this->general_model->get_proyectos_inversion($arrParam);
+
+			$vigencia = $this->general_model->get_vigencia();
+			$arrParam = array(
+				"vigencia" => $vigencia['vigencia']
+			);
+			$data['listaPropositos'] = $this->general_model->get_propositos_x_vigencia($arrParam);
 
 			$arrParam = array(
 				"filtro" => true

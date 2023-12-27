@@ -22,7 +22,7 @@
         <?php if($vigencia['vigencia'] >= 2023) { ?>
 
         <div class="col-lg-12">
-            <ul class="nav nav-tabs">
+            <ul class="nav nav-tabs ">
                 <?php $userRol = $this->session->userdata("role");
                 if ($userRol == ID_ROL_CONTROL_INTERNO || $userRol == ID_ROL_JEFEOCI) { ?>
                     <li><a href="<?php echo base_url("dashboard/control"); ?>"><b>Propósitos</b></a></li>
@@ -52,27 +52,39 @@
         <div class="col-lg-6">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <i class="fa fa-bell fa-fw"></i> Avance Proyectos de Inversión <b><?php echo $vigencia['vigencia']; ?></b><br>
+                    <i class="fa fa-bell fa-fw"></i> Avance ODS <b><?php echo $vigencia['vigencia']; ?></b><br>
                     Ejecución Componente: Gestión Magnitud
                 </div>
                 <div class="panel-body small">
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th width="45%">Proyecto de Inversión</th>
+                                <th width="45%">ODS</th>
                                 <th width="10%" class="text-center">No. Actividades</th>
                                 <th width="45%" class="text-center">Avance Gestión Magnitud</th>
                             </tr>
                         </thead>
                         <?php
-                        foreach ($listaProyectosInversion as $lista):
+                        foreach ($listaODS as $lista):
                             $arrParam = array(
-                                "numeroProyecto" => $lista["numero_proyecto_inversion"],
+                                "numeroODS" => $lista["numero_ods"],
                                 "vigencia" => $vigencia['vigencia']
                             );
                             $nroActividades = $this->general_model->countActividades($arrParam);
-                            $avance = $this->general_model->sumAvance($arrParam);
-                            $avancePOA = number_format($avance["avance_poa"],2);
+                            $infoProyectos = $this->general_model->informacionItem($arrParam);
+                            $sumPropositos = $this->general_model->sumatoriaItem($arrParam);
+                            $suma = 0;
+                            for ($i=0; $i<count($infoProyectos); $i++) {
+                                $infoProyectos[$i]['avance1'] = round($infoProyectos[$i]['presupuesto_meta'] / $sumPropositos['presupuesto_meta'], 4);
+                                $infoProyectos[$i]['avance2'] = 0;
+                                if ($infoProyectos[$i]['programado_meta_proyecto'] > 0) {
+                                    $infoProyectos[$i]['avance2'] = round(($infoProyectos[$i]['ejecutado_meta'] / $infoProyectos[$i]['programado_meta_proyecto']) * $infoProyectos[$i]['avance1'], 4);
+                                }
+                                $suma += $infoProyectos[$i]['avance2'];
+                            }
+                            $porcProyectos = $suma * 100;
+                            $avance = $porcProyectos;
+                            $avancePOA = number_format($avance,2);
                             if(!$avancePOA){
                                 $avancePOA = 0;
                                 $estilos = "bg-warning";
@@ -86,7 +98,7 @@
                                 }
                             }
                             echo "<tr>";
-                            echo "<td><small>" . $lista["numero_proyecto_inversion"] .' ' . $lista["nombre_proyecto_inversion"] . "</small></td>";
+                            echo "<td><small>" . $lista["numero_ods"] .' ' . $lista["ods"] . "</small></td>";
                             echo "<td class='text-center'><small>" . $nroActividades . "</small></td>";
                             echo "<td class='text-center'>";
                             echo "<b>" . $avancePOA ."%</b>";
@@ -105,25 +117,24 @@
         <div class="col-lg-6">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <i class="fa fa-bell fa-fw"></i> Avance Proyectos de Inversión <b><?php echo $vigencia['vigencia']; ?></b><br>
+                    <i class="fa fa-bell fa-fw"></i> Avance ODS <b><?php echo $vigencia['vigencia']; ?></b><br>
                     Ejecución Componente: Presupuestal
                 </div>
                 <div class="panel-body small">
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th width="45%">Proyecto de Inversión</th>
+                                <th width="45%">ODS</th>
                                 <th width="10%" class="text-center">No. Actividades</th>
                                 <th width="45%" class="text-center">Avance Presupuestal</th>
                             </tr>
                         </thead>
                         <?php
-                        $avancePOA = 0;
-                        foreach ($listaProyectosInversion as $lista):
+                        foreach ($listaODS as $lista):
                             $arrParam = array('vigencia'=>$vigencia['vigencia']);
-                            $avance = $this->general_model->get_proyectos_x_vigencia($arrParam);
+                            $avance = $this->general_model->get_logros($arrParam);
                             $arrParam = array(
-                                'numeroProyecto' => $lista['numero_proyecto_inversion'],
+                                'numeroODS' => $lista['numero_ods'],
                                 'vigencia' => $vigencia['vigencia']
                             );
                             $nroActividades = $this->general_model->countActividades($arrParam);
@@ -150,7 +161,7 @@
                                 }
                             }
                             echo "<tr>";
-                            echo "<td><small>" . $lista["numero_proyecto_inversion"] .' ' . $lista["nombre_proyecto_inversion"] . "</small></td>";
+                            echo "<td><small>" . $lista["numero_ods"] .' ' . $lista["ods"] . "</small></td>";
                             echo "<td class='text-center'><small>" . $nroActividades . "</small></td>";
                             echo "<td class='text-center'>";
                             echo "<b>" . $avancePOA ."%</b>";

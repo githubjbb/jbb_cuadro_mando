@@ -23,29 +23,37 @@
 
         <div class="col-lg-12">
             <ul class="nav nav-tabs ">
-                <li><a href="<?php echo base_url("dashboard/admin"); ?>"><b>Propositos</b></a>
-                </li>
-                <li><a href="<?php echo base_url("dashboard/tabs_logros"); ?>"><b>Logros</b></a>
-                </li>
-                <li><a href="<?php echo base_url("dashboard/tabs_programas"); ?>"><b>Programas PDD</b></a>
-                </li>
-                <li><a href="<?php echo base_url("dashboard/tabs_metas"); ?>"><b>Metas PDD</b></a>
-                </li>
-                <li><a href="<?php echo base_url("dashboard/tabs_ods"); ?>"><b>ODS</b></a>
-                </li>
-                <li><a href="<?php echo base_url("dashboard/tabs_proyectos"); ?>"><b>Proyectos Inversión</b></a>
-                </li>
-                <!--<li><a href="<?php echo base_url("dashboard/tabs_indicadores"); ?>"><b>Indicadores</b></a>
-                </li>-->
-                <li><a href="<?php echo base_url("dashboard/tabs_estrategias"); ?>"><b>Estrategias</b></a>
-                </li>
+                <?php $userRol = $this->session->userdata("role");
+                if ($userRol == ID_ROL_CONTROL_INTERNO || $userRol == ID_ROL_JEFEOCI) { ?>
+                    <li><a href="<?php echo base_url("dashboard/control"); ?>"><b>Propósitos</b></a></li>
+                <?php }
+                else if ($userRol == ID_ROL_PLANEACION) { ?>
+                    <li><a href="<?php echo base_url("dashboard/planeacion"); ?>"><b>Propósitos</b></a></li>
+                <?php }
+                else if ($userRol == ID_ROL_ENLACE) { ?>
+                    <li><a href="<?php echo base_url("dashboard/enlace"); ?>"><b>Propósitos</b></a></li>
+                <?php }
+                else if ($userRol == ID_ROL_SUPERVISOR) { ?>
+                    <li><a href="<?php echo base_url("dashboard/supervisor"); ?>"><b>Propósitos</b></a></li>
+                <?php }
+                else if ($userRol == ID_ROL_ADMINISTRADOR || $userRol == ID_ROL_SUPER_ADMIN) { ?>
+                    <li><a href="<?php echo base_url("dashboard/admin"); ?>"><b>Propósitos</b></a></li>
+                <?php } ?>
+                <li><a href="<?php echo base_url("dashboard/tabs_logros"); ?>"><b>Logros</b></a></li>
+                <li><a href="<?php echo base_url("dashboard/tabs_programas"); ?>"><b>Programas PDD</b></a></li>
+                <li><a href="<?php echo base_url("dashboard/tabs_metas"); ?>"><b>Metas PDD</b></a></li>
+                <li><a href="<?php echo base_url("dashboard/tabs_ods"); ?>"><b>ODS</b></a></li>
+                <li><a href="<?php echo base_url("dashboard/tabs_proyectos"); ?>"><b>Proyectos Inversión</b></a></li>
+                <!--<li><a href="<?php //echo base_url("dashboard/tabs_indicadores"); ?>"><b>Indicadores</b></a></li>-->
+                <li><a href="<?php echo base_url("dashboard/tabs_estrategias"); ?>"><b>Estrategias</b></a></li>
             </ul>
         </div>
 
         <div class="col-lg-6">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <i class="fa fa-bell fa-fw"></i> Avance Indicadores <b><?php echo $vigencia['vigencia']; ?></b>
+                    <i class="fa fa-bell fa-fw"></i> Avance Indicadores <b><?php echo $vigencia['vigencia']; ?></b><br>
+                    Ejecución Componente: Gestión Magnitud
                 </div>
                 <div class="panel-body small">
                     <table class="table table-hover">
@@ -53,7 +61,7 @@
                             <tr>
                                 <th width="45%">Indicadores</th>
                                 <th width="10%" class="text-center">No. Actividades</th>
-                                <th width="45%" class="text-center">Avance Gestión</th>
+                                <th width="45%" class="text-center">Avance Gestión Magnitud</th>
                             </tr>
                         </thead>
                         <?php
@@ -97,7 +105,8 @@
         <div class="col-lg-6">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <i class="fa fa-bell fa-fw"></i> Avance Indicadores <b><?php echo $vigencia['vigencia']; ?></b>
+                    <i class="fa fa-bell fa-fw"></i> Avance Indicadores <b><?php echo $vigencia['vigencia']; ?></b><br>
+                    Ejecución Componente: Presupuestal
                 </div>
                 <div class="panel-body small">
                     <table class="table table-hover">
@@ -105,7 +114,7 @@
                             <tr>
                                 <th width="45%">Indicadores</th>
                                 <th width="10%" class="text-center">No. Actividades</th>
-                                <th width="45%" class="text-center">Avance Presupuesto</th>
+                                <th width="45%" class="text-center">Avance Presupuestal</th>
                             </tr>
                         </thead>
                         <?php
