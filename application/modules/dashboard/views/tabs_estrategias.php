@@ -128,7 +128,7 @@
                                     </div>';
                             echo "</td>";
                             echo "</tr>";
-                        endforeach
+                        endforeach;
                         ?>
                     </table>
                 </div>
@@ -188,7 +188,7 @@
                                     </div>';
                             echo "</td>";
                             echo "</tr>";
-                        endforeach
+                        endforeach;
                         ?>
                     </table>
                 </div>
@@ -273,7 +273,7 @@
                                     </div>';
                             echo "</td>";
                             echo "</tr>";
-                        endforeach
+                        endforeach;
                         ?>
                     </table>
                 </div>
@@ -483,7 +483,7 @@
                                                         <?php
                                                         foreach ($metas as $lista):
                                                             echo "<li><small>" . $lista["meta"] . "</small></li>";
-                                                        endforeach
+                                                        endforeach;
                                                         ?>
                                                         </ul>
                                                     </div>
@@ -502,7 +502,7 @@
                                                     <?php
                                                     foreach ($indicadores as $lista):
                                                         echo "<small>" . $lista["indicador"] . "</small><br>";
-                                                    endforeach
+                                                    endforeach;
                                                     ?>
                                                     </div>
                                                 </div>
@@ -520,7 +520,7 @@
                                                     <?php
                                                     foreach ($resultados as $lista):
                                                         echo "<small>" . $lista["resultado"] . "</small><br>";
-                                                    endforeach
+                                                    endforeach;
                                                     ?>
                                                     </div>
                                                 </div>
@@ -630,7 +630,7 @@
                                                 echo "</td>";
                                                 echo "</tr>";
                                                 }
-                                            endforeach
+                                            endforeach;
                                             ?>
                                         </table>
                                     </div>

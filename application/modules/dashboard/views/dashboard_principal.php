@@ -84,7 +84,7 @@
                             }
                             $porcProyectos = $suma * 100;
                             $avance = $porcProyectos;
-                            $avancePOA = number_format($avance,2);
+                            $avancePOA = number_format($avance,1);
                             if(!$avancePOA){
                                 $avancePOA = 0;
                                 $estilos = "bg-warning";
@@ -107,7 +107,7 @@
                                     </div>';
                             echo "</td>";
                             echo "</tr>";
-                        endforeach
+                        endforeach;
                         ?>
                     </table>
                 </div>
@@ -147,7 +147,7 @@
                             } else {
                                 $avance['porcentaje_cumplimiento_proyecto'] = 0;
                             }
-                            $avancePOA = number_format($avance['porcentaje_cumplimiento_proyecto'],2);
+                            $avancePOA = number_format($avance['porcentaje_cumplimiento_proyecto'],1);
                             if(!$avancePOA){
                                 $avancePOA = 0;
                                 $estilos = "bg-warning";
@@ -170,7 +170,7 @@
                                     </div>';
                             echo "</td>";
                             echo "</tr>";
-                        endforeach
+                        endforeach;
                         ?>
                     </table>
                 </div>
@@ -186,21 +186,22 @@
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th width="30%">Proyecto de Inversión</th>
-                                <th width="30%" class="text-center">Propósito</th>
+                                <th width="30%">Propósito</th>
+                                <th width="30%" class="text-center">Proyecto de Inversión</th>
                                 <th width="10%" class="text-center">Total</th>
                                 <th width="30%" class="text-center">Avance Frente a Propositos</th>
                             </tr>
                         </thead>
                         <?php
-                        foreach ($listaProyectosInversion as $lista):
+                        foreach ($listaProyectosPropositos as $lista):
                             $arrParam = array(
-                                "numeroProyecto" => $lista["numero_proyecto_inversion"],
+                                "numeroProposito" => $lista["fk_numero_proposito"],
+                                "numeroProyecto" => $lista["fk_numero_proyecto"],
                                 "vigencia" => $vigencia['vigencia']
                             );
                             $infoProyectos = $this->general_model->infoPropositos($arrParam);
                             $arrParam = array(
-                                "numeroProposito" => $infoProyectos[0]["numero_proposito"],
+                                "numeroProposito" => $lista["fk_numero_proposito"],
                                 "vigencia" => $vigencia['vigencia']
                             );
                             $sumPropositos = $this->general_model->sumatoriaItem($arrParam);
@@ -211,15 +212,15 @@
                             }
                             $porcProyectos = $suma;
                             $total = $porcProyectos;
-                            $totalPOA = number_format($total * 100,2);
+                            $totalPOA = number_format($total * 100,1);
                             $arrParam = array(
-                                "numeroProyecto" => $lista["numero_proyecto_inversion"],
+                                "numeroProyecto" => $lista["fk_numero_proyecto"],
                                 "vigencia" => $vigencia['vigencia']
                             );
                             $proyecto = $this->general_model->sumAvance($arrParam);
                             $avanceProy = number_format($proyecto['avance_poa'],4) / 100;
                             $avance = $total * $avanceProy * 100;
-                            $avancePOA = number_format($avance,2);
+                            $avancePOA = number_format($avance,1);
                             if(!$avancePOA){
                                 $avancePOA = 0;
                                 $estilos = "bg-warning";
@@ -233,8 +234,8 @@
                                 }
                             }
                             echo "<tr>";
-                            echo "<td><small>" . $lista["numero_proyecto_inversion"] .' ' . $lista["nombre_proyecto_inversion"] . "</small></td>";
                             echo "<td><small>" . $infoProyectos[0]["numero_proposito"] .' ' . $infoProyectos[0]["proposito"] . "</small></td>";
+                            echo "<td><small>" . $infoProyectos[0]["numero_proyecto_inversion"] .' ' . $infoProyectos[0]["nombre_proyecto_inversion"] . "</small></td>";
                             echo "<td class='text-center'><small>" . $totalPOA . "%</small></td>";
                             echo "<td class='text-center'>";
                             echo "<b>" . $avancePOA ."%</b>";
@@ -243,7 +244,7 @@
                                     </div>';
                             echo "</td>";
                             echo "</tr>";
-                        endforeach
+                        endforeach;
                         ?>
                     </table>
                 </div>
@@ -303,7 +304,7 @@
                                     </div>';
                             echo "</td>";
                             echo "</tr>";
-                        endforeach
+                        endforeach;
                         ?>
                     </table>
                 </div>
@@ -388,7 +389,7 @@
                                     </div>';
                             echo "</td>";
                             echo "</tr>";
-                        endforeach
+                        endforeach;
                         ?>
                     </table>
                 </div>
@@ -598,7 +599,7 @@
                                                         <?php
                                                         foreach ($metas as $lista):
                                                             echo "<li><small>" . $lista["meta"] . "</small></li>";
-                                                        endforeach
+                                                        endforeach;
                                                         ?>
                                                         </ul>
                                                     </div>
@@ -617,7 +618,7 @@
                                                     <?php
                                                     foreach ($indicadores as $lista):
                                                         echo "<small>" . $lista["indicador"] . "</small><br>";
-                                                    endforeach
+                                                    endforeach;
                                                     ?>
                                                     </div>
                                                 </div>
@@ -635,7 +636,7 @@
                                                     <?php
                                                     foreach ($resultados as $lista):
                                                         echo "<small>" . $lista["resultado"] . "</small><br>";
-                                                    endforeach
+                                                    endforeach;
                                                     ?>
                                                     </div>
                                                 </div>
@@ -745,7 +746,7 @@
                                                 echo "</td>";
                                                 echo "</tr>";
                                                 }
-                                            endforeach
+                                            endforeach;
                                             ?>
                                         </table>
                                     </div>

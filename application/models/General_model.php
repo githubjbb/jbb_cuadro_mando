@@ -1237,7 +1237,7 @@ class General_model extends CI_Model {
 		public function get_actividades_full_by_dependencia($arrData) 
 		{		
 				$vigencia = $this->general_model->get_vigencia();
-				$this->db->select("A.*, D.dependencia, E.avance_poa, E.estado_trimestre_1, E.estado_trimestre_2, E.estado_trimestre_3, E.estado_trimestre_4, W.mes mes_inicial, K.mes mes_final, C.id_cuadro_base, numero_objetivo_estrategico, objetivo_estrategico, CONCAT(numero_proyecto_inversion, ' ', nombre_proyecto_inversion) proyecto_inversion, meta_proyecto, vigencia_meta_proyecto, CONCAT(numero_proposito, ' ', proposito) proposito, CONCAT(numero_logro, ' ', logro) logro, CONCAT(numero_programa_estrategico, ' ', programa_estrategico) programa, CONCAT(numero_meta_pdd, ' ', meta_pdd) meta_pdd, CONCAT(numero_ods, ' ', ods) ods");
+				$this->db->select("A.*, D.dependencia, E.avance_poa, E.estado_trimestre_1, E.estado_trimestre_2, E.estado_trimestre_3, E.estado_trimestre_4, W.mes mes_inicial, K.mes mes_final, C.id_cuadro_base, numero_objetivo_estrategico, objetivo_estrategico, CONCAT(numero_proyecto_inversion, ' ', nombre_proyecto_inversion) proyecto_inversion, CONCAT(numero_meta_proyecto, ' ', meta_proyecto) meta_proyecto, vigencia_meta_proyecto, CONCAT(numero_proposito, ' ', proposito) proposito, CONCAT(numero_logro, ' ', logro) logro, CONCAT(numero_programa_estrategico, ' ', programa_estrategico) programa, CONCAT(numero_meta_pdd, ' ', meta_pdd) meta_pdd, CONCAT(numero_ods, ' ', ods) ods");
 				$this->db->join('actividad_estado E', 'E.fk_numero_actividad  = A.numero_actividad ', 'LEFT');
 				$this->db->join('param_dependencias D', 'D.id_dependencia = A.fk_id_dependencia', 'INNER');
 				$this->db->join('param_meses W', 'W.id_mes = A.fecha_inicial', 'INNER');
@@ -2772,18 +2772,252 @@ class General_model extends CI_Model {
 		}
 
 		/**
+		 * Lista de los propositos x proyectos
+		 * @since 28/12/2023
+		 */
+		public function get_propositos_x_proyectos($arrData) 
+		{
+			$values = array('1','9999');
+			$this->db->select('DISTINCT(fk_numero_proyecto), fk_numero_proposito');
+			$this->db->where_not_in('fk_numero_proyecto', $values);
+			if (array_key_exists("numeroProposito", $arrData)) {
+				$this->db->where('fk_numero_proposito', $arrData["numeroProposito"]);
+			}
+			if (array_key_exists("vigencia", $arrData)) {
+				$this->db->where('vigencia_meta_proyecto', $arrData["vigencia"]);
+			}
+			$this->db->order_by('fk_numero_proposito, fk_numero_proyecto', 'asc');
+			$query = $this->db->get('meta_proyecto_inversion');
+
+			if ($query->num_rows() > 0) {
+				return $query->result_array();
+			} else {
+				return false;
+			}
+		}
+
+		/**
 		 * Información Propositos
 		 * @since 26/12/2023
 		 */
 		public function infoPropositos($arrData)
 		{		
 			$this->db->select();
+			$this->db->join('proyecto_inversion I', 'I.numero_proyecto_inversion = M.fk_numero_proyecto', 'INNER');
 			$this->db->join('propositos P', 'P.numero_proposito = M.fk_numero_proposito', 'INNER');
 			if (array_key_exists("numeroProyecto", $arrData)) {
 				$this->db->where('M.fk_numero_proyecto', $arrData["numeroProyecto"]);
 			}
 			if (array_key_exists("numeroProposito", $arrData)) {
 				$this->db->where('M.fk_numero_proposito', $arrData["numeroProposito"]);
+			}
+			if (array_key_exists("vigencia", $arrData)) {
+				$this->db->where('M.vigencia_meta_proyecto', $arrData["vigencia"]);
+			}
+			$query = $this->db->get('meta_proyecto_inversion M');
+
+			if ($query->num_rows() > 0) {
+				return $query->result_array();
+			} else {
+				return false;
+			}
+		}
+
+		/**
+		 * Lista de los logros x proyectos
+		 * @since 28/12/2023
+		 */
+		public function get_logros_x_proyectos($arrData) 
+		{
+			$values = array('1','9999');
+			$this->db->select('DISTINCT(fk_numero_proyecto), fk_numero_logro');
+			$this->db->where_not_in('fk_numero_proyecto', $values);
+			if (array_key_exists("numeroLogro", $arrData)) {
+				$this->db->where('fk_numero_logro', $arrData["numeroLogro"]);
+			}
+			if (array_key_exists("vigencia", $arrData)) {
+				$this->db->where('vigencia_meta_proyecto', $arrData["vigencia"]);
+			}
+			$this->db->order_by('fk_numero_logro, fk_numero_proyecto', 'asc');
+			$query = $this->db->get('meta_proyecto_inversion');
+
+			if ($query->num_rows() > 0) {
+				return $query->result_array();
+			} else {
+				return false;
+			}
+		}
+
+		/**
+		 * Información Logros
+		 * @since 29/12/2023
+		 */
+		public function infoLogros($arrData)
+		{		
+			$this->db->select();
+			$this->db->join('proyecto_inversion I', 'I.numero_proyecto_inversion = M.fk_numero_proyecto', 'INNER');
+			$this->db->join('logros L', 'L.numero_logro = M.fk_numero_logro', 'INNER');
+			if (array_key_exists("numeroProyecto", $arrData)) {
+				$this->db->where('M.fk_numero_proyecto', $arrData["numeroProyecto"]);
+			}
+			if (array_key_exists("numeroLogro", $arrData)) {
+				$this->db->where('M.fk_numero_logro', $arrData["numeroLogro"]);
+			}
+			if (array_key_exists("vigencia", $arrData)) {
+				$this->db->where('M.vigencia_meta_proyecto', $arrData["vigencia"]);
+			}
+			$query = $this->db->get('meta_proyecto_inversion M');
+
+			if ($query->num_rows() > 0) {
+				return $query->result_array();
+			} else {
+				return false;
+			}
+		}
+
+		/**
+		 * Lista de los programas x proyectos
+		 * @since 28/12/2023
+		 */
+		public function get_programas_x_proyectos($arrData) 
+		{
+			$values = array('1','9999');
+			$this->db->select('DISTINCT(fk_numero_proyecto), fk_numero_programa');
+			$this->db->where_not_in('fk_numero_proyecto', $values);
+			if (array_key_exists("numeroPrograma", $arrData)) {
+				$this->db->where('fk_numero_programa', $arrData["numeroPrograma"]);
+			}
+			if (array_key_exists("vigencia", $arrData)) {
+				$this->db->where('vigencia_meta_proyecto', $arrData["vigencia"]);
+			}
+			$this->db->order_by('fk_numero_programa, fk_numero_proyecto', 'asc');
+			$query = $this->db->get('meta_proyecto_inversion');
+
+			if ($query->num_rows() > 0) {
+				return $query->result_array();
+			} else {
+				return false;
+			}
+		}
+
+		/**
+		 * Información Programas
+		 * @since 29/12/2023
+		 */
+		public function infoProgramas($arrData)
+		{		
+			$this->db->select();
+			$this->db->join('proyecto_inversion I', 'I.numero_proyecto_inversion = M.fk_numero_proyecto', 'INNER');
+			$this->db->join('programa P', 'P.numero_programa = M.fk_numero_programa', 'INNER');
+			if (array_key_exists("numeroProyecto", $arrData)) {
+				$this->db->where('M.fk_numero_proyecto', $arrData["numeroProyecto"]);
+			}
+			if (array_key_exists("numeroProgramaSG", $arrData)) {
+				$this->db->where('M.fk_numero_programa', $arrData["numeroProgramaSG"]);
+			}
+			if (array_key_exists("vigencia", $arrData)) {
+				$this->db->where('M.vigencia_meta_proyecto', $arrData["vigencia"]);
+			}
+			$query = $this->db->get('meta_proyecto_inversion M');
+
+			if ($query->num_rows() > 0) {
+				return $query->result_array();
+			} else {
+				return false;
+			}
+		}
+
+		/**
+		 * Lista de los metas PDD x proyectos
+		 * @since 28/12/2023
+		 */
+		public function get_metas_x_proyectos($arrData) 
+		{
+			$values = array('1','9999');
+			$this->db->select('DISTINCT(fk_numero_proyecto), fk_numero_meta_pdd');
+			$this->db->where_not_in('fk_numero_proyecto', $values);
+			if (array_key_exists("numeroMetaPDD", $arrData)) {
+				$this->db->where('fk_numero_meta_pdd', $arrData["numeroMetaPDD"]);
+			}
+			if (array_key_exists("vigencia", $arrData)) {
+				$this->db->where('vigencia_meta_proyecto', $arrData["vigencia"]);
+			}
+			$this->db->order_by('fk_numero_meta_pdd, fk_numero_proyecto', 'asc');
+			$query = $this->db->get('meta_proyecto_inversion');
+
+			if ($query->num_rows() > 0) {
+				return $query->result_array();
+			} else {
+				return false;
+			}
+		}
+
+		/**
+		 * Información Metas PDD
+		 * @since 29/12/2023
+		 */
+		public function infoMetasPDD($arrData)
+		{		
+			$this->db->select();
+			$this->db->join('proyecto_inversion I', 'I.numero_proyecto_inversion = M.fk_numero_proyecto', 'INNER');
+			$this->db->join('meta_pdd MP', 'MP.numero_meta_pdd = M.fk_numero_meta_pdd', 'INNER');
+			if (array_key_exists("numeroProyecto", $arrData)) {
+				$this->db->where('M.fk_numero_proyecto', $arrData["numeroProyecto"]);
+			}
+			if (array_key_exists("numeroMetaPDD", $arrData)) {
+				$this->db->where('M.fk_numero_meta_pdd', $arrData["numeroMetaPDD"]);
+			}
+			if (array_key_exists("vigencia", $arrData)) {
+				$this->db->where('M.vigencia_meta_proyecto', $arrData["vigencia"]);
+			}
+			$query = $this->db->get('meta_proyecto_inversion M');
+
+			if ($query->num_rows() > 0) {
+				return $query->result_array();
+			} else {
+				return false;
+			}
+		}
+
+		/**
+		 * Lista de los ODS x proyectos
+		 * @since 28/12/2023
+		 */
+		public function get_ods_x_proyectos($arrData) 
+		{
+			$values = array('1','9999');
+			$this->db->select('DISTINCT(fk_numero_proyecto), fk_numero_ods');
+			$this->db->where_not_in('fk_numero_proyecto', $values);
+			if (array_key_exists("numeroODS", $arrData)) {
+				$this->db->where('fk_numero_ods', $arrData["numeroODS"]);
+			}
+			if (array_key_exists("vigencia", $arrData)) {
+				$this->db->where('vigencia_meta_proyecto', $arrData["vigencia"]);
+			}
+			$this->db->order_by('fk_numero_ods, fk_numero_proyecto', 'asc');
+			$query = $this->db->get('meta_proyecto_inversion');
+
+			if ($query->num_rows() > 0) {
+				return $query->result_array();
+			} else {
+				return false;
+			}
+		}
+
+		/**
+		 * Información ODS
+		 * @since 29/12/2023
+		 */
+		public function infoODS($arrData)
+		{		
+			$this->db->select();
+			$this->db->join('proyecto_inversion I', 'I.numero_proyecto_inversion = M.fk_numero_proyecto', 'INNER');
+			$this->db->join('ods O', 'O.numero_ods = M.fk_numero_ods', 'INNER');
+			if (array_key_exists("numeroProyecto", $arrData)) {
+				$this->db->where('M.fk_numero_proyecto', $arrData["numeroProyecto"]);
+			}
+			if (array_key_exists("numeroODS", $arrData)) {
+				$this->db->where('M.fk_numero_ods', $arrData["numeroODS"]);
 			}
 			if (array_key_exists("vigencia", $arrData)) {
 				$this->db->where('M.vigencia_meta_proyecto', $arrData["vigencia"]);

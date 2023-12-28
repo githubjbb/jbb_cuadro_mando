@@ -84,7 +84,7 @@
                             }
                             $porcProyectos = $suma * 100;
                             $avance = $porcProyectos;
-                            $avancePOA = number_format($avance,2);
+                            $avancePOA = number_format($avance,1);
                             if(!$avancePOA){
                                 $avancePOA = 0;
                                 $estilos = "bg-warning";
@@ -107,7 +107,7 @@
                                     </div>';
                             echo "</td>";
                             echo "</tr>";
-                        endforeach
+                        endforeach;
                         ?>
                     </table>
                 </div>
@@ -148,7 +148,7 @@
                             } else {
                                 $avance['porcentaje_cumplimiento_proyecto'] = 0;
                             }
-                            $avancePOA = number_format($avance['porcentaje_cumplimiento_proyecto'],2);
+                            $avancePOA = number_format($avance['porcentaje_cumplimiento_proyecto'],1);
                             if(!$avancePOA){
                                 $avancePOA = 0;
                                 $estilos = "bg-warning";
@@ -171,7 +171,81 @@
                                     </div>';
                             echo "</td>";
                             echo "</tr>";
-                        endforeach
+                        endforeach;
+                        ?>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <i class="fa fa-bell fa-fw"></i> Avance Proyectos de Inversión <b><?php echo $vigencia['vigencia']; ?></b>
+                </div>
+                <div class="panel-body small">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th width="30%">Programa</th>
+                                <th width="30%" class="text-center">Proyecto de Inversión</th>
+                                <th width="10%" class="text-center">Total</th>
+                                <th width="30%" class="text-center">Avance Frente a Logros</th>
+                            </tr>
+                        </thead>
+                        <?php
+                        foreach ($listaProyectosProgramas as $lista):
+                            $arrParam = array(
+                                "numeroProgramaSG" => $lista["fk_numero_programa"],
+                                "numeroProyecto" => $lista["fk_numero_proyecto"],
+                                "vigencia" => $vigencia['vigencia']
+                            );
+                            $infoProyectos = $this->general_model->infoProgramas($arrParam);
+                            $arrParam = array(
+                                "numeroProgramaSG" => $lista["fk_numero_programa"],
+                                "vigencia" => $vigencia['vigencia']
+                            );
+                            $sumProgramas = $this->general_model->sumatoriaItem($arrParam);
+                            $suma = 0;
+                            for ($i=0; $i<count($infoProyectos); $i++) {
+                                $infoProyectos[$i]['avance1'] = round($infoProyectos[$i]['presupuesto_meta'] / $sumProgramas['presupuesto_meta'], 4);
+                                $suma += $infoProyectos[$i]['avance1'];
+                            }
+                            $porcProyectos = $suma;
+                            $total = $porcProyectos;
+                            $totalPOA = number_format($total * 100,1);
+                            $arrParam = array(
+                                "numeroProyecto" => $lista["fk_numero_proyecto"],
+                                "vigencia" => $vigencia['vigencia']
+                            );
+                            $proyecto = $this->general_model->sumAvance($arrParam);
+                            $avanceProy = number_format($proyecto['avance_poa'],4) / 100;
+                            $avance = $total * $avanceProy * 100;
+                            $avancePOA = number_format($avance,1);
+                            if(!$avancePOA){
+                                $avancePOA = 0;
+                                $estilos = "bg-warning";
+                            }else{
+                                if($avancePOA > 70){
+                                    $estilos = "progress-bar-success";
+                                }elseif($avancePOA > 40 && $avancePOA <= 70){
+                                    $estilos = "progress-bar-warning";
+                                }else{
+                                    $estilos = "progress-bar-danger";
+                                }
+                            }
+                            echo "<tr>";
+                            echo "<td><small>" . $infoProyectos[0]["numero_programa"] .' ' . $infoProyectos[0]["programa"] . "</small></td>";
+                            echo "<td><small>" . $infoProyectos[0]["numero_proyecto_inversion"] .' ' . $infoProyectos[0]["nombre_proyecto_inversion"] . "</small></td>";
+                            echo "<td class='text-center'><small>" . $totalPOA . "%</small></td>";
+                            echo "<td class='text-center'>";
+                            echo "<b>" . $avancePOA ."%</b>";
+                            echo '<div class="progress progress-striped">
+                                      <div class="progress-bar ' . $estilos . '" role="progressbar" style="width: '. $avancePOA .'%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">' . $avancePOA . '%</div>
+                                    </div>';
+                            echo "</td>";
+                            echo "</tr>";
+                        endforeach;
                         ?>
                     </table>
                 </div>
@@ -231,7 +305,7 @@
                                     </div>';
                             echo "</td>";
                             echo "</tr>";
-                        endforeach
+                        endforeach;
                         ?>
                     </table>
                 </div>
@@ -316,7 +390,7 @@
                                     </div>';
                             echo "</td>";
                             echo "</tr>";
-                        endforeach
+                        endforeach;
                         ?>
                     </table>
                 </div>
@@ -526,7 +600,7 @@
                                                         <?php
                                                         foreach ($metas as $lista):
                                                             echo "<li><small>" . $lista["meta"] . "</small></li>";
-                                                        endforeach
+                                                        endforeach;
                                                         ?>
                                                         </ul>
                                                     </div>
@@ -545,7 +619,7 @@
                                                     <?php
                                                     foreach ($indicadores as $lista):
                                                         echo "<small>" . $lista["indicador"] . "</small><br>";
-                                                    endforeach
+                                                    endforeach;
                                                     ?>
                                                     </div>
                                                 </div>
@@ -563,7 +637,7 @@
                                                     <?php
                                                     foreach ($resultados as $lista):
                                                         echo "<small>" . $lista["resultado"] . "</small><br>";
-                                                    endforeach
+                                                    endforeach;
                                                     ?>
                                                     </div>
                                                 </div>
@@ -673,7 +747,7 @@
                                                 echo "</td>";
                                                 echo "</tr>";
                                                 }
-                                            endforeach
+                                            endforeach;
                                             ?>
                                         </table>
                                     </div>

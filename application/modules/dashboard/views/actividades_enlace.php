@@ -205,8 +205,10 @@
 								$cumplimiento4 = 0;
 
 								$avancePOA = 0;
+								$avanceActividad = 0;
 								if($sumaProgramado['programado'] > 0){
 									$avancePOA = round(($sumaEjecutado['ejecutado']/$sumaProgramado['programado']) * $ponderacion,2);
+									$avanceActividad = round(($sumaEjecutado['ejecutado']/$sumaProgramado['programado']),2);
 								}
 								if ($estadoActividad[0]['estado_trimestre_1'] != 0){
 									if($sumaProgramadoTrimestre1['programado'] > 0) {
@@ -318,7 +320,7 @@
 									<small>(Suma Programado)</small>
 								</td>
 								<td class="text-center">
-									<h2>Avance Actividad: <?php echo round(($avancePOA/$ponderacion)*100,2) . '%'; ?></h2>
+									<h2>Avance Actividad: <?php echo round($avanceActividad*100,2) . '%'; ?></h2>
 									<small></small>
 								</td>
 								<td class="text-right">

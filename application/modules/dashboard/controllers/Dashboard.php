@@ -57,17 +57,13 @@ class Dashboard extends CI_Controller {
 	        }
 	        $data['listaProyectos'] = $this->general_model->get_numero_proyectos_full_by_dependencia($arrParam);
 
-	        $arrParam = array(
-				"filtro" => true
-			);
-			$data['listaProyectosInversion'] = $this->general_model->get_proyectos_inversion($arrParam);
-
 	        $vigencia = $this->general_model->get_vigencia();
 			$arrParam = array(
 				"vigencia" => $vigencia['vigencia']
 			);
 			$data['listaPropositos'] = $this->general_model->get_propositos_x_vigencia($arrParam);
-
+			$data['listaProyectosPropositos'] = $this->general_model->get_propositos_x_proyectos($arrParam);
+			
 			$arrParam = array(
 				"filtro" => true
 			);
@@ -149,6 +145,7 @@ class Dashboard extends CI_Controller {
 				"vigencia" => $vigencia['vigencia']
 			);
 			$data['listaLogros'] = $this->general_model->get_logros($arrParam);
+			$data['listaProyectosLogros'] = $this->general_model->get_logros_x_proyectos($arrParam);
 
 			$arrParam = array(
 				"filtro" => true
@@ -249,6 +246,7 @@ class Dashboard extends CI_Controller {
 				"vigencia" => $vigencia['vigencia']
 			);
 			$data['listaProgramaSEGPLAN'] = $this->general_model->get_programa_sp_x_vigencia($arrParam);
+			$data['listaProyectosProgramas'] = $this->general_model->get_programas_x_proyectos($arrParam);
 
 			$arrParam = array(
 				"filtro" => true
@@ -348,6 +346,7 @@ class Dashboard extends CI_Controller {
 				"vigencia" => $vigencia['vigencia']
 			);
 			$data['listaMetaPDD'] = $this->general_model->get_metas_pdd_x_vigencia($arrParam);
+			$data['listaProyectosMetasPDD'] = $this->general_model->get_metas_x_proyectos($arrParam);
 
 			$arrParam = array(
 				"filtro" => true
@@ -447,6 +446,7 @@ class Dashboard extends CI_Controller {
 				"vigencia" => $vigencia['vigencia']
 			);
 			$data['listaODS'] = $this->general_model->get_ods($arrParam);
+			$data['listaProyectosODS'] = $this->general_model->get_ods_x_proyectos($arrParam);
 			
 			$arrParam = array(
 				"filtro" => true
