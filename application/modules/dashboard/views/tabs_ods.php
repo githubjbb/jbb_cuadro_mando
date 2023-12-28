@@ -189,7 +189,7 @@
                                 <th width="30%">ODS</th>
                                 <th width="30%" class="text-center">Proyecto de Inversión</th>
                                 <th width="10%" class="text-center">Total</th>
-                                <th width="30%" class="text-center">Avance Frente a Logros</th>
+                                <th width="30%" class="text-center">Avance Frente a ODS</th>
                             </tr>
                         </thead>
                         <?php
