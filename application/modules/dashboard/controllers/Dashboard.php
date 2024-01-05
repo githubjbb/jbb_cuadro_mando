@@ -1260,6 +1260,7 @@ class Dashboard extends CI_Controller {
 				"vigencia" => $vigencia['vigencia']
 			);
 			$data['listaPropositos'] = $this->general_model->get_propositos_x_vigencia($arrParam);
+			$data['listaProyectosPropositos'] = $this->general_model->get_propositos_x_proyectos($arrParam);
 
 			$arrParam = array(
 				"filtro" => true
@@ -1743,6 +1744,7 @@ class Dashboard extends CI_Controller {
 				"vigencia" => $vigencia['vigencia']
 			);
 			$data['listaPropositos'] = $this->general_model->get_propositos_x_vigencia($arrParam);
+			$data['listaProyectosPropositos'] = $this->general_model->get_propositos_x_proyectos($arrParam);
 
 			$arrParam = array(
 				"filtro" => true
@@ -1843,6 +1845,7 @@ class Dashboard extends CI_Controller {
 				"vigencia" => $vigencia['vigencia']
 			);
 			$data['listaPropositos'] = $this->general_model->get_propositos_x_vigencia($arrParam);
+			$data['listaProyectosPropositos'] = $this->general_model->get_propositos_x_proyectos($arrParam);
 
 			$arrParam = array(
 				"filtro" => true
@@ -2146,6 +2149,7 @@ class Dashboard extends CI_Controller {
 				"vigencia" => $vigencia['vigencia']
 			);
 			$data['listaPropositos'] = $this->general_model->get_propositos_x_vigencia($arrParam);
+			$data['listaProyectosPropositos'] = $this->general_model->get_propositos_x_proyectos($arrParam);
 
 			$arrParam = array(
 				"filtro" => true
