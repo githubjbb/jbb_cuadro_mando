@@ -100,6 +100,7 @@ $(function(){
 							<select class="form-control" name="vigencia" id="vigencia">
 								<option value="2022" <?php if($vigencia['vigencia'] == 2022) { echo "selected"; } ?>>2022</option>
 								<option value="2023" <?php if($vigencia['vigencia'] == 2023) { echo "selected"; } ?>>2023</option>
+								<option value="2024" <?php if($vigencia['vigencia'] == 2024) { echo "selected"; } ?>>2024</option>
 							</select><br>
 							<button class="btn btn-primary btn-sm">Guardar <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></button>
 						</div>
