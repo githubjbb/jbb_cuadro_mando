@@ -4952,42 +4952,42 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
 				$infoEjecucion = $this->general_model->get_ejecucion_actividadesPI($arrParam);
 				$arrParam = array("numeroActividadPI" => $lista['numero_actividad_pi']);
 				$ejecucionActividadesPI = $this->general_model->get_ejecucion_actividadesPI($arrParam);
-				if (!empty($ejecucionActividadesPI[0]['descripcion_actividades']) && !empty($ejecucionActividadesPI[1]['descripcion_actividades']) && !empty($ejecucionActividadesPI[2]['descripcion_actividades'])) {
+				if (!empty($ejecucionActividadesPI[0]['descripcion_actividades']) || !empty($ejecucionActividadesPI[1]['descripcion_actividades']) || !empty($ejecucionActividadesPI[2]['descripcion_actividades'])) {
 					$descTrim1 = $ejecucionActividadesPI[0]['mes'] . ': ' . $ejecucionActividadesPI[0]['descripcion_actividades'] . "\n" . $ejecucionActividadesPI[1]['mes'] . ': ' . $ejecucionActividadesPI[1]['descripcion_actividades'] . "\n" . $ejecucionActividadesPI[2]['mes'] . ': ' . $ejecucionActividadesPI[2]['descripcion_actividades'];
 				} else {
 					$descTrim1 = '';
 				}
-				if (!empty($ejecucionActividadesPI[3]['descripcion_actividades']) && !empty($ejecucionActividadesPI[4]['descripcion_actividades']) && !empty($ejecucionActividadesPI[5]['descripcion_actividades'])) {
+				if (!empty($ejecucionActividadesPI[3]['descripcion_actividades']) || !empty($ejecucionActividadesPI[4]['descripcion_actividades']) || !empty($ejecucionActividadesPI[5]['descripcion_actividades'])) {
 					$descTrim2 = $ejecucionActividadesPI[3]['mes'] . ': ' . $ejecucionActividadesPI[3]['descripcion_actividades'] . "\n" . $ejecucionActividadesPI[4]['mes'] . ': ' . $ejecucionActividadesPI[4]['descripcion_actividades'] . "\n" . $ejecucionActividadesPI[5]['mes'] . ': ' . $ejecucionActividadesPI[5]['descripcion_actividades'];
 				} else {
 					$descTrim2 = '';
 				}
-				if (!empty($ejecucionActividadesPI[6]['descripcion_actividades']) && !empty($ejecucionActividadesPI[7]['descripcion_actividades']) && !empty($ejecucionActividadesPI[8]['descripcion_actividades'])) {
+				if (!empty($ejecucionActividadesPI[6]['descripcion_actividades']) || !empty($ejecucionActividadesPI[7]['descripcion_actividades']) || !empty($ejecucionActividadesPI[8]['descripcion_actividades'])) {
 					$descTrim3 = $ejecucionActividadesPI[6]['mes'] . ': ' . $ejecucionActividadesPI[6]['descripcion_actividades'] . "\n" . $ejecucionActividadesPI[7]['mes'] . ': ' . $ejecucionActividadesPI[7]['descripcion_actividades'] . "\n" . $ejecucionActividadesPI[8]['mes'] . ': ' . $ejecucionActividadesPI[8]['descripcion_actividades'];
 				} else {
 					$descTrim3 = '';
 				}
-				if (!empty($ejecucionActividadesPI[9]['descripcion_actividades']) && !empty($ejecucionActividadesPI[10]['descripcion_actividades']) && !empty($ejecucionActividadesPI[11]['descripcion_actividades'])) {
+				if (!empty($ejecucionActividadesPI[9]['descripcion_actividades']) || !empty($ejecucionActividadesPI[10]['descripcion_actividades']) || !empty($ejecucionActividadesPI[11]['descripcion_actividades'])) {
 					$descTrim4 = $ejecucionActividadesPI[9]['mes'] . ': ' . $ejecucionActividadesPI[9]['descripcion_actividades'] . "\n" . $ejecucionActividadesPI[10]['mes'] . ': ' . $ejecucionActividadesPI[10]['descripcion_actividades'] ."\n" . $ejecucionActividadesPI[11]['mes'] . ': ' . $ejecucionActividadesPI[11]['descripcion_actividades'];
 				} else {
 					$descTrim4 = '';
 				}
-				if (!empty($ejecucionActividadesPI[0]['evidencias']) && !empty($ejecucionActividadesPI[1]['evidencias']) && !empty($ejecucionActividadesPI[2]['evidencias'])) {
+				if (!empty($ejecucionActividadesPI[0]['evidencias']) || !empty($ejecucionActividadesPI[1]['evidencias']) || !empty($ejecucionActividadesPI[2]['evidencias'])) {
 					$evidTrim1 = $ejecucionActividadesPI[0]['mes'] . ': ' . $ejecucionActividadesPI[0]['evidencias'] . "\n" . $ejecucionActividadesPI[1]['mes'] . ': ' . $ejecucionActividadesPI[1]['evidencias'] . "\n" . $ejecucionActividadesPI[2]['mes'] . ': ' . $ejecucionActividadesPI[2]['evidencias'];
 				} else {
 					$evidTrim1 = '';
 				}
-				if (!empty($ejecucionActividadesPI[3]['evidencias']) && !empty($ejecucionActividadesPI[4]['evidencias']) && !empty($ejecucionActividadesPI[5]['evidencias'])) {
+				if (!empty($ejecucionActividadesPI[3]['evidencias']) || !empty($ejecucionActividadesPI[4]['evidencias']) || !empty($ejecucionActividadesPI[5]['evidencias'])) {
 					$evidTrim2 = $ejecucionActividadesPI[3]['mes'] . ': ' . $ejecucionActividadesPI[3]['evidencias'] . "\n" . $ejecucionActividadesPI[4]['mes'] . ': ' . $ejecucionActividadesPI[4]['evidencias'] . "\n" . $ejecucionActividadesPI[5]['mes'] . ': ' . $ejecucionActividadesPI[5]['evidencias'];
 				} else {
 					$evidTrim2 = '';
 				}
-				if (!empty($ejecucionActividadesPI[6]['evidencias']) && !empty($ejecucionActividadesPI[7]['evidencias']) && !empty($ejecucionActividadesPI[8]['evidencias'])) {
+				if (!empty($ejecucionActividadesPI[6]['evidencias']) || !empty($ejecucionActividadesPI[7]['evidencias']) || !empty($ejecucionActividadesPI[8]['evidencias'])) {
 					$evidTrim3 = $ejecucionActividadesPI[6]['mes'] . ': ' . $ejecucionActividadesPI[6]['evidencias'] . "\n" . $ejecucionActividadesPI[7]['mes'] . ': ' . $ejecucionActividadesPI[7]['evidencias'] . "\n" . $ejecucionActividadesPI[8]['mes'] . ': ' . $ejecucionActividadesPI[8]['evidencias'];
 				} else {
 					$evidTrim3 = '';
 				}
-				if (!empty($ejecucionActividadesPI[9]['evidencias']) && !empty($ejecucionActividadesPI[10]['evidencias']) && !empty($ejecucionActividadesPI[11]['evidencias'])) {
+				if (!empty($ejecucionActividadesPI[9]['evidencias']) || !empty($ejecucionActividadesPI[10]['evidencias']) || !empty($ejecucionActividadesPI[11]['evidencias'])) {
 					$evidTrim4 = $ejecucionActividadesPI[9]['mes'] . ': ' . $ejecucionActividadesPI[9]['evidencias'] . "\n" . $ejecucionActividadesPI[10]['mes'] . ': ' . $ejecucionActividadesPI[10]['evidencias'] ."\n" . $ejecucionActividadesPI[11]['mes'] . ': ' . $ejecucionActividadesPI[11]['evidencias'];
 				} else {
 					$evidTrim4 = '';
