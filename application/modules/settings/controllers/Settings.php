@@ -5085,7 +5085,7 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
 					}
 				endforeach;
 
-				$spreadsheet->getActiveSheet()->setCellValue('AD'.$j, $lista['ponderacion_pi']);
+				$spreadsheet->getActiveSheet()->setCellValue('AD'.$j, $lista['avance_poa']);
 				$spreadsheet->getActiveSheet()->setCellValue('AE'.$j, $descTrim1);
 				$spreadsheet->getActiveSheet()->getStyle('AE'.$j)->getAlignment()->setWrapText(true);
 				$spreadsheet->getActiveSheet()->setCellValue('AF'.$j, $descTrim2);

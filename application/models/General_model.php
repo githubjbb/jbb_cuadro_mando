@@ -1158,7 +1158,7 @@ class General_model extends CI_Model {
 		public function get_actividades_pi_full($arrData)
 		{
 				$vigencia = $this->general_model->get_vigencia();
-				$this->db->select("A.*, PI.plan_institucional, D.dependencia, E.descripcion_actividad_trimestre_1, E.descripcion_actividad_trimestre_2, E.descripcion_actividad_trimestre_3, E.descripcion_actividad_trimestre_4, E.mensaje_poa_trimestre_1, E.mensaje_poa_trimestre_2, E.mensaje_poa_trimestre_3, E.mensaje_poa_trimestre_4");
+				$this->db->select("A.*, PI.plan_institucional, D.dependencia, E.descripcion_actividad_trimestre_1, E.descripcion_actividad_trimestre_2, E.descripcion_actividad_trimestre_3, E.descripcion_actividad_trimestre_4, E.mensaje_poa_trimestre_1, E.mensaje_poa_trimestre_2, E.mensaje_poa_trimestre_3, E.mensaje_poa_trimestre_4, E.avance_poa");
 				$this->db->join('planes_integrados I', 'I.id_plan_integrado = A.fk_id_plan_integrado', 'INNER');
 				$this->db->join('planes_institucionales PI', 'PI.id_plan_institucional = I.fk_id_plan_institucional', 'INNER');
 				$this->db->join('param_dependencias D', 'D.id_dependencia = A.fk_id_dependencia', 'INNER');
