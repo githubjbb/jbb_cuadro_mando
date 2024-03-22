@@ -2,7 +2,7 @@
 
 <script>
 $(function(){
-	$(".btn-success").click(function () {
+	$(".btn-warning").click(function () {
 			var oID = $(this).attr("id");
             $.ajax ({
                 type: 'POST',
@@ -83,17 +83,23 @@ $(function(){
 						<tbody>							
 						<?php
 							foreach ($info as $lista):
-									echo "<tr>";
-									echo "<td>" . $lista['id_plan_institucional'] . "</td>";
-									echo "<td>" . $lista['plan_institucional'] . "</td>";
-									echo "<td class='text-center'>";
+								echo "<tr>";
+								echo "<td>" . $lista['id_plan_institucional'] . "</td>";
+								echo "<td>" . $lista['plan_institucional'] . "</td>";
+								echo "<td class='text-center'>";
 						?>
-									<button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#modal" id="<?php echo $lista['id_plan_institucional']; ?>" >
-										Editar <span class="glyphicon glyphicon-edit" aria-hidden="true">
-									</button>
-									<button type="button" class='btn btn-danger btn-xs' id="<?php echo $lista['id_plan_institucional']; ?>">
-										Eliminar <i class="fa fa-trash-o"></i>
-									</button>
+								<button type="button" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modal" id="<?php echo $lista['id_plan_institucional']; ?>" >
+									Editar <span class="glyphicon glyphicon-edit" aria-hidden="true">
+								</button>
+							<?php if($lista['estado'] == 1) { ?>
+								<button type="button" class='btn btn-success btn-xs' id="<?php echo $lista['id_plan_institucional']; ?>">
+									Activo <i class="fa fa-eye"></i>
+								</button>
+							<?php } else { ?>
+								<button type="button" class='btn btn-danger btn-xs' id="<?php echo $lista['id_plan_institucional']; ?>">
+									Inactivo <i class="fa fa-eye"></i>
+								</button>
+							<?php } ?>
 						<?php
 									echo "</td>";
 									echo "</tr>";

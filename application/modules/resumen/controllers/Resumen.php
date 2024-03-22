@@ -623,7 +623,8 @@ class Resumen extends CI_Controller {
 			$vigencia = $this->general_model->get_vigencia();
 			$data['vigencia'] = $vigencia['vigencia'];
 			$arrParam = array(
-				'vigencia' => $vigencia['vigencia']
+				'vigencia' => $vigencia['vigencia'],
+				'estado' => 1
 			);
 			$data['planInstitucional'] = $this->general_model->get_plan_institucional($arrParam);
 			$data["view"] = 'planes_institucionales';

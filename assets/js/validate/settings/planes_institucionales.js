@@ -23,50 +23,76 @@ $( document ).ready( function () {
 		}
 	});
 
+	$(".btn-success").click(function () {
+			var oID = $(this).attr("id");
+
+				$(".btn-success").attr('disabled','-1');
+				$.ajax ({
+					type: 'POST',
+					url: base_url + 'settings/inactivar_planInstitucional',
+					data: {'identificador': oID},
+					cache: false,
+					success: function(data){
+						if( data.result == "error" )
+						{
+							alert(data.mensaje);
+							$(".btn-success").removeAttr('disabled');							
+							return false;
+						} 
+						if( data.result )//true
+						{	                                                        
+							$(".btn-success").removeAttr('disabled');
+							var url = base_url + "settings/planesInstitucionales";
+							$(location).attr("href", url);
+						}
+						else
+						{
+							alert('Error. Reload the web page.');
+							$(".btn-success").removeAttr('disabled');
+						}	
+					},
+					error: function(result) {
+						alert('Error. Reload the web page.');
+						$(".btn-success").removeAttr('disabled');
+					}
+				});
+			
+	});
+
 	$(".btn-danger").click(function () {
 			var oID = $(this).attr("id");
-			//Activa icono guardando
-			Swal.fire({
-				title: "Eliminar",
-                text: "¿ Confirma que desea eliminar el Plan Institucional ?",
-                icon: "warning",
-                confirmButtonText: "Confirmar",
-                showCancelButton: true,
-                cancelButtonColor: "#DD6B55"
-			}).then((result) => {
-				if (result.isConfirmed) {
-					$(".btn-danger").attr('disabled','-1');
-					$.ajax ({
-						type: 'POST',
-						url: base_url + 'settings/eliminar_planInstitucional',
-						data: {'identificador': oID},
-						cache: false,
-						success: function(data){
-							if( data.result == "error" )
-							{
-								alert(data.mensaje);
-								$(".btn-danger").removeAttr('disabled');							
-								return false;
-							} 
-							if( data.result )//true
-							{	                                                        
-								$(".btn-danger").removeAttr('disabled');
-								var url = base_url + "settings/planesInstitucionales";
-								$(location).attr("href", url);
-							}
-							else
-							{
-								alert('Error. Reload the web page.');
-								$(".btn-danger").removeAttr('disabled');
-							}	
-						},
-						error: function(result) {
+			
+				$(".btn-danger").attr('disabled','-1');
+				$.ajax ({
+					type: 'POST',
+					url: base_url + 'settings/activar_planInstitucional',
+					data: {'identificador': oID},
+					cache: false,
+					success: function(data){
+						if( data.result == "error" )
+						{
+							alert(data.mensaje);
+							$(".btn-danger").removeAttr('disabled');							
+							return false;
+						} 
+						if( data.result )//true
+						{	                                                        
+							$(".btn-danger").removeAttr('disabled');
+							var url = base_url + "settings/planesInstitucionales";
+							$(location).attr("href", url);
+						}
+						else
+						{
 							alert('Error. Reload the web page.');
 							$(".btn-danger").removeAttr('disabled');
-						}
-					});
-				}
-			})
+						}	
+					},
+					error: function(result) {
+						alert('Error. Reload the web page.');
+						$(".btn-danger").removeAttr('disabled');
+					}
+				});
+			
 	});
 	
 	$("#btnSubmit").click(function(){

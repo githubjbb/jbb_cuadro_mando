@@ -2648,6 +2648,9 @@ class General_model extends CI_Model {
 				if (array_key_exists("vigencia", $arrData)) {
 					$this->db->where('P.vigencia', $arrData["vigencia"]);
 				}
+				if (array_key_exists("estado", $arrData)) {
+					$this->db->where('I.estado', $arrData["estado"]);
+				}
 				$query = $this->db->get('planes_integrados P');
 				if ($query->num_rows() > 0) {
 					return $query->result_array();

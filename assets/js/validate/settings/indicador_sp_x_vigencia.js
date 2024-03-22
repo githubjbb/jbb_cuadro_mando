@@ -38,7 +38,7 @@ $( document ).ready( function () {
                 cancelButtonColor: "#DD6B55"
             }).then((result) => {
                 if (result.isConfirmed) {
-                    $(".btn-danger").attr('disabled','-1');
+                    $(".btn-warning").attr('disabled','-1');
                     $.ajax ({
                         type: 'POST',
                         url: base_url + 'settings/delete_indicadores_segplan/' + vigencia,
@@ -48,24 +48,24 @@ $( document ).ready( function () {
                             if( data.result == "error" )
                             {
                                 alert(data.mensaje);
-                                $(".btn-danger").removeAttr('disabled');                            
+                                $(".btn-warning").removeAttr('disabled');                            
                                 return false;
                             } 
                             if( data.result )
                             {                                                           
-                                $(".btn-danger").removeAttr('disabled');
+                                $(".btn-warning").removeAttr('disabled');
                                 var url = base_url + "settings/indicador_sp_x_vigencia";
                                 $(location).attr("href", url);
                             }
                             else
                             {
                                 alert('Error. Reload the web page.');
-                                $(".btn-danger").removeAttr('disabled');
+                                $(".btn-warning").removeAttr('disabled');
                             }
                         },
                         error: function(result) {
                             alert('Error. Reload the web page.');
-                            $(".btn-danger").removeAttr('disabled');
+                            $(".btn-warning").removeAttr('disabled');
                         }
                     });
                 }

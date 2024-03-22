@@ -512,27 +512,104 @@
 		}
 
 		/**
-		 * Eliminar registros de la tabla actividad_historial,actividad_estado, actividad_ejecucion, actividades
+		 * Eliminar registros de la tabla actividad_historial, actividad_estado, actividad_ejecucion, actividades
 		 * @since  20/06/2022
 		 */
-		public function eliminarRegistrosActividades()
+		public function eliminarRegistrosActividades($arrParam)
 		{
-				$sql = "TRUNCATE actividad_historial;";
+				$sql = "DELETE FROM actividad_historial WHERE fk_numero_actividad IN (SELECT id_actividad FROM actividades WHERE vigencia = " . $arrParam['vigencia'] . ")";
 				$query = $this->db->query($sql);
 			
-				$sql = "TRUNCATE actividad_estado";
+				$sql = "DELETE FROM actividad_estado WHERE fk_numero_actividad IN (SELECT id_actividad FROM actividades WHERE vigencia = " . $arrParam['vigencia'] . ")";
 				$query = $this->db->query($sql);
 
-				$sql = "TRUNCATE actividad_ejecucion";
+				$sql = "DELETE FROM actividad_ejecucion WHERE fk_numero_actividad IN (SELECT id_actividad FROM actividades WHERE vigencia = " . $arrParam['vigencia'] . ")";
 				$query = $this->db->query($sql);
 
-				$sql = "DELETE FROM actividades";
+				$sql = "DELETE FROM actividades WHERE vigencia = " . $arrParam['vigencia'];
 				$query = $this->db->query($sql);
-				
-				$sql = "ALTER TABLE actividad_ejecucion AUTO_INCREMENT=1";
-				$sql = "ALTER TABLE actividad_estado AUTO_INCREMENT=1";
-				$sql = "ALTER TABLE actividad_historial AUTO_INCREMENT=1";
-				$sql = "ALTER TABLE actividades AUTO_INCREMENT=1";
+
+				$this->db->select_max('id_historial');
+				$query = $this->db->get('actividad_historial');
+				$historial = $query->row_array();
+				$id_historial = $historial['id_historial'] + 1;
+
+				$this->db->select_max('id_estado_actividad');
+				$query = $this->db->get('actividad_estado');
+				$estado = $query->row_array();
+				$id_estado = $estado['id_estado_actividad'] + 1;
+
+				$this->db->select_max('id_ejecucion_actividad');
+				$query = $this->db->get('actividad_ejecucion');
+				$ejecucion = $query->row_array();
+				$id_ejecucion = $ejecucion['id_ejecucion_actividad'] + 1;
+
+				$this->db->select_max('id_actividad');
+				$query = $this->db->get('actividades');
+				$actividad = $query->row_array();
+				$id_actividad = $actividad['id_actividad'] + 1;
+
+				$sql = "ALTER TABLE actividad_historial AUTO_INCREMENT = " . $id_historial;
+				$query = $this->db->query($sql);
+				$sql = "ALTER TABLE actividad_estado AUTO_INCREMENT = " . $id_estado;
+				$query = $this->db->query($sql);
+				$sql = "ALTER TABLE actividad_ejecucion AUTO_INCREMENT = " . $id_ejecucion;
+				$query = $this->db->query($sql);
+				$sql = "ALTER TABLE actividades AUTO_INCREMENT = " . $id_actividad;
+				$query = $this->db->query($sql);
+
+				if ($query) {
+					return true;
+				} else {
+					return false;
+				}
+		}
+
+		/**
+		 * Eliminar registros de la tabla actividad_historial_pi, actividad_estado_pi, actividad_ejecucion_pi, actividades_pi
+		 * @since  25/02/2024
+		 */
+		public function eliminarRegistrosActividadesPI($arrParam)
+		{
+				$sql = "DELETE FROM actividad_historial_pi WHERE fk_numero_actividad_pi IN (SELECT id_actividad_pi FROM actividades_pi WHERE vigencia = " . $arrParam['vigencia'] . ")";
+				$query = $this->db->query($sql);
+			
+				$sql = "DELETE FROM actividad_estado_pi WHERE fk_numero_actividad_pi IN (SELECT id_actividad_pi FROM actividades_pi WHERE vigencia = " . $arrParam['vigencia'] . ")";
+				$query = $this->db->query($sql);
+
+				$sql = "DELETE FROM actividad_ejecucion_pi WHERE fk_numero_actividad_pi IN (SELECT id_actividad_pi FROM actividades_pi WHERE vigencia = " . $arrParam['vigencia'] . ")";
+				$query = $this->db->query($sql);
+
+				$sql = "DELETE FROM actividades_pi WHERE vigencia = " . $arrParam['vigencia'];
+				$query = $this->db->query($sql);
+
+				$this->db->select_max('id_historial_pi');
+				$query = $this->db->get('actividad_historial_pi');
+				$historial = $query->row_array();
+				$id_historial = $historial['id_historial_pi'] + 1;
+
+				$this->db->select_max('id_estado_actividad_pi');
+				$query = $this->db->get('actividad_estado_pi');
+				$estado = $query->row_array();
+				$id_estado = $estado['id_estado_actividad_pi'] + 1;
+
+				$this->db->select_max('id_ejecucion_actividad_pi');
+				$query = $this->db->get('actividad_ejecucion_pi');
+				$ejecucion = $query->row_array();
+				$id_ejecucion = $ejecucion['id_ejecucion_actividad_pi'] + 1;
+
+				$this->db->select_max('id_actividad_pi');
+				$query = $this->db->get('actividades_pi');
+				$actividad = $query->row_array();
+				$id_actividad = $actividad['id_actividad_pi'] + 1;
+
+				$sql = "ALTER TABLE actividad_historial_pi AUTO_INCREMENT = " . $id_historial;
+				$query = $this->db->query($sql);
+				$sql = "ALTER TABLE actividad_estado_pi AUTO_INCREMENT = " . $id_estado;
+				$query = $this->db->query($sql);
+				$sql = "ALTER TABLE actividad_ejecucion_pi AUTO_INCREMENT = " . $id_ejecucion;
+				$query = $this->db->query($sql);
+				$sql = "ALTER TABLE actividades_pi AUTO_INCREMENT = " . $id_actividad;
 				$query = $this->db->query($sql);
 
 				if ($query) {
@@ -597,6 +674,21 @@
 		public function cargar_actividades($lista) 
 		{
 				$query = $this->db->insert('actividades', $lista);
+
+				if ($query) {
+					return true;
+				} else {
+					return false;
+				}
+		}
+
+		/**
+		 * Cargar actividades PI 
+		 * @since 25/02/2024
+		 */
+		public function cargar_actividades_pi($lista) 
+		{
+				$query = $this->db->insert('actividades_pi', $lista);
 
 				if ($query) {
 					return true;
@@ -680,9 +772,46 @@
 		 * Cargar informacion 
 		 * @since 14/8/2017
 		 */
+		public function cargar_actividades_estados_pi($lista) 
+		{
+				$data = array(
+					'fk_numero_actividad_pi' => $lista["numero_actividad_pi"],
+					'estado_trimestre_1' => 0,
+					'estado_trimestre_2' => 0,
+					'estado_trimestre_3' => 0,
+					'estado_trimestre_4' => 0
+				);
+
+				$query = $this->db->insert('actividad_estado_pi', $data);
+				if ($query) {
+					return true;
+				} else {
+					return false;
+				}
+		}
+
+		/**
+		 * Cargar informacion 
+		 * @since 14/8/2017
+		 */
 		public function cargar_actividades_ejecucion($lista) 
 		{
 				$query = $this->db->insert('actividad_ejecucion', $lista);
+
+				if ($query) {
+					return true;
+				} else {
+					return false;
+				}
+		}
+
+		/**
+		 * Cargar informacion 
+		 * @since 25/02/2024
+		 */
+		public function cargar_actividades_ejecucion_pi($lista) 
+		{
+				$query = $this->db->insert('actividad_ejecucion_pi', $lista);
 
 				if ($query) {
 					return true;
@@ -1259,7 +1388,62 @@
 		}
 
 		/**
-		 * Consulta lista de actividades por indicador PMR
+		 * Activar PLAN INSTITUCIONAL
+		 * @since 14/02/2024
+		 * @author AOCUBILLOSA
+		 */
+		public function activarPlanInstitucional() 
+		{
+				$idPlanInstitucional = $this->input->post('identificador');
+				$data = array('estado' => 1);
+				$this->db->where('id_plan_institucional', $idPlanInstitucional);
+				$query = $this->db->update('planes_institucionales', $data);
+				if ($query) {
+					return true;
+				} else {
+					return false;
+				}
+		}
+
+		/**
+		 * Inactivar PLAN INSTITUCIONAL
+		 * @since 14/02/2024
+		 * @author AOCUBILLOSA
+		 */
+		public function inactivarPlanInstitucional() 
+		{
+				$idPlanInstitucional = $this->input->post('identificador');
+				$data = array('estado' => 2);
+				$this->db->where('id_plan_institucional', $idPlanInstitucional);
+				$query = $this->db->update('planes_institucionales', $data);
+				if ($query) {
+					return true;
+				} else {
+					return false;
+				}
+		}
+
+		/**
+		 * Consulta lista de actividades PI
+		 * @since 25/02/2024
+		 * @author AOCUBILLOSA
+		 */
+		public function get_listaActividadesPI($arrParams) {
+				$this->db->select();
+				$this->db->join('actividad_estado_pi E', 'A.numero_actividad_pi = E.fk_numero_actividad_pi', 'LEFT');
+				$this->db->join('param_dependencias D', 'A.fk_id_dependencia = D.id_dependencia', 'LEFT');
+				$this->db->where('A.vigencia', $arrParams['vigencia']);
+				$this->db->order_by('A.fk_id_plan_integrado', 'asc');
+				$query = $this->db->get('actividades_pi A');
+				if ($query->num_rows() > 0) {
+					return $query->result_array();
+				} else {
+					return false;
+				}
+		}
+
+		/**
+		 * Consulta lista de planes integrados
 		 * @since 31/10/2022
 		 * @author AOCUBILLOSA
 		 */
@@ -1279,7 +1463,10 @@
 				if (array_key_exists("dependencia", $arrParams)) {
 					$this->db->where('A.fk_id_dependencia', $arrParams['dependencia']);
 				}
-				$this->db->order_by('P.fk_id_plan_institucional', 'asc');
+				if (array_key_exists("estado", $arrParams)) {
+					$this->db->where('I.estado', $arrParams['estado']);
+				}
+				$this->db->order_by('P.id_plan_integrado', 'asc');
 				$query = $this->db->get('planes_integrados P');
 				if ($query->num_rows() > 0) {
 					return $query->result_array();

@@ -1673,7 +1673,6 @@ class Settings extends CI_Controller {
 			if ($userRol != 99 &&  $userRol != 1) { 
 				show_error('ERROR!!! - You are in the wrong place.');	
 			}
-		
 			$data["view"] = 'eliminar_db';
 			$this->load->view("layout_calendar", $data);
 	}
@@ -1686,20 +1685,59 @@ class Settings extends CI_Controller {
 	{
 			header('Content-Type: application/json');
 			$data = array();
-
-			if ($this->settings_model->eliminarRegistrosActividades()) {
-				
-				$data["msj"] = "las tablas actividades, actividad_historial, actividad_estado, actividad_ejecucion, actividades";
-				
+			$vigencia = $this->general_model->get_vigencia();
+			$arrParam = array(
+				"vigencia" => $vigencia['vigencia']
+			);
+			if ($this->settings_model->eliminarRegistrosActividades($arrParam)) {
+				$data["msj"] = "las tablas actividad_historial, actividad_estado, actividad_ejecucion, actividades";
 				$data["result"] = true;
 				$data["mensaje"] = "Se eliminaron los registros.";
 				$this->session->set_flashdata('retornoExito', 'Se eliminó los registros de ' . $data["msj"]);
-			}else{
+			} else {
 				$data["result"] = "error";
 				$data["mensaje"] = "Error!!! Contactarse con el Administrador.";
 				$this->session->set_flashdata('retornoError', '<strong>Error!!!</strong> Contactarse con el Administrador');
 			}
+			echo json_encode($data);
+	}
 
+	/**
+	 * Formulario para eliminar actividades PI
+     * @since 25/02/2024
+	 */
+	public function atencion_eliminar_pi()
+	{
+			$userRol = $this->session->role;
+			if ($userRol != 99 &&  $userRol != 1) { 
+				show_error('ERROR!!! - You are in the wrong place.');	
+			}
+			$data["view"] = 'eliminar_db_pi';
+			$this->load->view("layout_calendar", $data);
+	}
+
+	/**
+	 * Eliminar registros activiades PI
+	 * @since 25/02/2024
+	 */
+	public function eliminar_db_pi()
+	{
+			header('Content-Type: application/json');
+			$data = array();
+			$vigencia = $this->general_model->get_vigencia();
+			$arrParam = array(
+				"vigencia" => $vigencia['vigencia']
+			);
+			if ($this->settings_model->eliminarRegistrosActividadesPI($arrParam)) {
+				$data["msj"] = "las tablas actividad_historial_pi, actividad_estado_pi, actividad_ejecucion_pi, actividades_pi";
+				$data["result"] = true;
+				$data["mensaje"] = "Se eliminaron los registros.";
+				$this->session->set_flashdata('retornoExito', 'Se eliminó los registros de ' . $data["msj"]);
+			} else {
+				$data["result"] = "error";
+				$data["mensaje"] = "Error!!! Contactarse con el Administrador.";
+				$this->session->set_flashdata('retornoError', '<strong>Error!!!</strong> Contactarse con el Administrador');
+			}
 			echo json_encode($data);
 	}
 
@@ -1843,6 +1881,10 @@ class Settings extends CI_Controller {
 							if($model == "cargar_actividades"){
 								//cargo registros en la tabla de estado actividad
 								$this->settings_model->cargar_actividades_estados($lista);
+							}
+							if ($model == "cargar_actividades_pi") {
+								//cargo registros en la tabla de estado actividad pi
+								$this->settings_model->cargar_actividades_estados_pi($lista);
 							}
 						} else {
 							$errores["numero_registro"] = $x;
@@ -3163,7 +3205,7 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
     }
 	
 	/**
-	 * Ingresar/Actualizar actividades PI
+	 * Ingresar/Actualizar Planes Institucionales
      * @since 29/03/2023
      * @author AOCUBILLOSA
 	 */
@@ -3186,6 +3228,48 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
 			echo json_encode($data);
     }
 
+    /**
+	 * Activar Planes Institucionales
+     * @since 12/02/2024
+     * @author AOCUBILLOSA
+	 */
+	public function activar_planInstitucional()
+	{			
+			header('Content-Type: application/json');
+			$data = array();
+			$idPlanInstitucional = $this->input->post('identificador');
+			$msj = "Se activo el Plan Institucional!";
+			if ($idPlanInstitucional = $this->settings_model->activarPlanInstitucional()) {
+				$data["result"] = true;				
+				$this->session->set_flashdata('retornoExito', '<strong>Correcto!</strong> ' . $msj);
+			} else {
+				$data["result"] = "error";			
+				$this->session->set_flashdata('retornoError', '<strong>Error!</strong> Ask for help');
+			}
+			echo json_encode($data);
+    }
+
+    /**
+	 * Inactivar Planes Institucionales
+     * @since 12/02/2024
+     * @author AOCUBILLOSA
+	 */
+	public function inactivar_planInstitucional()
+	{			
+			header('Content-Type: application/json');
+			$data = array();
+			$idPlanInstitucional = $this->input->post('identificador');
+			$msj = "Se inactivo el Plan Institucional!";
+			if ($idPlanInstitucional = $this->settings_model->inactivarPlanInstitucional()) {
+				$data["result"] = true;				
+				$this->session->set_flashdata('retornoExito', '<strong>Correcto!</strong> ' . $msj);
+			} else {
+				$data["result"] = "error";			
+				$this->session->set_flashdata('retornoError', '<strong>Error!</strong> Ask for help');
+			}
+			echo json_encode($data);
+    }
+
     public function eliminar_planInstitucional()
 	{			
 			header('Content-Type: application/json');
@@ -3199,7 +3283,7 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
 			if ($this->general_model->deleteRecord($arrParam))
 			{
 				$data["result"] = true;
-				$this->session->set_flashdata('retornoExito', '<strong>Correcto!</strong> El Plan Integrado fue eliminado exitosamente.');
+				$this->session->set_flashdata('retornoExito', '<strong>Correcto!</strong> El Plan Institucional fue eliminado exitosamente.');
 			} else {
 				$data["result"] = "error";
 				$data["mensaje"] = "Error!!! Ask for help.";
@@ -3218,20 +3302,25 @@ FALTA GUARDA EL CAMBIO PARA UNA AUDITORIA
 			$data['userRol'] = $this->session->userdata("role");
 			$dependencia = $this->session->userdata("dependencia");
 			$vigencia = $this->general_model->get_vigencia();
+			$arrParam = array(
+				'vigencia' => $vigencia['vigencia'],
+			);
+			$data['listaActividadesPI'] = $this->settings_model->get_listaActividadesPI($arrParam);
 			if ($data['userRol'] == ID_ROL_SUPER_ADMIN || $data['userRol'] == ID_ROL_ADMINISTRADOR || $data['userRol'] == ID_ROL_PLANEACION) {
-					$arrParam = array(
-					'vigencia' => $vigencia['vigencia']
+				$arrParam = array(
+					'vigencia' => $vigencia['vigencia'],
+					'estado' => 1
 				);
 				$data['info'] = $this->settings_model->get_plan_integrado($arrParam);
 			} else {
 				$arrParam = array(
 					'vigencia' => $vigencia['vigencia'],
-					'dependencia' => $dependencia
+					'dependencia' => $dependencia,
+					'estado' => 1
 				);
 				$data['info'] = $this->settings_model->get_plan_integrado($arrParam);
 			}
-			$data['vigencia'] = $this->general_model->get_vigencia();
-
+			$data['vigencia'] = $vigencia['vigencia'];
 			$data["view"] = 'plan_integrado';
 			$this->load->view("layout_calendar", $data);
 	}

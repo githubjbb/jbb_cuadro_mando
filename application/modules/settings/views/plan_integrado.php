@@ -36,7 +36,7 @@ $(function(){
 			<div class="panel panel-primary">
 				<div class="panel-heading">
 					<h4 class="list-group-item-heading">
-						<i class="fa fa-gear fa-fw"></i> PLAN INTEGRADO - PLANES INTEGRADOS <?php echo $vigencia['vigencia']; ?>
+						<i class="fa fa-gear fa-fw"></i> PLAN INTEGRADO - PLANES INTEGRADOS <?php echo $vigencia; ?>
 					</h4>
 				</div>
 			</div>
@@ -98,9 +98,10 @@ $(function(){
 						</thead>
 						<tbody>
 						<?php
+							$i=1;
 							foreach ($info as $lista):
 									echo "<tr>";
-									echo "<td>" . $lista['id_plan_integrado'] . "</td>";
+									echo "<td>" . $i . "</td>";
 									echo "<td>" . $lista['plan_institucional'] . "</td>";
 									echo "<td>" . $lista['dependencia'] . "</td>";
 									echo "<td>" . $lista['descripcion_actividad_pi'] . "</td>";
@@ -123,6 +124,7 @@ $(function(){
 									}
 									echo "</td>";
 									echo "</tr>";
+									$i++;
 							endforeach;
 						?>
 						</tbody>

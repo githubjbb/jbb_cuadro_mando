@@ -1,4 +1,4 @@
-<script type="text/javascript" src="<?php echo base_url("assets/js/validate/settings/eliminar_db.js"); ?>"></script>
+<script type="text/javascript" src="<?php echo base_url("assets/js/validate/settings/eliminar_db_pi.js"); ?>"></script>
 
 <div id="page-wrapper">
 	<br>
@@ -53,7 +53,7 @@ if ($retornoError) {
 					<div class="row">
 						<div class="col-lg-3">	
 							<div class="alert alert-danger">
-								<strong>Atención:</strong> <br>Al aceptar borrará toda la información de Actividades, Historial de Actividades, Estados de las Actividades y Ejecución de las Actividades.
+								<strong>Atención:</strong> <br>Al aceptar borrará toda la información de Actividades PI, Historial de Actividades PI, Estados de las Actividades PI y Ejecución de las Actividades PI.
 								
 								<br><br>
 								<button type="button" class="btn btn-danger btn-xs" >
@@ -63,48 +63,43 @@ if ($retornoError) {
 						</div>
 
 						<div class="col-lg-3">	
-							<div class="alert alert-warning">
+							<!--<div class="alert alert-warning">
 								<strong>Borrar Metas Objetivos Estratégicos:</strong> <br>Al aceptar borrará los registros de la tabla  objetivos_estrategicos_metas.
 								<br><br>
 								<button type="button" class="btn btn-warning btn-xs" >
 									Aceptar <span class="fa fa-times fa-fw" aria-hidden="true">
 								</button>						
-							</div>
+							</div>-->
 						</div>
 						
 						<div class="col-lg-3">	
-							<div class="alert alert-info">
+							<!--<div class="alert alert-info">
 								<strong>Borrar Indicadores Objetivos Estratégicos:</strong> <br>Al aceptar borrará los registros de la tabla  objetivos_estrategicos_indicadores.
 								
 								<br><br>
 								<button type="button" class="btn btn-info btn-xs" >
 									Aceptar <span class="fa fa-times fa-fw" aria-hidden="true">
 								</button>						
-							</div>
+							</div>-->
 						</div>
 						
 						<div class="col-lg-3">	
-							<div class="alert alert-atencion">
+							<!--<div class="alert alert-atencion">
 								<strong>Borrar Resultados Objetivos Estratégicos:</strong> <br>Al aceptar borrará los registros de la tabla  objetivos_estrategicos_resultados.
 								
 								<br><br>
 								<button type="button" class="btn btn-atencion btn-xs" >
 									Aceptar <span class="fa fa-times fa-fw" aria-hidden="true">
 								</button>						
-							</div>
+							</div>-->
 						</div>
 						
 					</div>
 					
 				</div>
-				<!-- /.row (nested) -->
 			</div>
-			<!-- /.panel-body -->
 		</div>
-		<!-- /.panel -->
 	</div>
-	<!-- /.col-lg-12 -->
-	
 	
 	<!-- /.row -->
 	<div class="row">
@@ -117,18 +112,18 @@ if ($retornoError) {
 					<div class="row">
 						<div class="col-lg-3">	
 							<div class="alert alert-success">
-								Subir registros a la tabla <strong>Actividades</strong>.
+								Subir registros a la tabla <strong>Actividades PI</strong>.
 								<br><br>
-								<a class="btn btn-success btn-xs" href=" <?php echo base_url(). 'settings/subir_archivo/cargar_actividades'; ?> ">
-									Subir Actividades<span class="glyphicon glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+								<a class="btn btn-success btn-xs" href=" <?php echo base_url(). 'settings/subir_archivo/cargar_actividades_pi'; ?> ">
+									Subir Actividades PI<span class="glyphicon glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
 								</a>
 								<br><br>
-								Subir registros a la tabla <strong>Actividades Ejecución</strong>.
+								Subir registros a la tabla <strong>Actividades Ejecución PI</strong>.
 								<br><br>
-								<a class="btn btn-success btn-xs" href=" <?php echo base_url(). 'settings/subir_archivo/cargar_actividades_ejecucion'; ?> ">
-									Subir Actividades Ejecución<span class="glyphicon glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+								<a class="btn btn-success btn-xs" href=" <?php echo base_url(). 'settings/subir_archivo/cargar_actividades_ejecucion_pi'; ?> ">
+									Subir Actividades Ejecución PI<span class="glyphicon glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
 								</a>
-								<br><br>
+								<!--<br><br>
 								Actualizar mensaje de POA para primer trimestre
 								<br><br>
 								<a class="btn btn-success btn-xs" href=" <?php echo base_url(). 'settings/subir_archivo/cargar_mensaje_poa'; ?> ">
@@ -139,35 +134,35 @@ if ($retornoError) {
 								<br><br>
 								<a class="btn btn-success btn-xs" href=" <?php echo base_url(). 'settings/subir_archivo/cargar_plan_institucional'; ?> ">
 									Actualizar Plan Institucional <span class="glyphicon glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-								</a>
+								</a>-->
 							</div>
 						</div>
 						<div class="col-lg-3">	
-							<div class="alert alert-success">
+							<!--<div class="alert alert-success">
 								Subir registros a la tabla <strong>Metas Objetivos Estratégicos</strong>. 
 								<br><br>
 								<a class="btn btn-success btn-xs" href=" <?php echo base_url(). 'settings/subir_archivo/cargar_metas_objetivos_estrategicos'; ?> ">
 									Subir Metas <span class="glyphicon glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
 								</a>
-							</div>
+							</div>-->
 						</div>
 						<div class="col-lg-3">	
-							<div class="alert alert-success">
+							<!--<div class="alert alert-success">
 								Subir registros a la tabla <strong>Indicadores Objetivos Estratégicos</strong>. 
 								<br><br>
 								<a class="btn btn-success btn-xs" href=" <?php echo base_url(). 'settings/subir_archivo/cargar_indicadores_objetivos_estrategicos'; ?> ">
 									Subir Indicadores <span class="glyphicon glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
 								</a>
-							</div>
+							</div>-->
 						</div>
 						<div class="col-lg-3">	
-							<div class="alert alert-success">
+							<!--<div class="alert alert-success">
 								Subir registros a la tabla <strong>Resultados Objetivos Estratégicos</strong>. 
 								<br><br>
 								<a class="btn btn-success btn-xs" href=" <?php echo base_url(). 'settings/subir_archivo/cargar_resultados_objetivos_estrategicos'; ?> ">
 									Subir Resultados <span class="glyphicon glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
 								</a>
-							</div>
+							</div>-->
 						</div>
 					</div>
 				</div>
